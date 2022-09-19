@@ -1,0 +1,23 @@
+type School @key(fields: "id") {
+  id: ID!
+  name: String
+  subDomain: String
+  latitude: String
+  longitude: String
+  mascot: String
+  feederTowns: String
+  takingPayments: Boolean
+  paymentOptions: Int
+  spendingCapMax: Int
+  paymentCode: String
+  smsMessaging: Boolean
+  notifications: Int
+  notes: String
+  features: Int
+  kind: String
+  tracked: Boolean
+  subMerchantId: String
+  a2kLinkSchoolId: Int
+  createdAt: String
+  updatedAt: String
+}

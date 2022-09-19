@@ -1,0 +1,8 @@
+type SupportDocument {
+  id: ID!
+  name: String
+  documentText: String
+  sectionHeader: String
+  createdAt: String
+  updatedAt: String
+}
