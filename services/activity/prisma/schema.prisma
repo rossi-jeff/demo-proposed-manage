@@ -8,33 +8,444 @@ generator client {
     output   = "../generated/activity-db"
 }
 
+model Affiliation {
+    id              String   @id @default(cuid())
+    personId        String
+    schoolId        String?
+    affiliationType String?
+    createdAt       DateTime
+    updatedAt       DateTime
+    Person          Person   @relation(fields: [personId], references: [id])
+}
+
+model AlergicCondition {
+    id               String   @id @default(cuid())
+    personId         String
+    allergyCondition String?
+    severity         String?
+    reaction         String?
+    createdAt        DateTime
+    updatedAt        DateTime
+    Person           Person   @relation(fields: [personId], references: [id])
+}
+
+model AwardAssignment {
+    id          String   @id @default(cuid())
+    recipientId String
+    awardId     String
+    state       Int?     @default(0)
+    createdAt   DateTime
+    updatedAt   DateTime
+}
+
+model CampShortOrder {
+    id                String   @id @default(cuid())
+    campTShirtOrderId String?
+    designLayout      String?
+    designChoice      String?
+    topLineText       String?
+    bottomLineText    String?
+    shortSizes        String?  @db.Text()
+    participants      String?  @db.Text()
+    createdAt         DateTime
+    updatedAt         DateTime
+}
+
+model CampTshirtOrder {
+    id                 String    @id @default(cuid())
+    ventureId          String?
+    coachId            String?
+    schoolId           String?
+    season             String?
+    organizationName   String?
+    ventureName        String?
+    organizationColor1 String?
+    organizationColor2 String?
+    coachName          String?
+    coachEmail         String?
+    coachPhoneNumber   String?
+    deliveryDate       DateTime? @db.Date()
+    campDataSubmitted  Boolean?  @default(false)
+    orderDate          DateTime? @db.Date()
+    template           String?
+    topLineText        String?
+    middleLineText     String?
+    bottomLineText     String?
+    tShirtColor        String?
+    orderOptions       Int?
+    shirtSizes         String?   @db.Text()
+    participants       String?   @db.Text()
+    tShirtQuantity     Int?
+    overfillPercentage Int?
+    mascotFile         String?
+    createdAt          DateTime
+    updatedAt          DateTime
+}
+
+model Consent {
+    id             String   @id @default(cuid())
+    legalFormId    Int
+    registrationId Int
+    accepted       Boolean?
+    checkboxText   String?
+    sha1           String?
+    createdAt      DateTime
+    updatedAt      DateTime
+}
+
+model CustomAnswer {
+    id         String   @id @default(cuid())
+    personId   Int?
+    questionId Int?
+    answer     String?  @db.Text()
+    createdAt  DateTime
+    updatedAt  DateTime
+}
+
+model EmergencyContact {
+    id           String   @id @default(cuid())
+    personId     Int?
+    firstName    String?
+    lastName     String?
+    phoneNumber  String?
+    relationship String?
+    createdAt    DateTime
+    updatedAt    DateTime
+}
+
+model FuelMyClubRegistration {
+    id             String   @id @default(cuid())
+    registrationId String?  @unique
+    data           String?  @db.Text
+    createdAt      DateTime
+    updatedAt      DateTime
+}
+
+model GroupAwardAssignment {
+    id          String   @id @default(cuid())
+    recipientId String
+    awardId     String
+    state       Int?     @default(0)
+    createdAt   DateTime
+    updatedAt   DateTime
+}
+
+model GroupRegistration {
+    id             String    @id @default(cuid())
+    registrationId Int?
+    groupId        Int?
+    rosterId       Int?
+    finalizeDate   DateTime? @db.Date
+    jerseyNumber   String?
+    position       String?
+    state          Int?      @default(0)
+    createdAt      DateTime
+    updatedAt      DateTime
+}
+
+model Invite {
+    id          String   @id @default(cuid())
+    personId    String?
+    invitedById String?
+    schoolId    String?
+    accepted    Boolean  @default(false)
+    secret      String
+    createdAt   DateTime
+    updatedAt   DateTime
+}
+
+model Invoice {
+    id                   String   @id @default(cuid())
+    personId             String?
+    credit               Int?     @default(0)
+    invoiceTransactionId String?
+    createdAt            DateTime
+    updatedAt            DateTime
+}
+
+model InvoiceTransaction {
+    id              String    @id @default(cuid())
+    remoteId        String?
+    status          String?
+    invoiceId       String?   @unique
+    paymentType     String?
+    adminFlag       Boolean?  @default(true)
+    problemStatusAt DateTime?
+    details         String?   @db.Text
+    createdAt       DateTime
+    updatedAt       DateTime
+}
+
+model LegalVideoConsent {
+    id           String   @id @default(cuid())
+    legalVideoId Int?
+    personId     Int?
+    season       String?
+    createdAt    DateTime
+    updatedAt    DateTime
+}
+
+model LineItem {
+    id             String   @id @default(cuid())
+    registrationId String?
+    ventureId      String?
+    activityName   String?
+    ventureName    String?
+    price          Int?
+    invoiceId      String?
+    refunded       Boolean? @default(false)
+    paid           Boolean? @default(false)
+    refundAmount   Int?     @default(0)
+    ticketKind     String?
+    eventName      String?
+    ticketId       String?
+    state          Int?     @default(0)
+    createdAt      DateTime
+    updatedAt      DateTime
+}
+
+model LineItemInvoice {
+    id         String   @id @default(cuid())
+    lineItemId String
+    invoiceId  String
+    createdAt  DateTime
+    updatedAt  DateTime
+}
+
+model MedicalCondition {
+    id              String    @id @default(cuid())
+    personId        Int
+    name            String?
+    physician       String?
+    dateOfDiagnosis DateTime? @db.Date
+    emergencyPlan   String?
+    createdAt       DateTime
+    updatedAt       DateTime
+}
+
+model Message {
+    id                  String   @id @default(cuid())
+    schoolId            Int?
+    activityId          Int?
+    ventureId           Int?
+    status              String?
+    message             String?  @db.Text
+    groupId             Int?
+    senderId            Int?
+    eventId             Int?
+    messageType         Int?     @default(0)
+    superadminMessage   Boolean? @default(false)
+    documentFileName    String?
+    documentContentType String?
+    documentFileSize    Int?
+    createdAt           DateTime
+    updatedAt           DateTime
+}
+
+model MessagePerson {
+    id        String   @id @default(cuid())
+    messageId String
+    personId  String
+    createdAt DateTime
+    updatedAt DateTime
+}
+
+model Occurance {
+    id        String    @id @default(cuid())
+    from      DateTime?
+    to        DateTime?
+    ventureId Int?
+    createdAt DateTime
+    updatedAt DateTime
+}
+
 model Person {
-    id              String          @id @default(cuid())
-    userName        String
-    passWord        String
-    PersonPhones    PersonPhone[]
-    PersonEmails    PersonEmail[]
-    PersonAddresses PersonAddress[]
+    id                    String             @id @default(cuid())
+    userName              String
+    passWord              String
+    createdAt             DateTime
+    updatedAt             DateTime
+    PersonPhones          PersonPhone[]
+    PersonEmails          PersonEmail[]
+    PersonAddresses       PersonAddress[]
+    Affiliations          Affiliation[]
+    AlergicConditions     AlergicCondition[]
+    SubjectRelationships  Relationship[]     @relation("subject")
+    ReceiverRelationships Relationship[]     @relation("receiver")
+}
+
+model PersonAddress {
+    id        String   @id @default(cuid())
+    personId  String
+    addressId String
+    createdAt DateTime
+    updatedAt DateTime
+    Person    Person   @relation(fields: [personId], references: [id])
+}
+
+model PersonEmail {
+    id        String   @id @default(cuid())
+    personId  String
+    emailId   String
+    createdAt DateTime
+    updatedAt DateTime
+    Person    Person   @relation(fields: [personId], references: [id])
 }
 
 model PersonPhone {
-    id       String @id @default(cuid())
-    personId String
-    phoneId  String
+    id        String   @id @default(cuid())
+    personId  String
+    phoneId   String
+    createdAt DateTime
+    updatedAt DateTime
 
     Person Person @relation(fields: [personId], references: [id])
 }
 
-model PersonEmail {
-    id       String @id @default(cuid())
-    personId String
-    emailId  String
-    Person   Person @relation(fields: [personId], references: [id])
+model Record {
+    id         String   @id @default(cuid())
+    groupId    Int?
+    sportCode  String?
+    title      String?
+    recordCode String?
+    unit       String?
+    kind       String?
+    createdAt  DateTime
+    updatedAt  DateTime
 }
 
-model PersonAddress {
-    id        String @id @default(cuid())
-    personId  String
-    addressId String
-    Person    Person @relation(fields: [personId], references: [id])
+model RecordAssignment {
+    id            String    @id @default(cuid())
+    recipientId   Int?
+    rosterId      Int?
+    recordId      Int?
+    recordSetDate DateTime? @db.Date
+    result        Float?
+    state         Int?      @default(0)
+    banner_year   String?
+    createdAt     DateTime
+    updatedAt     DateTime
+}
+
+model Registration {
+    id                    String   @id @default(cuid())
+    activityId            String?
+    participantId         String?
+    registeredById        String?
+    paid                  Boolean? @default(false)
+    season                String?
+    groupId               String?
+    tShirtSize            String?
+    weight                Int?
+    height                Int?
+    comment               String?  @db.Text
+    tryout                Boolean? @default(false)
+    state                 Int?     @default(0)
+    paymentOptionsComment String?  @db.Text
+    participationStatus   String?
+    paymentCodeId         String?
+    shortSize             String?
+    equipmentJerseySize   String?
+    equipmentPantSize     String?
+    equipmentJacketSize   String?
+    equipmentShoeSize     String?
+    createdAt             DateTime
+    updatedAt             DateTime
+}
+
+model Relationship {
+    id               String   @id @default(cuid())
+    subjectId        String?
+    receiverId       String?
+    relationshipType String?
+    createdAt        DateTime
+    updatedAt        DateTime
+
+    Subject  Person? @relation(fields: [subjectId], references: [id], name: "subject")
+    Receiver Person? @relation(fields: [receiverId], references: [id], name: "receiver")
+}
+
+model Roster {
+    id        String   @id @default(cuid())
+    groupId   String?
+    season    String?
+    final     Boolean? @default(false)
+    createdAt DateTime
+    updatedAt DateTime
+}
+
+model Settlement {
+    id               String    @id @default(cuid())
+    activityId       String?
+    schoolId         String?
+    startDate        DateTime? @db.Date
+    endDate          DateTime? @db.Date
+    amountCollected  Int?
+    fees             Int?
+    amountSettled    Int?
+    percentage       Int?
+    amountPaid       Int?
+    amountRemaining  Int?
+    final            Boolean?
+    flatFee          Int?
+    percentageFee    Int?
+    manualFee        Int?
+    participantCount Int?
+    kind             Int?      @default(0)
+    approval         Int?      @default(0)
+    activityKind     String?
+    createdAt        DateTime
+    updatedAt        DateTime
+}
+
+model SubLineItem {
+    id         String    @id @default(cuid())
+    lineItemId String?
+    type       String?
+    amount     Int?
+    settledAt  DateTime?
+    remoteId   Int?
+    createdAt  DateTime
+    updatedAt  DateTime
+}
+
+model Ticket {
+    id                 String   @id @default(cuid())
+    eventId            String?
+    kind               String?
+    basePrice          Int?
+    maxNumberOfTickets Int?
+    state              Int?     @default(0)
+    title              String?  @db.VarChar(40)
+    groupSize          Int?     @default(1)
+    commentsEnabled    Boolean? @default(false)
+    createdAt          DateTime
+    updatedAt          DateTime
+}
+
+model TicketRegistration {
+    id                    String   @id @default(cuid())
+    registrationId        String?
+    ticketId              String?
+    state                 Int?     @default(0)
+    ticketholderFirstName String?
+    ticketEmail           String?
+    studentId             String?
+    lineItemId            String?
+    confirmationNumber    String?
+    ticketholderLastName  String?
+    comment               String?  @db.Text
+    createdAt             DateTime
+    updatedAt             DateTime
+}
+
+model VentureRegistration {
+    id             String   @id @default(cuid())
+    registrationId String?
+    ventureId      String?
+    state          Int?     @default(0)
+    comment        String?
+    paymentCodeId  String?
+    createdAt      DateTime
+    updatedAt      DateTime
 }

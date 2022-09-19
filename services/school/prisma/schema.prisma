@@ -9,23 +9,146 @@ generator client {
 }
 
 model Activity {
-    id                 String        @id @default(cuid())
+    id                                  String                                @id @default(cuid())
+    schoolId                            String
+    registerable                        Boolean?                              @default(false)
+    active                              Boolean?                              @default(true)
+    archived                            Boolean?                              @default(false)
+    steps                               Int?                                  @default(0)
+    emailFooter                         String?
+    termsAndConditions                  String?
+    kind                                String?
+    leadInMessage                       String?
+    noCut                               Boolean?                              @default(false)
+    currentSeason                       String?                               @default("current season")
+    athleticSeason                      String?                               @default("none")
+    createdAt                           DateTime
+    updatedAt                           DateTime
+    ActivityFees                        ActivityFee[]
+    Events                              Event[]
+    CustomDiscounts                     CustomDiscount[]
+    Groups                              Group[]
+    ParticipantInformationConfiguration ParticipantInformationConfiguration[]
+    Ventures                            Venture[]
+    ActivityLegalForms                  ActivityLegalForm[]
+}
+
+model ActivityFee {
+    id         String @id @default(cuid())
+    feeId      String
+    activityId String
+
+    Activity Activity @relation(fields: [activityId], references: [id])
+    Fee      Fee      @relation(fields: [feeId], references: [id])
+}
+
+model ActivityLegalForm {
+    id          String    @id @default(cuid())
+    activityId  String
+    legalFormId String
+    createdAt   DateTime
+    updatedAt   DateTime
+    Activity    Activity  @relation(fields: [activityId], references: [id])
+    LegalForm   LegalForm @relation(fields: [legalFormId], references: [id])
+}
+
+model Address {
+    id              String          @id @default(cuid())
+    type            AddresTypeEnum
+    lineOne         String?
+    lineTwo         String?
+    city            String?
+    state           String?
+    zipCode         String?
+    createdAt       DateTime
+    updatedAt       DateTime
+    SchoolAddresses SchoolAddress[]
+}
+
+enum AddresTypeEnum {
+    PERSONAL
+    BUSINESS
+}
+
+model Award {
+    id        String   @id @default(cuid())
+    schoolId  String
+    name      String?
+    position  Int?
+    active    Boolean? @default(true)
+    createdAt DateTime
+    updatedAt DateTime
+}
+
+model CoachCertification {
+    id        String   @id @default(cuid())
+    personId  String
+    value     String?
+    state     String?
+    code      String?
+    createdAt DateTime
+    updatedAt DateTime
+}
+
+model Color {
+    id       String @id @default(cuid())
+    name     String
+    schoolId String
+}
+
+model CustomDiscount {
+    id                 String   @id @default(cuid())
     schoolId           String
-    registerable       Boolean?      @default(false)
-    active             Boolean?      @default(true)
-    archived           Boolean?      @default(false)
-    steps              Int?          @default(0)
-    emailFooter        String?
-    termsAndConditions String?
     kind               String?
-    leadInMessage      String?
-    noCut              Boolean?      @default(false)
-    currentSeason      String?       @default("current season")
-    athleticSeason     String?       @default("none")
+    condition          Int?
+    active             Boolean? @default(true)
+    discountedFee      Int?
+    activityId         String?
+    secondaryCondition String?
     createdAt          DateTime
     updatedAt          DateTime
-    ActivityFees       ActivityFee[]
-    Events             Event[]
+
+    Activity Activity? @relation(fields: [activityId], references: [id])
+}
+
+model CustomQuestion {
+    id              String   @id @default(cuid())
+    schoolId        String
+    state           String?
+    question        String?
+    questionType    String?
+    questionOptions String?
+    active          Boolean?
+    required        Boolean? @default(false)
+    dependentOn     Int?
+    dependentAnswer String?
+    sortOrder       Int?
+    activityType    String?
+    createdAt       DateTime
+    updatedAt       DateTime
+}
+
+model DirectingRole {
+    id        String   @id @default(cuid())
+    personId  String
+    eventId   String
+    createdAt DateTime
+    updatedAt DateTime
+    Event     Event    @relation(fields: [eventId], references: [id])
+}
+
+model Email {
+    id           String        @id @default(cuid())
+    type         EmailTypeEnum
+    address      String
+    createdAt    DateTime
+    updatedAt    DateTime
+    SchoolEmails SchoolEmail[]
+}
+
+enum EmailTypeEnum {
+    PERSONAL
+    BUSINESS
 }
 
 model Event {
@@ -48,17 +171,27 @@ model Event {
     createdAt         DateTime
     updatedAt         DateTime
 
-    Activity Activity @relation(fields: [activityId], references: [id])
+    Activity       Activity        @relation(fields: [activityId], references: [id])
+    DirectingRoles DirectingRole[]
 }
 
-model Award {
+model FeatureForSeason {
     id        String   @id @default(cuid())
-    schoolId  String
-    name      String?
-    position  Int?
-    active    Boolean? @default(true)
+    schoolId  String?
+    season    String?
+    feature   String?
     createdAt DateTime
     updatedAt DateTime
+}
+
+model Fee {
+    id           String        @id @default(cuid())
+    type         FeeTypeEnum
+    amount       Int
+    createdAt    DateTime
+    updatedAt    DateTime
+    ActivityFees ActivityFee[]
+    SchoolFees   SchoolFee[]
 }
 
 enum FeeTypeEnum {
@@ -66,34 +199,128 @@ enum FeeTypeEnum {
     PERCENTAGE
 }
 
-model Fee {
-    id           String        @id @default(cuid())
-    type         FeeTypeEnum
-    amount       Int
-    ActivityFees ActivityFee[]
-    SchoolFees   SchoolFee[]
+model FuelMyClubActivity {
+    id                        String   @id @default(cuid())
+    activityId                String?  @unique
+    externalFmcOrganizationId String?
+    createdAt                 DateTime
+    updatedAt                 DateTime
 }
 
-model Color {
-    id       String @id @default(cuid())
-    name     String
-    schoolId String
+model FuelMyClubFundraiser {
+    id                      String   @id @default(cuid())
+    fuelMyClubActivityId    String?
+    season                  String?
+    externalFmcFundraiserId String?
+    contactPersonId         String?
+    config                  Int?     @default(0)
+    leadInMessage           String?  @db.Text
+    createdAt               DateTime
+    updatedAt               DateTime
 }
 
-model ActivityFee {
-    id         String @id @default(cuid())
-    feeId      String
-    activityId String
-
-    Activity Activity @relation(fields: [activityId], references: [id])
-    Fee      Fee      @relation(fields: [feeId], references: [id])
+model FuelMyClubOrganization {
+    id              String   @id @default(cuid())
+    schoolId        String?  @unique
+    data            String?  @db.Text
+    fmcOrganization String?
+    fmcFundraiser   String?
+    fmcParticipant  String?
+    salesLink       String?
+    createdAt       DateTime
+    updatedAt       DateTime
 }
 
-enum PhoneTypeEnum {
-    HOME
-    OFFICE
-    FAX
-    CELL
+model Group {
+    id                     String       @id @default(cuid())
+    activityId             String
+    name                   String?
+    level                  String?
+    gender                 String?
+    a2kSiteschoolsportId   Int?
+    sportName              String?
+    rosterwebserviceAccess Boolean?     @default(false)
+    state                  Int?         @default(0)
+    createdAt              DateTime
+    updatedAt              DateTime
+    Activity               Activity     @relation(fields: [activityId], references: [id])
+    GroupAwards            GroupAward[]
+}
+
+model GroupAward {
+    id        String   @id @default(cuid())
+    groupId   String
+    name      String?
+    state     Int?     @default(0)
+    createdAt DateTime
+    updatedAt DateTime
+    Group     Group    @relation(fields: [groupId], references: [id])
+}
+
+model LegalForm {
+    id                    String              @id @default(cuid())
+    schoolId              String
+    name                  String?
+    checkboxText          String?
+    emailToChild          Boolean?
+    file                  String?
+    requireStudentSignOff Boolean?
+    state                 Int?                @default(0)
+    createdAt             DateTime
+    updatedAt             DateTime
+    ActivityLegalForms    ActivityLegalForm[]
+}
+
+model LegalVideo {
+    id                    String   @id @default(cuid())
+    schoolId              String
+    name                  String?
+    checkboxText          String?
+    remoteId              String?
+    requireStudentSignOff Boolean?
+    createdAt             DateTime
+    updatedAt             DateTime
+}
+
+model MedicalForm {
+    id           String   @id @default(cuid())
+    schoolId     String
+    name         String?
+    file         String?
+    freshmanOnly Boolean?
+    createdAt    DateTime
+    updatedAt    DateTime
+}
+
+model ParticipantInformationConfiguration {
+    id            String   @id @default(cuid())
+    schoolId      String
+    activityId    String
+    key           String?
+    visible       Boolean?
+    required      Boolean?
+    activity_kind String?
+    createdAt     DateTime
+    updatedAt     DateTime
+    Activity      Activity @relation(fields: [activityId], references: [id])
+}
+
+model PaymentCode {
+    id        String   @id @default(cuid())
+    schoolId  String
+    name      String?
+    code      String?
+    active    Boolean? @default(true)
+    createdAt DateTime
+    updatedAt DateTime
+}
+
+model PersonRole {
+    id        String   @id @default(cuid())
+    personId  String
+    roleId    String
+    createdAt DateTime
+    updatedAt DateTime
 }
 
 model Phone {
@@ -105,69 +332,72 @@ model Phone {
     SchoolPhones SchoolPhone[]
 }
 
-enum EmailTypeEnum {
-    PERSONAL
-    BUSINESS
+enum PhoneTypeEnum {
+    HOME
+    OFFICE
+    FAX
+    CELL
 }
 
-model Email {
-    id           String        @id @default(cuid())
-    type         EmailTypeEnum
-    address      String
-    createdAt    DateTime
-    updatedAt    DateTime
-    SchoolEmails SchoolEmail[]
+model SchoolAddress {
+    id        String   @id @default(cuid())
+    schoolId  String
+    addressId String
+    createdAt DateTime
+    updatedAt DateTime
+    Address   Address  @relation(fields: [addressId], references: [id])
 }
 
-enum AddresTypeEnum {
-    PERSONAL
-    BUSINESS
+model SchoolEmail {
+    id        String   @id @default(cuid())
+    schoolId  String
+    emailId   String
+    createdAt DateTime
+    updatedAt DateTime
+    Email     Email    @relation(fields: [emailId], references: [id])
 }
 
-model Address {
-    id              String          @id @default(cuid())
-    type            AddresTypeEnum
-    lineOne         String?
-    lineTwo         String?
-    city            String?
-    state           String?
-    zipCode         String?
-    createdAt       DateTime
-    updatedAt       DateTime
-    SchoolAddresses SchoolAddress[]
+model SchoolFee {
+    id        String   @id @default(cuid())
+    schoolId  String
+    feeId     String
+    createdAt DateTime
+    updatedAt DateTime
+    Fee       Fee      @relation(fields: [feeId], references: [id])
 }
 
 model SchoolPhone {
-    id       String @id @default(cuid())
-    schoolId String
-    phoneId  String
+    id        String   @id @default(cuid())
+    schoolId  String
+    phoneId   String
+    createdAt DateTime
+    updatedAt DateTime
 
     Phone Phone @relation(fields: [phoneId], references: [id])
 }
 
-model SchoolEmail {
-    id       String @id @default(cuid())
-    schoolId String
-    emailId  String
-    Email    Email  @relation(fields: [emailId], references: [id])
-}
-
-model SchoolAddress {
-    id        String  @id @default(cuid())
-    schoolId  String
-    addressId String
-    Address   Address @relation(fields: [addressId], references: [id])
-}
-
-model SchoolFee {
-    id       String @id @default(cuid())
-    schoolId String
-    feeId    String
-    Fee      Fee    @relation(fields: [feeId], references: [id])
-}
-
-model PersonRole {
-    id       String @id @default(cuid())
-    personId String
-    roleId   String
+model Venture {
+    id                      String    @id @default(cuid())
+    activityId              String
+    name                    String?
+    description             String?   @db.Text
+    type                    String?
+    gender                  String?
+    grade                   String?
+    basePrice               Int?
+    nonDistrictBasePrice    Int?
+    registrationStart       DateTime? @db.Date
+    registrationEnd         DateTime? @db.Date
+    director                String?
+    directorBio             String?   @db.Text
+    registerable            Boolean?  @default(false)
+    maxNumberOfParticipants Int?      @default(0)
+    location                String?
+    cancelled               Boolean?  @default(false)
+    state                   Int?      @default(0)
+    season                  String?
+    sourceVentureId         Int?
+    createdAt               DateTime
+    updatedAt               DateTime
+    Activity                Activity  @relation(fields: [activityId], references: [id])
 }
