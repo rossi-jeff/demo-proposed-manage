@@ -31,6 +31,8 @@ model Activity {
     ParticipantInformationConfiguration ParticipantInformationConfiguration[]
     Ventures                            Venture[]
     ActivityLegalForms                  ActivityLegalForm[]
+    FuelMyClubActivities                FuelMyClubActivity?
+    Settlements                         Settlement[]
 }
 
 model ActivityFee {
@@ -205,11 +207,14 @@ model FuelMyClubActivity {
     externalFmcOrganizationId String?
     createdAt                 DateTime
     updatedAt                 DateTime
+
+    Activity             Activity?              @relation(fields: [activityId], references: [id])
+    FuelMyClubFundraiser FuelMyClubFundraiser[]
 }
 
 model FuelMyClubFundraiser {
     id                      String   @id @default(cuid())
-    fuelMyClubActivityId    String?
+    fuelMyClubActivityId    String
     season                  String?
     externalFmcFundraiserId String?
     contactPersonId         String?
@@ -217,6 +222,8 @@ model FuelMyClubFundraiser {
     leadInMessage           String?  @db.Text
     createdAt               DateTime
     updatedAt               DateTime
+
+    FuelMyClubActivity FuelMyClubActivity @relation(fields: [fuelMyClubActivityId], references: [id])
 }
 
 model FuelMyClubOrganization {
@@ -293,16 +300,16 @@ model MedicalForm {
 }
 
 model ParticipantInformationConfiguration {
-    id            String   @id @default(cuid())
-    schoolId      String
-    activityId    String
-    key           String?
-    visible       Boolean?
-    required      Boolean?
-    activity_kind String?
-    createdAt     DateTime
-    updatedAt     DateTime
-    Activity      Activity @relation(fields: [activityId], references: [id])
+    id           String   @id @default(cuid())
+    schoolId     String
+    activityId   String
+    key          String?
+    visible      Boolean?
+    required     Boolean?
+    activityKind String?
+    createdAt    DateTime
+    updatedAt    DateTime
+    Activity     Activity @relation(fields: [activityId], references: [id])
 }
 
 model PaymentCode {
@@ -374,6 +381,32 @@ model SchoolPhone {
     updatedAt DateTime
 
     Phone Phone @relation(fields: [phoneId], references: [id])
+}
+
+model Settlement {
+    id               String    @id @default(cuid())
+    activityId       String?
+    schoolId         String?
+    startDate        DateTime? @db.Date
+    endDate          DateTime? @db.Date
+    amountCollected  Int?
+    fees             Int?
+    amountSettled    Int?
+    percentage       Int?
+    amountPaid       Int?
+    amountRemaining  Int?
+    final            Boolean?
+    flatFee          Int?
+    percentageFee    Int?
+    manualFee        Int?
+    participantCount Int?
+    kind             Int?      @default(0)
+    approval         Int?      @default(0)
+    activityKind     String?
+    createdAt        DateTime
+    updatedAt        DateTime
+
+    Activity Activity? @relation(fields: [activityId], references: [id])
 }
 
 model Venture {

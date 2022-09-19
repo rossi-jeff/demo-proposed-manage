@@ -36,11 +36,13 @@ model AwardAssignment {
     state       Int?     @default(0)
     createdAt   DateTime
     updatedAt   DateTime
+
+    GroupRegistration GroupRegistration @relation(fields: [recipientId], references: [id])
 }
 
 model CampShortOrder {
     id                String   @id @default(cuid())
-    campTShirtOrderId String?
+    campTShirtOrderId String
     designLayout      String?
     designChoice      String?
     topLineText       String?
@@ -49,10 +51,12 @@ model CampShortOrder {
     participants      String?  @db.Text()
     createdAt         DateTime
     updatedAt         DateTime
+
+    CampTshirtOrder CampTshirtOrder @relation(fields: [campTShirtOrderId], references: [id])
 }
 
 model CampTshirtOrder {
-    id                 String    @id @default(cuid())
+    id                 String           @id @default(cuid())
     ventureId          String?
     coachId            String?
     schoolId           String?
@@ -64,53 +68,62 @@ model CampTshirtOrder {
     coachName          String?
     coachEmail         String?
     coachPhoneNumber   String?
-    deliveryDate       DateTime? @db.Date()
-    campDataSubmitted  Boolean?  @default(false)
-    orderDate          DateTime? @db.Date()
+    deliveryDate       DateTime?        @db.Date()
+    campDataSubmitted  Boolean?         @default(false)
+    orderDate          DateTime?        @db.Date()
     template           String?
     topLineText        String?
     middleLineText     String?
     bottomLineText     String?
     tShirtColor        String?
     orderOptions       Int?
-    shirtSizes         String?   @db.Text()
-    participants       String?   @db.Text()
+    shirtSizes         String?          @db.Text()
+    participants       String?          @db.Text()
     tShirtQuantity     Int?
     overfillPercentage Int?
     mascotFile         String?
     createdAt          DateTime
     updatedAt          DateTime
+    CampShortOrders    CampShortOrder[]
+
+    Coach Person? @relation(fields: [coachId], references: [id])
 }
 
 model Consent {
     id             String   @id @default(cuid())
-    legalFormId    Int
-    registrationId Int
+    legalFormId    String
+    registrationId String
     accepted       Boolean?
     checkboxText   String?
     sha1           String?
     createdAt      DateTime
     updatedAt      DateTime
+
+    Registration Registration @relation(fields: [registrationId], references: [id])
 }
 
 model CustomAnswer {
     id         String   @id @default(cuid())
-    personId   Int?
-    questionId Int?
+    personId   String
+    questionId String?
     answer     String?  @db.Text()
     createdAt  DateTime
     updatedAt  DateTime
+
+    Person Person @relation(fields: [personId], references: [id])
 }
 
 model EmergencyContact {
     id           String   @id @default(cuid())
-    personId     Int?
+    personId     String
     firstName    String?
     lastName     String?
     phoneNumber  String?
     relationship String?
     createdAt    DateTime
     updatedAt    DateTime
+
+    Person Person @relation(fields: [personId], references: [id])
 }
 
 model FuelMyClubRegistration {
@@ -119,6 +132,8 @@ model FuelMyClubRegistration {
     data           String?  @db.Text
     createdAt      DateTime
     updatedAt      DateTime
+
+    Registration Registration? @relation(fields: [registrationId], references: [id])
 }
 
 model GroupAwardAssignment {
@@ -128,19 +143,25 @@ model GroupAwardAssignment {
     state       Int?     @default(0)
     createdAt   DateTime
     updatedAt   DateTime
+
+    GroupRegistration GroupRegistration @relation(fields: [recipientId], references: [id])
 }
 
 model GroupRegistration {
-    id             String    @id @default(cuid())
-    registrationId Int?
-    groupId        Int?
-    rosterId       Int?
-    finalizeDate   DateTime? @db.Date
-    jerseyNumber   String?
-    position       String?
-    state          Int?      @default(0)
-    createdAt      DateTime
-    updatedAt      DateTime
+    id                    String                 @id @default(cuid())
+    registrationId        String?
+    groupId               String?
+    rosterId              String?
+    finalizeDate          DateTime?              @db.Date
+    jerseyNumber          String?
+    position              String?
+    state                 Int?                   @default(0)
+    createdAt             DateTime
+    updatedAt             DateTime
+    AwardAssignments      AwardAssignment[]
+    GroupAwardAssignments GroupAwardAssignment[]
+    Registration          Registration?          @relation(fields: [registrationId], references: [id])
+    RecordAssignments     RecordAssignment[]
 }
 
 model Invite {
@@ -152,6 +173,9 @@ model Invite {
     secret      String
     createdAt   DateTime
     updatedAt   DateTime
+
+    Person    Person? @relation(fields: [personId], references: [id], name: "recipient")
+    InvitedBy Person? @relation(fields: [invitedById], references: [id], name: "invited_by")
 }
 
 model Invoice {
@@ -161,6 +185,10 @@ model Invoice {
     invoiceTransactionId String?
     createdAt            DateTime
     updatedAt            DateTime
+
+    Person          Person?           @relation(fields: [personId], references: [id])
+    LineItem        LineItem[]
+    LineItemInvoice LineItemInvoice[]
 }
 
 model InvoiceTransaction {
@@ -178,11 +206,13 @@ model InvoiceTransaction {
 
 model LegalVideoConsent {
     id           String   @id @default(cuid())
-    legalVideoId Int?
-    personId     Int?
+    legalVideoId String?
+    personId     String?
     season       String?
     createdAt    DateTime
     updatedAt    DateTime
+
+    Person Person? @relation(fields: [personId], references: [id])
 }
 
 model LineItem {
@@ -202,6 +232,13 @@ model LineItem {
     state          Int?     @default(0)
     createdAt      DateTime
     updatedAt      DateTime
+
+    Registration        Registration?        @relation(fields: [registrationId], references: [id])
+    Invoice             Invoice?             @relation(fields: [invoiceId], references: [id])
+    Ticket              Ticket?              @relation(fields: [ticketId], references: [id])
+    LineItemInvoices    LineItemInvoice[]
+    SubLineItem         SubLineItem[]
+    TicketRegistrations TicketRegistration[]
 }
 
 model LineItemInvoice {
@@ -210,36 +247,43 @@ model LineItemInvoice {
     invoiceId  String
     createdAt  DateTime
     updatedAt  DateTime
+
+    LineItem LineItem @relation(fields: [lineItemId], references: [id])
+    Invoice  Invoice  @relation(fields: [invoiceId], references: [id])
 }
 
 model MedicalCondition {
     id              String    @id @default(cuid())
-    personId        Int
+    personId        String
     name            String?
     physician       String?
     dateOfDiagnosis DateTime? @db.Date
     emergencyPlan   String?
     createdAt       DateTime
     updatedAt       DateTime
+
+    Person Person @relation(fields: [personId], references: [id])
 }
 
 model Message {
-    id                  String   @id @default(cuid())
-    schoolId            Int?
-    activityId          Int?
-    ventureId           Int?
+    id                  String          @id @default(cuid())
+    schoolId            String?
+    activityId          String?
+    ventureId           String?
     status              String?
-    message             String?  @db.Text
-    groupId             Int?
-    senderId            Int?
-    eventId             Int?
-    messageType         Int?     @default(0)
-    superadminMessage   Boolean? @default(false)
+    message             String?         @db.Text
+    groupId             String?
+    senderId            String?
+    eventId             String?
+    messageType         Int?            @default(0)
+    superadminMessage   Boolean?        @default(false)
     documentFileName    String?
     documentContentType String?
     documentFileSize    Int?
     createdAt           DateTime
     updatedAt           DateTime
+    Sender              Person?         @relation(fields: [senderId], references: [id])
+    MessagePeople       MessagePerson[]
 }
 
 model MessagePerson {
@@ -248,6 +292,9 @@ model MessagePerson {
     personId  String
     createdAt DateTime
     updatedAt DateTime
+
+    Message Message @relation(fields: [messageId], references: [id])
+    Person  Person  @relation(fields: [personId], references: [id])
 }
 
 model Occurance {
@@ -260,18 +307,57 @@ model Occurance {
 }
 
 model Person {
-    id                    String             @id @default(cuid())
-    userName              String
-    passWord              String
-    createdAt             DateTime
-    updatedAt             DateTime
-    PersonPhones          PersonPhone[]
-    PersonEmails          PersonEmail[]
-    PersonAddresses       PersonAddress[]
-    Affiliations          Affiliation[]
-    AlergicConditions     AlergicCondition[]
-    SubjectRelationships  Relationship[]     @relation("subject")
-    ReceiverRelationships Relationship[]     @relation("receiver")
+    id                       String               @id @default(cuid())
+    userName                 String
+    passWord                 String
+    schoolId                 String?
+    allowedToLogin           Boolean?             @default(false)
+    firstName                String?
+    lastName                 String?
+    sex                      String?
+    birthDate                DateTime?            @db.Date
+    highSchoolGraduationYear String?
+    insuranceCompany         String?
+    insuranceAccountNumber   String?
+    physicianName            String?
+    physicianPhone           String?
+    studentId                String?
+    schoolTransferredFrom    String?
+    medicalInformation       String?              @db.Text
+    acceptsCOPPA             Boolean?
+    optsInToCommunications   Boolean?             @default(true)
+    physicalDate             DateTime?            @db.Date
+    credit                   Int?
+    ethnicity                String?
+    firstEnrollmentDate      DateTime?            @db.Date
+    participationStatus      String?
+    gpa                      Float?
+    felonyInfo               Int?                 @default(0)
+    notifications            Int?                 @default(31)
+    concussionTestDate       DateTime?            @db.Date
+    adData                   String?              @db.Text
+    createdAt                DateTime
+    updatedAt                DateTime
+    Phones                   PersonPhone[]
+    Emails                   PersonEmail[]
+    Addresses                PersonAddress[]
+    Affiliations             Affiliation[]
+    AlergicConditions        AlergicCondition[]
+    SubjectRelationships     Relationship[]       @relation("subject")
+    ReceiverRelationships    Relationship[]       @relation("receiver")
+    CampTshirtOrders         CampTshirtOrder[]
+    CustomAnswers            CustomAnswer[]
+    EmergencyContacts        EmergencyContact[]
+    InvitesSent              Invite[]             @relation("invited_by")
+    InvitesReceived          Invite[]             @relation("recipient")
+    Invoices                 Invoice[]
+    LegalVideoConsents       LegalVideoConsent[]
+    MedicalConditions        MedicalCondition[]
+    MessagePeople            MessagePerson[]
+    Messages                 Message[]
+    Participants             Registration[]       @relation("participant")
+    RegisteredBy             Registration[]       @relation("registered_by")
+    TicketRegistrations      TicketRegistration[]
 }
 
 model PersonAddress {
@@ -303,54 +389,66 @@ model PersonPhone {
 }
 
 model Record {
-    id         String   @id @default(cuid())
-    groupId    Int?
-    sportCode  String?
-    title      String?
-    recordCode String?
-    unit       String?
-    kind       String?
-    createdAt  DateTime
-    updatedAt  DateTime
+    id                String             @id @default(cuid())
+    groupId           String?
+    sportCode         String?
+    title             String?
+    recordCode        String?
+    unit              String?
+    kind              String?
+    createdAt         DateTime
+    updatedAt         DateTime
+    RecordAssignments RecordAssignment[]
 }
 
 model RecordAssignment {
     id            String    @id @default(cuid())
-    recipientId   Int?
-    rosterId      Int?
-    recordId      Int?
+    recipientId   String?
+    rosterId      String?
+    recordId      String?
     recordSetDate DateTime? @db.Date
     result        Float?
     state         Int?      @default(0)
     banner_year   String?
     createdAt     DateTime
     updatedAt     DateTime
+
+    Recipient GroupRegistration? @relation(fields: [recipientId], references: [id])
+    Roster    Roster?            @relation(fields: [rosterId], references: [id])
+    Record    Record?            @relation(fields: [recordId], references: [id])
 }
 
 model Registration {
-    id                    String   @id @default(cuid())
-    activityId            String?
-    participantId         String?
-    registeredById        String?
-    paid                  Boolean? @default(false)
-    season                String?
-    groupId               String?
-    tShirtSize            String?
-    weight                Int?
-    height                Int?
-    comment               String?  @db.Text
-    tryout                Boolean? @default(false)
-    state                 Int?     @default(0)
-    paymentOptionsComment String?  @db.Text
-    participationStatus   String?
-    paymentCodeId         String?
-    shortSize             String?
-    equipmentJerseySize   String?
-    equipmentPantSize     String?
-    equipmentJacketSize   String?
-    equipmentShoeSize     String?
-    createdAt             DateTime
-    updatedAt             DateTime
+    id                     String                  @id @default(cuid())
+    activityId             String?
+    participantId          String?
+    registeredById         String?
+    paid                   Boolean?                @default(false)
+    season                 String?
+    groupId                String?
+    tShirtSize             String?
+    weight                 Int?
+    height                 Int?
+    comment                String?                 @db.Text
+    tryout                 Boolean?                @default(false)
+    state                  Int?                    @default(0)
+    paymentOptionsComment  String?                 @db.Text
+    participationStatus    String?
+    paymentCodeId          String?
+    shortSize              String?
+    equipmentJerseySize    String?
+    equipmentPantSize      String?
+    equipmentJacketSize    String?
+    equipmentShoeSize      String?
+    createdAt              DateTime
+    updatedAt              DateTime
+    Consents               Consent[]
+    FuelMyClubRegistration FuelMyClubRegistration?
+    GroupRegistrations     GroupRegistration[]
+    LineItems              LineItem[]
+    Participant            Person?                 @relation(fields: [participantId], references: [id], name: "participant")
+    RegisteredBy           Person?                 @relation(fields: [registeredById], references: [id], name: "registered_by")
+    TicketRegistrations    TicketRegistration[]
 }
 
 model Relationship {
@@ -366,36 +464,13 @@ model Relationship {
 }
 
 model Roster {
-    id        String   @id @default(cuid())
-    groupId   String?
-    season    String?
-    final     Boolean? @default(false)
-    createdAt DateTime
-    updatedAt DateTime
-}
-
-model Settlement {
-    id               String    @id @default(cuid())
-    activityId       String?
-    schoolId         String?
-    startDate        DateTime? @db.Date
-    endDate          DateTime? @db.Date
-    amountCollected  Int?
-    fees             Int?
-    amountSettled    Int?
-    percentage       Int?
-    amountPaid       Int?
-    amountRemaining  Int?
-    final            Boolean?
-    flatFee          Int?
-    percentageFee    Int?
-    manualFee        Int?
-    participantCount Int?
-    kind             Int?      @default(0)
-    approval         Int?      @default(0)
-    activityKind     String?
+    id               String             @id @default(cuid())
+    groupId          String?
+    season           String?
+    final            Boolean?           @default(false)
     createdAt        DateTime
     updatedAt        DateTime
+    RecordAssignment RecordAssignment[]
 }
 
 model SubLineItem {
@@ -407,20 +482,24 @@ model SubLineItem {
     remoteId   Int?
     createdAt  DateTime
     updatedAt  DateTime
+
+    LineItem LineItem? @relation(fields: [lineItemId], references: [id])
 }
 
 model Ticket {
-    id                 String   @id @default(cuid())
-    eventId            String?
-    kind               String?
-    basePrice          Int?
-    maxNumberOfTickets Int?
-    state              Int?     @default(0)
-    title              String?  @db.VarChar(40)
-    groupSize          Int?     @default(1)
-    commentsEnabled    Boolean? @default(false)
-    createdAt          DateTime
-    updatedAt          DateTime
+    id                  String               @id @default(cuid())
+    eventId             String?
+    kind                String?
+    basePrice           Int?
+    maxNumberOfTickets  Int?
+    state               Int?                 @default(0)
+    title               String?              @db.VarChar(40)
+    groupSize           Int?                 @default(1)
+    commentsEnabled     Boolean?             @default(false)
+    createdAt           DateTime
+    updatedAt           DateTime
+    LineItem            LineItem[]
+    TicketRegistrations TicketRegistration[]
 }
 
 model TicketRegistration {
@@ -437,6 +516,11 @@ model TicketRegistration {
     comment               String?  @db.Text
     createdAt             DateTime
     updatedAt             DateTime
+
+    Ticket       Ticket?       @relation(fields: [ticketId], references: [id])
+    Registration Registration? @relation(fields: [registrationId], references: [id])
+    Student      Person?       @relation(fields: [studentId], references: [id])
+    LineItem     LineItem?     @relation(fields: [lineItemId], references: [id])
 }
 
 model VentureRegistration {
