@@ -9,15 +9,16 @@ generator client {
 }
 
 model Person {
-    id           String      @id @default(cuid())
-    userName    String
-    passWord    String
-    PersonPhones PersonPhone[]
-    PersonEmails PersonEmail[]
+    id              String          @id @default(cuid())
+    userName        String
+    passWord        String
+    PersonPhones    PersonPhone[]
+    PersonEmails    PersonEmail[]
+    PersonAddresses PersonAddress[]
 }
 
 model PersonPhone {
-    id        String      @id @default(cuid())
+    id       String @id @default(cuid())
     personId String
     phoneId  String
 
@@ -25,8 +26,15 @@ model PersonPhone {
 }
 
 model PersonEmail {
-    id        String      @id @default(cuid())
+    id       String @id @default(cuid())
     personId String
     emailId  String
+    Person   Person @relation(fields: [personId], references: [id])
+}
+
+model PersonAddress {
+    id        String @id @default(cuid())
+    personId  String
+    addressId String
     Person    Person @relation(fields: [personId], references: [id])
 }

@@ -1,0 +1,17 @@
+-- AlterTable
+ALTER TABLE "School" ADD COLUMN     "a2kLinkSchoolId" INTEGER,
+ADD COLUMN     "features" INTEGER DEFAULT 0,
+ADD COLUMN     "feederTowns" TEXT,
+ADD COLUMN     "kind" TEXT DEFAULT 'High School',
+ADD COLUMN     "latitude" TEXT,
+ADD COLUMN     "longitude" TEXT,
+ADD COLUMN     "mascot" TEXT,
+ADD COLUMN     "notes" TEXT,
+ADD COLUMN     "notifications" INTEGER DEFAULT 0,
+ADD COLUMN     "paymentCode" TEXT DEFAULT '',
+ADD COLUMN     "paymentOptions" INTEGER DEFAULT 0,
+ADD COLUMN     "smsMessaging" BOOLEAN DEFAULT false,
+ADD COLUMN     "spendingCapMax" INTEGER DEFAULT 0,
+ADD COLUMN     "subMerchantId" TEXT,
+ADD COLUMN     "takingPayments" BOOLEAN,
+ADD COLUMN     "tracked" BOOLEAN DEFAULT false;

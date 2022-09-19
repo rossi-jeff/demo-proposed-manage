@@ -9,30 +9,165 @@ generator client {
 }
 
 model Activity {
-    id String @id @default(cuid())
+    id                 String        @id @default(cuid())
+    schoolId           String
+    registerable       Boolean?      @default(false)
+    active             Boolean?      @default(true)
+    archived           Boolean?      @default(false)
+    steps              Int?          @default(0)
+    emailFooter        String?
+    termsAndConditions String?
+    kind               String?
+    leadInMessage      String?
+    noCut              Boolean?      @default(false)
+    currentSeason      String?       @default("current season")
+    athleticSeason     String?       @default("none")
+    createdAt          DateTime
+    updatedAt          DateTime
+    ActivityFees       ActivityFee[]
+    Events             Event[]
+}
+
+model Event {
+    id                String    @id @default(cuid())
+    activityId        String
+    name              String?
+    description       String?   @db.Text()
+    registerable      Boolean?  @default(false)
+    director          String?
+    startTime         DateTime? @db.Time()
+    endTime           DateTime? @db.Time()
+    studentOnly       Boolean?  @default(false)
+    location          String?
+    registrationStart DateTime? @db.Date
+    registrationEnd   DateTime? @db.Date
+    cancelled         Boolean?  @default(false)
+    state             Int?      @default(0)
+    eventDate         DateTime? @db.Date
+    maxTicketCapacity Int?
+    createdAt         DateTime
+    updatedAt         DateTime
+
+    Activity Activity @relation(fields: [activityId], references: [id])
+}
+
+model Award {
+    id        String   @id @default(cuid())
+    schoolId  String
+    name      String?
+    position  Int?
+    active    Boolean? @default(true)
+    createdAt DateTime
+    updatedAt DateTime
+}
+
+enum FeeTypeEnum {
+    FLAT
+    PERCENTAGE
+}
+
+model Fee {
+    id           String        @id @default(cuid())
+    type         FeeTypeEnum
+    amount       Int
+    ActivityFees ActivityFee[]
+    SchoolFees   SchoolFee[]
+}
+
+model Color {
+    id       String @id @default(cuid())
+    name     String
+    schoolId String
+}
+
+model ActivityFee {
+    id         String @id @default(cuid())
+    feeId      String
+    activityId String
+
+    Activity Activity @relation(fields: [activityId], references: [id])
+    Fee      Fee      @relation(fields: [feeId], references: [id])
+}
+
+enum PhoneTypeEnum {
+    HOME
+    OFFICE
+    FAX
+    CELL
 }
 
 model Phone {
-    id        String   @id @default(cuid())
-    numnber   String
-    createdAt DateTime
-    updatedAt DateTime
+    id           String        @id @default(cuid())
+    type         PhoneTypeEnum
+    numnber      String
+    createdAt    DateTime
+    updatedAt    DateTime
+    SchoolPhones SchoolPhone[]
+}
+
+enum EmailTypeEnum {
+    PERSONAL
+    BUSINESS
 }
 
 model Email {
-    id        String   @id @default(cuid())
-    address   String
-    createdAt DateTime
-    updatedAt DateTime
+    id           String        @id @default(cuid())
+    type         EmailTypeEnum
+    address      String
+    createdAt    DateTime
+    updatedAt    DateTime
+    SchoolEmails SchoolEmail[]
+}
+
+enum AddresTypeEnum {
+    PERSONAL
+    BUSINESS
 }
 
 model Address {
-    id        String   @id @default(cuid())
-    lineOne   String?
-    lineTwo   String?
-    city      String?
-    state     String?
-    zipCode   String?
-    createdAt DateTime
-    updatedAt DateTime
+    id              String          @id @default(cuid())
+    type            AddresTypeEnum
+    lineOne         String?
+    lineTwo         String?
+    city            String?
+    state           String?
+    zipCode         String?
+    createdAt       DateTime
+    updatedAt       DateTime
+    SchoolAddresses SchoolAddress[]
+}
+
+model SchoolPhone {
+    id       String @id @default(cuid())
+    schoolId String
+    phoneId  String
+
+    Phone Phone @relation(fields: [phoneId], references: [id])
+}
+
+model SchoolEmail {
+    id       String @id @default(cuid())
+    schoolId String
+    emailId  String
+    Email    Email  @relation(fields: [emailId], references: [id])
+}
+
+model SchoolAddress {
+    id        String  @id @default(cuid())
+    schoolId  String
+    addressId String
+    Address   Address @relation(fields: [addressId], references: [id])
+}
+
+model SchoolFee {
+    id       String @id @default(cuid())
+    schoolId String
+    feeId    String
+    Fee      Fee    @relation(fields: [feeId], references: [id])
+}
+
+model PersonRole {
+    id       String @id @default(cuid())
+    personId String
+    roleId   String
 }

@@ -19,16 +19,32 @@ model User {
 }
 
 model School {
-    id         String      @id @default(cuid())
-    name       String
-    subDomain  String
-    createdAt DateTime
-    updatedAt DateTime
+    id              String   @id @default(cuid())
+    name            String
+    subDomain       String
+    latitude        String?
+    longitude       String?
+    mascot          String?
+    feederTowns     String?
+    takingPayments  Boolean?
+    paymentOptions  Int?     @default(0)
+    spendingCapMax  Int?     @default(0)
+    paymentCode     String?  @default("")
+    smsMessaging    Boolean? @default(false)
+    notifications   Int?     @default(0)
+    notes           String?  @db.Text
+    features        Int?     @default(0)
+    kind            String?  @default("High School")
+    tracked         Boolean? @default(false)
+    subMerchantId   String?
+    a2kLinkSchoolId Int?
+    createdAt       DateTime
+    updatedAt       DateTime
 }
 
 model Role {
-    id         String      @id @default(cuid())
-    name       String
+    id        String   @id @default(cuid())
+    name      String
     isAdmin   Boolean
     createdAt DateTime
     updatedAt DateTime
@@ -37,7 +53,7 @@ model Role {
 }
 
 model UserRole {
-    id         String      @id @default(cuid())
+    id        String   @id @default(cuid())
     userId    Int
     roleId    String
     createdAt DateTime
@@ -46,5 +62,3 @@ model UserRole {
     User User @relation(fields: [userId], references: [id])
     Role Role @relation(fields: [roleId], references: [id])
 }
-
-
