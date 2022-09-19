@@ -1,0 +1,12 @@
+type CampShortOrder {
+  id: ID!
+  campTShirtOrderId: String
+  designLayout: String
+  designChoice: String
+  topLineText: String
+  bottomLineText: String
+  shortSizes: String
+  participants: String
+  createdAt: String
+  updatedAt: String
+}

@@ -1,0 +1,8 @@
+type AwardAssignment {
+  id: ID!
+  recipientId: String
+  awardId: String
+  state: Int
+  createdAt: String
+  updatedAt: String
+}

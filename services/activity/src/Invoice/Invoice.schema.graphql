@@ -1,0 +1,8 @@
+type Invoice {
+  id: ID!
+  personId: String
+  credit: Int
+  invoiceTransactionId: String
+  createdAt: String
+  updatedAt: String
+}

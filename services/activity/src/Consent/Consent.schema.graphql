@@ -1,0 +1,10 @@
+type Consent {
+  id: ID!
+  legalFormId: String
+  registrationId: String
+  accepted: Boolean
+  checkboxText: String
+  sha1: String
+  createdAt: String
+  updatedAt: String
+}

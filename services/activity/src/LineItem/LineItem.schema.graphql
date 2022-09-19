@@ -1,0 +1,18 @@
+type LineItem {
+  id: ID!
+  registrationId: String
+  ventureId: String
+  activityName: String
+  ventureName: String
+  price: Int
+  invoiceId: String
+  refunded: Boolean
+  paid: Boolean
+  refundAmount: Int
+  ticketKind: String
+  eventName: String
+  ticketId: String
+  state: Int
+  createdAt: String
+  updatedAt: String
+}

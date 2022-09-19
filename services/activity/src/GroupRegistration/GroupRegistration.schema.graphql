@@ -1,0 +1,12 @@
+type GroupRegistration {
+  id: ID!
+  registrationId: String
+  groupId: String
+  rosterId: String
+  finalizeDate: String
+  jerseyNumber: String
+  position: String
+  state: Int
+  createdAt: String
+  updatedAt: String
+}

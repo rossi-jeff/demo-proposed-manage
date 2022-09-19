@@ -1,0 +1,7 @@
+type FuelMyClubRegistration {
+  id: ID!
+  registrationId: String
+  data: String
+  createdAt: String
+  updatedAt: String
+}

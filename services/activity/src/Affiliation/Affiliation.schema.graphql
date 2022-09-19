@@ -1,0 +1,8 @@
+type Affiliation {
+  id: ID!
+  personId: String
+  schoolId: String
+  affiliationType: String
+  createdAt: String
+  updatedAt: String
+}

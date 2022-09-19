@@ -1,0 +1,12 @@
+type InvoiceTransaction {
+  id: ID!
+  remoteId: String
+  status: String
+  invoiceId: String
+  paymentType: String
+  adminFlag: Boolean
+  problemStatusAt: String
+  details: String
+  createdAt: String
+  updatedAt: String
+}

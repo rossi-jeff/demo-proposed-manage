@@ -1,0 +1,10 @@
+type Invite {
+  id: ID!
+  personId: String
+  invitedById: String
+  schoolId: String
+  accepted: Boolean
+  secret: String
+  createdAt: String
+  updatedAt: String
+}
