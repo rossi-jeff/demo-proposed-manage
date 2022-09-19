@@ -1,0 +1,50 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("ADMIN_DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "../generated/admin-db"
+}
+
+// user from federation, snap employee
+model User {
+    id       Int    @id @default(autoincrement())
+    name     String
+    email    String @unique
+    passWord String
+
+    UserRole UserRole[]
+}
+
+model School {
+    id         String      @id @default(cuid())
+    name       String
+    subDomain  String
+    createdAt DateTime
+    updatedAt DateTime
+}
+
+model Role {
+    id         String      @id @default(cuid())
+    name       String
+    isAdmin   Boolean
+    createdAt DateTime
+    updatedAt DateTime
+
+    UserRole UserRole[]
+}
+
+model UserRole {
+    id         String      @id @default(cuid())
+    userId    Int
+    roleId    String
+    createdAt DateTime
+    updatedAt DateTime
+
+    User User @relation(fields: [userId], references: [id])
+    Role Role @relation(fields: [roleId], references: [id])
+}
+
+

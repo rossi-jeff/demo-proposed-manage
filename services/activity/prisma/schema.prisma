@@ -1,0 +1,32 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("ACTIVITY_DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "../generated/activity-db"
+}
+
+model Person {
+    id           String      @id @default(cuid())
+    userName    String
+    passWord    String
+    PersonPhones PersonPhone[]
+    PersonEmails PersonEmail[]
+}
+
+model PersonPhone {
+    id        String      @id @default(cuid())
+    personId String
+    phoneId  String
+
+    Person Person @relation(fields: [personId], references: [id])
+}
+
+model PersonEmail {
+    id        String      @id @default(cuid())
+    personId String
+    emailId  String
+    Person    Person @relation(fields: [personId], references: [id])
+}

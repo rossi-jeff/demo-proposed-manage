@@ -1,0 +1,38 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("SCHOOL_DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "../generated/school-db"
+}
+
+model Activity {
+    id String @id @default(cuid())
+}
+
+model Phone {
+    id        String   @id @default(cuid())
+    numnber   String
+    createdAt DateTime
+    updatedAt DateTime
+}
+
+model Email {
+    id        String   @id @default(cuid())
+    address   String
+    createdAt DateTime
+    updatedAt DateTime
+}
+
+model Address {
+    id        String   @id @default(cuid())
+    lineOne   String?
+    lineTwo   String?
+    city      String?
+    state     String?
+    zipCode   String?
+    createdAt DateTime
+    updatedAt DateTime
+}

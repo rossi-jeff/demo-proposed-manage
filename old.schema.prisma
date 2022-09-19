@@ -1,0 +1,1240 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// model User {
+//   id       Int    @id @default(autoincrement())
+//   name     String
+//   email    String @unique
+//   password String
+// }
+
+model ActiveAdminComment {
+  id            Int      @id @default(autoincrement())
+  resource_id   Int?
+  resource_type String?
+  author_id     Int?
+  author_type   String?
+  body          String?  @db.Text()
+  created_at    DateTime
+  updated_at    DateTime
+  namespace     String?
+
+  @@index([author_id, author_type])
+  @@index([namespace])
+  @@index([resource_id, resource_type])
+  @@map("active_admin_comments")
+}
+
+model Activity {
+  id                      Int      @id @default(autoincrement())
+  name                    String
+  registerable            Boolean  @default(false)
+  organization_id         Int?
+  created_at              DateTime
+  updated_at              DateTime
+  steps                   Int      @default(0)
+  fee                     Int?
+  email_footer            String?
+  terms_and_conditions    String?
+  kind                    String?
+  lead_in_message         String?
+  no_cut                  Boolean  @default(false)
+  current_season          String   @default("current season")
+  discounted_fee          Int?
+  spirit_wear_link        String?
+  athletic_season         String   @default("none")
+  rosterwebservice_access Boolean  @default(false)
+  archived                Boolean  @default(false)
+
+  Organization                        Organization?                         @relation(fields: [organization_id], references: [id])
+  FuelMyClubActivity                  FuelMyClubActivity?
+  Message                             Message[]
+  ParticipantInformationConfiguration ParticipantInformationConfiguration[]
+  Registration                        Registration[]
+  Settlement                          Settlement[]
+  Venture                             Venture[]
+  ActivityLegalForm                   ActivityLegalForm[]
+  CustomDiscount                      CustomDiscount[]
+  Event                               Event[]
+  Group                               Group[]
+
+  @@index([organization_id, name])
+  @@index([organization_id])
+  @@map("activities")
+}
+
+model ActivityLegalForm {
+  id            Int @id @default(autoincrement())
+  activity_id   Int
+  legal_form_id Int
+
+  Activity  Activity  @relation(fields: [activity_id], references: [id])
+  LegalForm LegalForm @relation(fields: [legal_form_id], references: [id])
+
+  @@index([activity_id, legal_form_id])
+  @@index([activity_id])
+  @@map("activity_legal_forms")
+}
+
+model Address {
+  id         Int      @id @default(autoincrement())
+  line1      String?
+  line2      String?
+  city       String?
+  state      String?
+  zip_code   String?
+  created_at DateTime
+  updated_at DateTime
+
+  People       Person[]
+  Organization Organization?
+
+  @@map("addresses")
+}
+
+model AdminAction {
+  id                      Int      @id @default(autoincrement())
+  performed_by_id         Int?
+  action                  String?
+  admin_type              String?
+  performed_on_table_name String?
+  organization_id         Int?
+  performed_on_id         Int?
+  data_submitted          String?  @db.Text()
+  data_changed            String?  @db.Text()
+  additional_notes        String?  @db.Text()
+  created_at              DateTime
+  updated_at              DateTime
+
+  PerformedBy Person? @relation(fields: [performed_by_id], references: [id])
+
+  @@map("admin_actions")
+}
+
+model AdminUser {
+  id                     Int       @id @default(autoincrement())
+  email                  String    @unique @default("")
+  encrypted_password     String?
+  reset_password_token   String?   @unique
+  reset_password_sent_at DateTime?
+  remember_created_at    DateTime?
+  sign_in_count          Int?      @default(0)
+  current_sign_in_at     DateTime?
+  last_sign_in_at        DateTime?
+  current_sign_in_ip     String?
+  last_sign_in_ip        String?
+  created_at             DateTime
+  updated_at             DateTime
+
+  @@map("admin_users")
+}
+
+model Affiliation {
+  id               Int      @id @default(autoincrement())
+  person_id        Int?
+  organization_id  Int?
+  affiliation_type String?
+  created_at       DateTime
+  updated_at       DateTime
+
+  Person       Person?       @relation(fields: [person_id], references: [id])
+  Organization Organization? @relation(fields: [organization_id], references: [id])
+
+  @@index([organization_id, affiliation_type])
+  @@map("affiliations")
+}
+
+model AlergicCondition {
+  id                Int      @id @default(autoincrement())
+  allergy_condition String?
+  severity          String?
+  reaction          String?
+  person_id         Int?
+  created_at        DateTime
+  updated_at        DateTime
+
+  Person Person? @relation(fields: [person_id], references: [id])
+
+  @@map("alergic_conditions")
+}
+
+model AwardAssignment {
+  id           Int      @id @default(autoincrement())
+  recipient_id Int
+  award_id     Int
+  state        Int?     @default(0)
+  created_at   DateTime
+  updated_at   DateTime
+
+  Award             Award             @relation(fields: [award_id], references: [id])
+  GroupRegistration GroupRegistration @relation(fields: [recipient_id], references: [id])
+
+  @@map("award_assignments")
+}
+
+model Award {
+  id              Int      @id @default(autoincrement())
+  name            String?
+  position        Int?
+  organization_id Int?
+  active          Boolean? @default(true)
+  created_at      DateTime
+  updated_at      DateTime
+
+  Organization    Organization?     @relation(fields: [organization_id], references: [id])
+  AwardAssignment AwardAssignment[]
+
+  @@map("awards")
+}
+
+model CampShortOrder {
+  id                   Int      @id @default(autoincrement())
+  camp_tshirt_order_id Int?
+  design_layout        String?
+  design_choice        String?
+  top_line_text        String?
+  bottom_line_text     String?
+  short_sizes          String?  @db.Text()
+  participants         String?  @db.Text()
+  created_at           DateTime
+  updated_at           DateTime
+
+  CampTshirtOrder CampTshirtOrder? @relation(fields: [camp_tshirt_order_id], references: [id])
+
+  @@map("camp_short_orders")
+}
+
+model CampTshirtOrder {
+  id                  Int       @id @default(autoincrement())
+  venture_id          Int?
+  coach_id            Int?
+  season              String?
+  organization_name   String?
+  venture_name        String?
+  organization_color1 String?
+  organization_color2 String?
+  coach_name          String?
+  coach_email         String?
+  coach_phone_number  String?
+  delivery_date       DateTime? @db.Date()
+  camp_data_submitted Boolean?  @default(false)
+  order_date          DateTime? @db.Date()
+  template            String?
+  top_line_text       String?
+  middle_line_text    String?
+  bottom_line_text    String?
+  tshirt_color        String?
+  order_options       Int?
+  shirt_sizes         String?   @db.Text()
+  participants        String?   @db.Text()
+  tshirt_quantity     Int?
+  overfill_percentage Int?
+  organization_id     Int?
+  mascot_file         String?
+  created_at          DateTime
+  updated_at          DateTime
+
+  Venture        Venture?         @relation(fields: [venture_id], references: [id])
+  Organization   Organization?    @relation(fields: [organization_id], references: [id])
+  Coach          Person?          @relation(fields: [coach_id], references: [id])
+  CampShortOrder CampShortOrder[]
+
+  @@map("camp_tshirt_orders")
+}
+
+model CoachCertification {
+  id         Int      @id @default(autoincrement())
+  person_id  Int?
+  value      String?
+  state      String?
+  code       String?
+  created_at DateTime
+  updated_at DateTime
+
+  Person Person? @relation(fields: [person_id], references: [id])
+
+  @@index([person_id])
+  @@map("coach_certifications")
+}
+
+model CoachingRole {
+  id         Int      @id @default(autoincrement())
+  person_id  Int?
+  group_id   Int?
+  position   String?
+  venture_id Int?
+  created_at DateTime
+  updated_at DateTime
+
+  Person  Person?  @relation(fields: [person_id], references: [id])
+  Group   Group?   @relation(fields: [group_id], references: [id])
+  Venture Venture? @relation(fields: [venture_id], references: [id])
+
+  @@index([group_id])
+  @@index([venture_id])
+  @@map("coaching_roles")
+}
+
+model Consent {
+  id              Int      @id @default(autoincrement())
+  legal_form_id   Int?
+  registration_id Int?
+  accepted        Boolean?
+  checkbox_text   String?
+  sha1            String?
+  created_at      DateTime
+  updated_at      DateTime
+
+  LegalForm    LegalForm?    @relation(fields: [legal_form_id], references: [id])
+  Registration Registration? @relation(fields: [registration_id], references: [id])
+
+  @@index([registration_id])
+  @@map("consents")
+}
+
+model CustomAnswer {
+  id          Int      @id @default(autoincrement())
+  person_id   Int?
+  question_id Int?
+  answer      String?  @db.Text()
+  created_at  DateTime
+  updated_at  DateTime
+
+  Person         Person?         @relation(fields: [person_id], references: [id])
+  CustomQuestion CustomQuestion? @relation(fields: [question_id], references: [id])
+
+  @@map("custom_answers")
+}
+
+model CustomDiscount {
+  id                  Int      @id @default(autoincrement())
+  organization_id     Int?
+  kind                String?
+  condition           Int?
+  active              Boolean? @default(true)
+  discounted_fee      Int?
+  activity_id         Int?
+  secondary_condition String?
+  created_at          DateTime
+  updated_at          DateTime
+
+  Organization Organization? @relation(fields: [organization_id], references: [id])
+  Activity     Activity?     @relation(fields: [activity_id], references: [id])
+
+  @@index([organization_id])
+  @@map("custom_discounts")
+}
+
+model CustomQuestion {
+  id               Int      @id @default(autoincrement())
+  organization_id  Int?
+  state            String?
+  question         String?
+  question_type    String?
+  question_options String?
+  active           Boolean?
+  required         Boolean? @default(false)
+  dependent_on     Int?
+  dependent_answer String?
+  sort_order       Int?
+  activity_type    String?
+  created_at       DateTime
+  updated_at       DateTime
+
+  Organization Organization?  @relation(fields: [organization_id], references: [id])
+  CustomAnswer CustomAnswer[]
+
+  @@map("custom_questions")
+}
+
+model DirectingRole {
+  id         Int      @id @default(autoincrement())
+  person_id  Int
+  event_id   Int
+  created_at DateTime
+  updated_at DateTime
+
+  Person Person @relation(fields: [person_id], references: [id])
+  Event  Event  @relation(fields: [event_id], references: [id])
+
+  @@map("directing_roles")
+}
+
+model EmergencyContact {
+  id           Int      @id @default(autoincrement())
+  person_id    Int?
+  first_name   String?
+  last_name    String?
+  phone_number String?
+  relationship String?
+  created_at   DateTime
+  updated_at   DateTime
+
+  Person Person? @relation(fields: [person_id], references: [id])
+
+  @@index([person_id])
+  @@map("emergency_contacts")
+}
+
+model Event {
+  id                  Int       @id @default(autoincrement())
+  activity_id         Int?
+  name                String?
+  description         String?   @db.Text()
+  registerable        Boolean?  @default(false)
+  director            String?
+  start_time          DateTime? @db.Time()
+  end_time            DateTime? @db.Time()
+  student_only        Boolean?  @default(false)
+  location            String?
+  registration_start  DateTime? @db.Date
+  registration_end    DateTime? @db.Date
+  cancelled           Boolean?  @default(false)
+  state               Int?      @default(0)
+  event_date          DateTime? @db.Date
+  max_ticket_capacity Int?
+  created_at          DateTime
+  updated_at          DateTime
+
+  Activity      Activity?       @relation(fields: [activity_id], references: [id])
+  Message       Message[]
+  Ticket        Ticket[]
+  DirectingRole DirectingRole[]
+
+  @@index([activity_id])
+  @@index([registerable])
+  @@map("events")
+}
+
+model FeatureForSeason {
+  id              Int      @id @default(autoincrement())
+  organization_id Int?
+  season          String?
+  feature         String?
+  created_at      DateTime
+  updated_at      DateTime
+
+  Organization Organization? @relation(fields: [organization_id], references: [id])
+
+  @@index([organization_id])
+  @@map("feature_for_seasons")
+}
+
+model FuelMyClubActivity {
+  id                           Int      @id @default(autoincrement())
+  activity_id                  Int?     @unique
+  external_fmc_organization_id String?
+  created_at                   DateTime
+  updated_at                   DateTime
+
+  Activity             Activity?              @relation(fields: [activity_id], references: [id])
+  FuelMyClubFundraiser FuelMyClubFundraiser[]
+
+  @@index([activity_id])
+  @@map("fuel_my_club_activities")
+}
+
+model FuelMyClubFundraiser {
+  id                         Int      @id @default(autoincrement())
+  fuel_my_club_activity_id   Int?
+  season                     String?
+  external_fmc_fundraiser_id String?
+  contact_person_id          Int?
+  config                     Int?     @default(0)
+  lead_in_message            String?  @db.Text
+  created_at                 DateTime
+  updated_at                 DateTime
+
+  FuelMyClubActivity FuelMyClubActivity? @relation(fields: [fuel_my_club_activity_id], references: [id])
+  ContactPerson      Person?             @relation(fields: [contact_person_id], references: [id])
+
+  @@map("fuel_my_club_fundraisers")
+}
+
+model FuelMyClubOrganization {
+  id               Int      @id @default(autoincrement())
+  organization_id  Int?     @unique
+  data             String?  @db.Text
+  fmc_organization String?
+  fmc_fundraiser   String?
+  fmc_participant  String?
+  sales_link       String?
+  created_at       DateTime
+  updated_at       DateTime
+
+  Organization Organization? @relation(fields: [organization_id], references: [id])
+
+  @@index([organization_id])
+  @@map("fuel_my_club_organizations")
+}
+
+model FuelMyClubRegistration {
+  id              Int      @id @default(autoincrement())
+  registration_id Int?     @unique
+  data            String?  @db.Text
+  created_at      DateTime
+  updated_at      DateTime
+
+  Registration Registration? @relation(fields: [registration_id], references: [id])
+
+  @@index([registration_id])
+  @@map("fuel_my_club_registrations")
+}
+
+model GroupAwardAssignment {
+  id           Int      @id @default(autoincrement())
+  recipient_id Int
+  award_id     Int
+  state        Int?     @default(0)
+  created_at   DateTime
+  updated_at   DateTime
+
+  Award             GroupAward        @relation(fields: [award_id], references: [id])
+  GroupRegistration GroupRegistration @relation(fields: [recipient_id], references: [id])
+
+  @@map("group_award_assignments")
+}
+
+model GroupAward {
+  id         Int      @id @default(autoincrement())
+  name       String?
+  group_id   Int?
+  state      Int?     @default(0)
+  created_at DateTime
+  updated_at DateTime
+
+  Group                Group?                 @relation(fields: [group_id], references: [id])
+  GroupAwardAssignment GroupAwardAssignment[]
+
+  @@map("group_awards")
+}
+
+model GroupRegistration {
+  id              Int       @id @default(autoincrement())
+  registration_id Int?
+  group_id        Int?
+  roster_id       Int?
+  finalize_date   DateTime? @db.Date
+  jersey_number   String?
+  position        String?
+  state           Int?      @default(0)
+  created_at      DateTime
+  updated_at      DateTime
+
+  Group                Group?                 @relation(fields: [group_id], references: [id])
+  Registration         Registration?          @relation(fields: [registration_id], references: [id])
+  Roster               Roster?                @relation(fields: [roster_id], references: [id])
+  RecordAssignment     RecordAssignment[]
+  AwardAssignment      AwardAssignment[]
+  GroupAwardAssignment GroupAwardAssignment[]
+
+  @@index([registration_id])
+  @@map("group_registrations")
+}
+
+model Group {
+  id                      Int      @id @default(autoincrement())
+  activity_id             Int?
+  name                    String?
+  level                   String?
+  gender                  String?
+  a2k_siteschoolsport_id  Int?
+  sport_name              String?
+  rosterwebservice_access Boolean? @default(false)
+  state                   Int?     @default(0)
+  created_at              DateTime
+  updated_at              DateTime
+
+  Message           Message[]
+  Record            Record[]
+  Roster            Roster[]
+  CoachingRole      CoachingRole[]
+  GroupAward        GroupAward[]
+  GroupRegistration GroupRegistration[]
+  Activity          Activity?           @relation(fields: [activity_id], references: [id])
+
+  @@index([a2k_siteschoolsport_id])
+  @@index([activity_id])
+  @@map("groups")
+}
+
+model Invite {
+  id              Int     @id @default(autoincrement())
+  person_id       Int?
+  invited_by_id   Int?
+  organization_id Int?
+  accepted        Boolean @default(false)
+  secret          String
+
+  Person       Person?       @relation(fields: [person_id], references: [id], name: "recipient")
+  InvitedBy    Person?       @relation(fields: [invited_by_id], references: [id], name: "invited_by")
+  Organization Organization? @relation(fields: [organization_id], references: [id])
+
+  @@map("invites")
+}
+
+model InvoiceTransaction {
+  id                Int       @id @default(autoincrement())
+  remote_id         String?
+  status            String?
+  invoice_id        Int?      @unique
+  payment_type      String?
+  admin_flag        Boolean?  @default(true)
+  problem_status_at DateTime?
+  details           String?   @db.Text
+
+  Invoice Invoice? @relation(fields: [invoice_id], references: [id])
+
+  @@index([invoice_id])
+  @@map("invoice_transactions")
+}
+
+model Invoice {
+  id                     Int      @id @default(autoincrement())
+  person_id              Int?
+  credit                 Int?     @default(0)
+  invoice_transaction_id Int?
+  created_at             DateTime
+  updated_at             DateTime
+
+  Person          Person?             @relation(fields: [person_id], references: [id])
+  Transaction     InvoiceTransaction?
+  LineItemInvoice LineItemInvoice[]
+
+  @@map("invoices")
+}
+
+model LegalForm {
+  id                       Int      @id @default(autoincrement())
+  name                     String?
+  checkbox_text            String?
+  email_to_child           Boolean?
+  file                     String?
+  organization_id          Int?
+  require_student_sign_off Boolean?
+  state                    Int?     @default(0)
+  created_at               DateTime
+  updated_at               DateTime
+
+  Organization      Organization?       @relation(fields: [organization_id], references: [id])
+  ActivityLegalForm ActivityLegalForm[]
+  Consent           Consent[]
+
+  @@map("legal_forms")
+}
+
+model LegalVideoConsent {
+  id             Int      @id @default(autoincrement())
+  legal_video_id Int?
+  person_id      Int?
+  season         String?
+  created_at     DateTime
+  updated_at     DateTime
+
+  person      Person?     @relation(fields: [person_id], references: [id])
+  legal_video LegalVideo? @relation(fields: [legal_video_id], references: [id])
+
+  @@index([legal_video_id])
+  @@index([person_id])
+  @@map("legal_video_consents")
+}
+
+model LegalVideo {
+  id                       Int      @id @default(autoincrement())
+  name                     String?
+  checkbox_text            String?
+  remote_id                String?
+  organization_id          Int?
+  require_student_sign_off Boolean?
+  created_at               DateTime
+  updated_at               DateTime
+
+  Organization      Organization?       @relation(fields: [organization_id], references: [id])
+  LegalVideoConsent LegalVideoConsent[]
+
+  @@map("legal_videos")
+}
+
+model LineItemInvoice {
+  id           Int @id @default(autoincrement())
+  line_item_id Int
+  invoice_id   Int
+
+  Invoice  Invoice  @relation(fields: [invoice_id], references: [id])
+  LineItem LineItem @relation(fields: [line_item_id], references: [id])
+
+  @@index([line_item_id, invoice_id])
+  @@map("line_item_invoices")
+}
+
+model LineItem {
+  id              Int      @id @default(autoincrement())
+  registration_id Int?
+  venture_id      Int?
+  activity_name   String?
+  venture_name    String?
+  price           Int?
+  invoice_id      Int?
+  refunded        Boolean? @default(false)
+  paid            Boolean? @default(false)
+  refund_amount   Int?     @default(0)
+  ticket_kind     String?
+  event_name      String?
+  ticket_id       Int?
+  state           Int?     @default(0)
+  created_at      DateTime
+  updated_at      DateTime
+
+  Registration       Registration?        @relation(fields: [registration_id], references: [id])
+  Venture            Venture?             @relation(fields: [venture_id], references: [id])
+  Ticket             Ticket?              @relation(fields: [ticket_id], references: [id])
+  SubLineItem        SubLineItem[]
+  TicketRegistration TicketRegistration[]
+  LineItemInvoice    LineItemInvoice[]
+
+  @@index([invoice_id])
+  @@index([registration_id])
+  @@index([venture_id])
+  @@map("line_items")
+}
+
+model MedicalCondition {
+  id                Int       @id @default(autoincrement())
+  name              String?
+  physician         String?
+  date_of_diagnosis DateTime? @db.Date
+  emergency_plan    String?
+  person_id         Int?
+  created_at        DateTime
+  updated_at        DateTime
+
+  Person Person? @relation(fields: [person_id], references: [id])
+
+  @@index([person_id])
+  @@map("medical_conditions")
+}
+
+model MedicalForm {
+  id              Int      @id @default(autoincrement())
+  name            String?
+  file            String?
+  freshman_only   Boolean?
+  organization_id Int?
+  created_at      DateTime
+  updated_at      DateTime
+
+  Organization Organization? @relation(fields: [organization_id], references: [id])
+
+  @@map("medical_forms")
+}
+
+model Message {
+  id                    Int      @id @default(autoincrement())
+  organization_id       Int?
+  activity_id           Int?
+  venture_id            Int?
+  status                String?
+  message               String?  @db.Text
+  created_at            DateTime
+  group_id              Int?
+  sender_id             Int?
+  event_id              Int?
+  message_type          Int?     @default(0)
+  superadmin_message    Boolean? @default(false)
+  document_file_name    String?
+  document_content_type String?
+  document_file_size    Int?
+  document_updated_at   DateTime
+
+  Organization  Organization?   @relation(fields: [organization_id], references: [id])
+  Activity      Activity?       @relation(fields: [activity_id], references: [id])
+  Venture       Venture?        @relation(fields: [venture_id], references: [id])
+  Group         Group?          @relation(fields: [group_id], references: [id])
+  Sender        Person?         @relation(fields: [sender_id], references: [id])
+  Event         Event?          @relation(fields: [event_id], references: [id])
+  MessagePerson MessagePerson[]
+
+  @@index([organization_id, sender_id, created_at])
+  @@index([superadmin_message])
+  @@map("messages")
+}
+
+model MessagePerson {
+  id         Int @id @default(autoincrement())
+  message_id Int
+  person_id  Int
+
+  Person  Person  @relation(fields: [person_id], references: [id])
+  Message Message @relation(fields: [message_id], references: [id])
+
+  @@index([message_id])
+  @@index([person_id])
+  @@map("message_people")
+}
+
+model Occurance {
+  id         Int       @id @default(autoincrement())
+  from       DateTime?
+  to         DateTime?
+  venture_id Int?
+  created_at DateTime
+  updated_at DateTime
+
+  Venture Venture? @relation(fields: [venture_id], references: [id])
+
+  @@index([from, to, venture_id])
+  @@index([venture_id])
+  @@map("occurances")
+}
+
+model Organization {
+  id                   Int      @id @default(autoincrement())
+  name                 String?
+  subdomain            String?
+  active               Boolean? @default(false)
+  a2k_link_school_id   Int?
+  color1               String?
+  color2               String?
+  sub_merchant_id      String?
+  latitude             String?
+  longitude            String?
+  phone                String?
+  fax                  String?
+  mascot               String?
+  feeder_towns         String?
+  address_id           Int?     @unique
+  flat_fee             Int?     @default(75)
+  percentage_fee       Int?     @default(1)
+  manual_fee           Int?     @default(100)
+  cc_fee               Int?     @default(375)
+  taking_payments      Boolean?
+  payment_options      Int?     @default(0)
+  spending_cap_max     Int?     @default(0)
+  payment_code         String?  @default("")
+  sms_messaging        Boolean? @default(false)
+  flat_fee_camp        Int?     @default(200)
+  percentage_fee_camp  Int?     @default(1)
+  flat_fee_event       Int?     @default(75)
+  percentage_fee_event Int?     @default(1)
+  oh_physical_url      String?
+  notifications        Int?     @default(0)
+  notes                String?  @db.Text
+  flat_fee_band        Int?     @default(75)
+  percentage_fee_band  Int?     @default(1)
+  custom_website_url   String?
+  features             Int?     @default(0)
+  kind                 String?  @default("High School")
+  tracked              Boolean? @default(false)
+  ach_flat_fee         Int?     @default(100)
+  created_at           DateTime
+  updated_at           DateTime
+
+  FuelMyClubOrganization              FuelMyClubOrganization?
+  Message                             Message[]
+  ParticipantInformationConfiguration ParticipantInformationConfiguration[]
+  PaymentCode                         PaymentCode[]
+  Person                              Person[]
+  Settlement                          Settlement[]
+  Activity                            Activity[]
+  Affiliation                         Affiliation[]
+  Award                               Award[]
+  CampTshirtOrder                     CampTshirtOrder[]
+  CustomDiscount                      CustomDiscount[]
+  CustomQuestion                      CustomQuestion[]
+  FeatureForSeason                    FeatureForSeason[]
+  Invite                              Invite[]
+  LegalForm                           LegalForm[]
+  LegalVideo                          LegalVideo[]
+  MedicalForm                         MedicalForm[]
+  Address                             Address?                              @relation(fields: [address_id], references: [id])
+
+  @@map("organizations")
+}
+
+model ParticipantInformationConfiguration {
+  id              Int      @id @default(autoincrement())
+  activity_id     Int?
+  key             String?
+  visible         Boolean?
+  required        Boolean?
+  organization_id Int?
+  activity_kind   String?
+
+  Organization Organization? @relation(fields: [organization_id], references: [id])
+  Activity     Activity?     @relation(fields: [activity_id], references: [id])
+
+  @@map("participant_information_configurations")
+}
+
+model PaymentCode {
+  id              Int      @id @default(autoincrement())
+  name            String?
+  code            String?
+  active          Boolean? @default(true)
+  organization_id Int?
+  created_at      DateTime
+  updated_at      DateTime
+
+  Organization Organization?  @relation(fields: [organization_id], references: [id])
+  Registration Registration[]
+
+  @@map("payment_codes")
+}
+
+model Person {
+  id                              Int       @id @default(autoincrement())
+  username                        String?
+  password                        String?
+  allowed_to_login                Boolean?  @default(false)
+  first_name                      String?
+  last_name                       String?
+  sex                             String?
+  cell_phone                      String?
+  home_phone                      String?
+  office_phone                    String?
+  birth_date                      DateTime? @db.Date
+  high_school_graduation_year     Decimal?  @db.Decimal(4, 0)
+  insurance_company               String?
+  insurance_account_number        String?
+  physician_name                  String?
+  physician_phone                 String?
+  student_id                      String?
+  school_transferred_from         String?
+  medical_information             String?   @db.Text
+  accepts_COPPA                   Boolean?
+  opts_in_to_communications       Boolean?  @default(true)
+  address_id                      Int?
+  physical_date                   DateTime? @db.Date
+  registered_with_organization_id Int?
+  credit                          Int?
+  ethnicity                       String?
+  first_enrollment_date           DateTime? @db.Date
+  participation_status            String?
+  gpa                             Float?
+  felony_info                     Int?      @default(0)
+  secondary_email                 String?
+  notifications                   Int?      @default(31)
+  concussion_test_date            DateTime? @db.Date
+  secondary_email_2               String?
+  secondary_email_3               String?
+  ad_data                         String?   @db.Text
+  secondary_cell_phone_1          String?
+  secondary_cell_phone_2          String?
+  secondary_cell_phone_3          String?
+  created_at                      DateTime
+  updated_at                      DateTime
+
+  Address              Address?               @relation(fields: [address_id], references: [id])
+  InvitesSent          Invite[]               @relation("invited_by")
+  InvitesReceived      Invite[]               @relation("recipient")
+  Message              Message[]
+  MessagePerson        MessagePerson[]
+  Organization         Organization?          @relation(fields: [registered_with_organization_id], references: [id])
+  Participants         Registration[]         @relation("participant")
+  RegisteredBy         Registration[]         @relation("registered_by")
+  SubjectRelationship  Relationship[]         @relation("subject")
+  ReceiverRelationship Relationship[]         @relation("receiver")
+  TicketRegistration   TicketRegistration[]
+  AdminAction          AdminAction[]
+  Affiliation          Affiliation[]
+  AlergicCondition     AlergicCondition[]
+  CampTshirtOrder      CampTshirtOrder[]
+  CoachCertification   CoachCertification[]
+  CoachingRole         CoachingRole[]
+  CustomAnswer         CustomAnswer[]
+  DirectingRole        DirectingRole[]
+  EmergencyContact     EmergencyContact[]
+  FuelMyClubFundraiser FuelMyClubFundraiser[]
+  Invoice              Invoice[]
+  LegalVideoConsent    LegalVideoConsent[]
+  MedicalCondition     MedicalCondition[]
+
+  @@index([first_name])
+  @@index([last_name])
+  @@index([username])
+  @@map("people")
+}
+
+model RecordAssignment {
+  id              Int       @id @default(autoincrement())
+  recipient_id    Int?
+  roster_id       Int?
+  record_id       Int?
+  record_set_date DateTime? @db.Date
+  result          Float?
+  state           Int?      @default(0)
+  banner_year     String?
+  created_at      DateTime
+  updated_at      DateTime
+
+  Recipient GroupRegistration? @relation(fields: [recipient_id], references: [id])
+  Roster    Roster?            @relation(fields: [roster_id], references: [id])
+  Record    Record?            @relation(fields: [record_id], references: [id])
+
+  @@map("record_assignments")
+}
+
+model Record {
+  id          Int      @id
+  group_id    Int?
+  sport_code  String?
+  title       String?
+  record_code String?
+  unit        String?
+  kind        String?
+  created_at  DateTime
+  updated_at  DateTime
+
+  RecordAssignment RecordAssignment[]
+  Group            Group?             @relation(fields: [group_id], references: [id])
+
+  @@map("records")
+}
+
+model Registration {
+  id                      Int      @id @default(autoincrement())
+  activity_id             Int?
+  participant_id          Int?
+  registered_by_id        Int?
+  paid                    Boolean? @default(false)
+  season                  String?
+  group_id                Int?
+  tshirt_size             String?
+  weight                  Int?
+  height                  Int?
+  comment                 String?  @db.Text
+  tryout                  Boolean? @default(false)
+  state                   Int?     @default(0)
+  payment_options_comment String?  @db.Text
+  participation_status    String?
+  payment_code_id         Int?
+  short_size              String?
+  equipment_jersey_size   String?
+  equipment_pant_size     String?
+  equipment_jacket_size   String?
+  equipment_shoe_size     String?
+  created_at              DateTime
+  updated_at              DateTime
+
+  FuelMyClubRegistration FuelMyClubRegistration?
+  Activity               Activity?               @relation(fields: [activity_id], references: [id])
+  Participant            Person?                 @relation(fields: [participant_id], references: [id], name: "participant")
+  RegisteredBy           Person?                 @relation(fields: [registered_by_id], references: [id], name: "registered_by")
+  PaymentCode            PaymentCode?            @relation(fields: [payment_code_id], references: [id])
+  TicketRegistration     TicketRegistration[]
+  VentureRegistration    VentureRegistration[]
+  Consent                Consent[]
+  GroupRegistration      GroupRegistration[]
+  LineItem               LineItem[]
+
+  @@index([activity_id, group_id])
+  @@index([activity_id, state, season])
+  @@index([activity_id])
+  @@index([participant_id])
+  @@index([registered_by_id])
+  @@index([state, season])
+  @@map("registrations")
+}
+
+model Relationship {
+  id                Int     @id @default(autoincrement())
+  subject_id        Int?
+  receiver_id       Int?
+  relationship_type String?
+
+  Subject  Person? @relation(fields: [subject_id], references: [id], name: "subject")
+  Receiver Person? @relation(fields: [receiver_id], references: [id], name: "receiver")
+
+  @@index([receiver_id])
+  @@index([subject_id])
+  @@map("relationships")
+}
+
+model Roster {
+  id         Int      @id @default(autoincrement())
+  group_id   Int?
+  season     String?
+  final      Boolean? @default(false)
+  created_at DateTime
+  updated_at DateTime
+
+  RecordAssignment  RecordAssignment[]
+  Group             Group?              @relation(fields: [group_id], references: [id])
+  GroupRegistration GroupRegistration[]
+
+  @@map("rosters")
+}
+
+model Session {
+  id         Int      @id @default(autoincrement())
+  session_id String?
+  data       String?  @db.Text
+  created_at DateTime
+  updated_at DateTime
+
+  @@map("sessions")
+}
+
+model Settlement {
+  id                Int       @id @default(autoincrement())
+  activity_id       Int?
+  organization_id   Int?
+  start_date        DateTime? @db.Date
+  end_date          DateTime? @db.Date
+  amount_collected  Int?
+  fees              Int?
+  amount_settled    Int?
+  percentage        Int?
+  amount_paid       Int?
+  amount_remaining  Int?
+  final             Boolean?
+  flat_fee          Int?
+  percentage_fee    Int?
+  manual_fee        Int?
+  participant_count Int?
+  kind              Int?      @default(0)
+  approval          Int?      @default(0)
+  activity_kind     String
+  created_at        DateTime
+  updated_at        DateTime
+
+  Organization Organization? @relation(fields: [organization_id], references: [id])
+  Activity     Activity?     @relation(fields: [activity_id], references: [id])
+
+  @@map("settlements")
+}
+
+model SubLineItem {
+  id           Int       @id @default(autoincrement())
+  line_item_id Int?
+  type         String?
+  amount       Int?
+  settled_at   DateTime?
+  remote_id    Int?
+  created_at   DateTime
+  updated_at   DateTime
+
+  LineItem LineItem? @relation(fields: [line_item_id], references: [id])
+
+  @@index([line_item_id])
+  @@map("sub_line_items")
+}
+
+model SupportDocument {
+  id             Int      @id @default(autoincrement())
+  name           String?
+  document_text  String?  @db.Text
+  section_header String?
+  created_at     DateTime
+  updated_at     DateTime
+
+  @@map("support_documents")
+}
+
+model TicketRegistration {
+  id                      Int      @id @default(autoincrement())
+  registration_id         Int?
+  ticket_id               Int?
+  state                   Int?     @default(0)
+  ticketholder_first_name String?
+  ticket_email            String?
+  student_id              Int?
+  line_item_id            Int?
+  confirmation_number     String?
+  ticketholder_last_name  String?
+  comment                 String?  @db.Text
+  created_at              DateTime
+  updated_at              DateTime
+
+  Ticket       Ticket?       @relation(fields: [ticket_id], references: [id])
+  Registration Registration? @relation(fields: [registration_id], references: [id])
+  Student      Person?       @relation(fields: [student_id], references: [id])
+  LineItem     LineItem?     @relation(fields: [line_item_id], references: [id])
+
+  @@index([registration_id])
+  @@index([ticket_id])
+  @@map("ticket_registrations")
+}
+
+model Ticket {
+  id                    Int      @id @default(autoincrement())
+  event_id              Int?
+  kind                  String?
+  base_price            Int?
+  max_number_of_tickets Int?
+  state                 Int?     @default(0)
+  title                 String?  @db.VarChar(40)
+  group_size            Int?     @default(1)
+  comments_enabled      Boolean? @default(false)
+  created_at            DateTime
+  updated_at            DateTime
+
+  TicketRegistration TicketRegistration[]
+  Event              Event?               @relation(fields: [event_id], references: [id])
+  LineItem           LineItem[]
+
+  @@index([event_id])
+  @@map("tickets")
+}
+
+model VentureRegistration {
+  id              Int      @id @default(autoincrement())
+  registration_id Int?
+  venture_id      Int?
+  state           Int?     @default(0)
+  comment         String?
+  payment_code_id Int?
+  created_at      DateTime
+  updated_at      DateTime
+
+  Venture      Venture?      @relation(fields: [venture_id], references: [id])
+  Registration Registration? @relation(fields: [registration_id], references: [id])
+
+  @@index([registration_id])
+  @@index([venture_id, registration_id])
+  @@index([venture_id])
+  @@map("venture_registrations")
+}
+
+model Venture {
+  id                         Int       @id @default(autoincrement())
+  name                       String?
+  description                String?   @db.Text
+  type                       String?
+  gender                     String?
+  grade                      String?
+  base_price                 Int?
+  non_district_base_price    Int?
+  registration_start         DateTime? @db.Date
+  registration_end           DateTime? @db.Date
+  director                   String?
+  director_bio               String?   @db.Text
+  registerable               Boolean?  @default(false)
+  activity_id                Int?
+  max_number_of_participants Int?      @default(0)
+  location                   String?
+  cancelled                  Boolean?  @default(false)
+  state                      Int?      @default(0)
+  season                     String?
+  source_venture_id          Int?
+  created_at                 DateTime
+  updated_at                 DateTime
+
+  Message             Message[]
+  Occurance           Occurance[]
+  VentureRegistration VentureRegistration[]
+  Activity            Activity?             @relation(fields: [activity_id], references: [id])
+  CampTshirtOrder     CampTshirtOrder[]
+  CoachingRole        CoachingRole[]
+  LineItem            LineItem[]
+
+  @@index([activity_id])
+  @@index([registerable])
+  @@map("ventures")
+}
