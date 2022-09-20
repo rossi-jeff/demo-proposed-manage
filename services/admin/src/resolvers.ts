@@ -1,4 +1,5 @@
 import { Resolvers } from "../generated/graphql";
+import { School } from "./School/field-resolvers";
 import { school, schools } from "./School/query-resolvers";
 
 export const resolvers: Resolvers = {
@@ -6,4 +7,5 @@ export const resolvers: Resolvers = {
     schools,
     school,
   },
+  School,
 };
