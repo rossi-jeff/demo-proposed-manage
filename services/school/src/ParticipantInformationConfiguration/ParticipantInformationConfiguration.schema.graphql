@@ -1,0 +1,11 @@
+type ParticipantInformationConfiguration {
+  id: ID!
+  schoolId: String
+  activityId: String
+  key: String
+  visible: Boolean
+  required: Boolean
+  activityKind: String
+  createdAt: String
+  updatedAt: String
+}

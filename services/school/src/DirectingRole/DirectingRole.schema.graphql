@@ -1,0 +1,7 @@
+type DirectingRole {
+  id: ID!
+  personId: String
+  eventId: String
+  createdAt: String
+  updatedAt: String
+}

@@ -1,0 +1,14 @@
+type Phone {
+  id: ID!
+  type: PhoneTypeEnum
+  numnber: String
+  createdAt: String
+  updatedAt: String
+}
+
+enum PhoneTypeEnum {
+  HOME
+  OFFICE
+  FAX
+  CELL
+}

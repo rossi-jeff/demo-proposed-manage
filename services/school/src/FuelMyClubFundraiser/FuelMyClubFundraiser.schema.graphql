@@ -1,0 +1,11 @@
+type FuelMyClubFundraiser {
+  id: ID!
+  fuelMyClubActivityId: String
+  season: String
+  externalFmcFundraiserId: String
+  contactPersonId: String
+  config: Int
+  leadInMessage: String
+  createdAt: String
+  updatedAt: String
+}

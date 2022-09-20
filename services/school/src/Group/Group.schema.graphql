@@ -1,0 +1,13 @@
+type Group {
+  id: ID!
+  activityId: String
+  name: String
+  level: String
+  gender: String
+  a2kSiteschoolsportId: Int
+  sportName: String
+  rosterwebserviceAccess: Boolean
+  state: Int
+  createdAt: String
+  updatedAt: String
+}

@@ -1,0 +1,12 @@
+type CustomDiscount {
+  id: ID!
+  schoolId: String
+  kind: String
+  condition: Int
+  active: Boolean
+  discountedFee: Int
+  activityId: String
+  secondaryCondition: String
+  createdAt: String
+  updatedAt: String
+}

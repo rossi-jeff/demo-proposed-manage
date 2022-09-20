@@ -1,0 +1,23 @@
+type Settlement {
+  id: ID!
+  activityId: String
+  schoolId: String
+  startDate: String
+  endDate: String
+  amountCollected: Int
+  fees: Int
+  amountSettled: Int
+  percentage: Int
+  amountPaid: Int
+  amountRemaining: Int
+  final: Boolean
+  flatFee: Int
+  percentageFee: Int
+  manualFee: Int
+  participantCount: Int
+  kind: Int
+  approval: Int
+  activityKind: String
+  createdAt: String
+  updatedAt: String
+}

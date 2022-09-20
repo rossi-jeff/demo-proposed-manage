@@ -1,0 +1,7 @@
+type FuelMyClubActivity {
+  id: ID!
+  activityId: String
+  externalFmcOrganizationId: String
+  createdAt: String
+  updatedAt: String
+}

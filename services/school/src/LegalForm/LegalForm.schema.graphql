@@ -1,0 +1,12 @@
+type LegalForm {
+  id: ID!
+  schoolId: String
+  name: String
+  checkboxText: String
+  emailToChild: Boolean
+  file: String
+  requireStudentSignOff: Boolean
+  state: Int
+  createdAt: String
+  updatedAt: String
+}

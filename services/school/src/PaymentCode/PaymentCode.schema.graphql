@@ -1,0 +1,9 @@
+type PaymentCode {
+  id: ID!
+  schoolId: String
+  name: String
+  code: String
+  active: Boolean
+  createdAt: String
+  updatedAt: String
+}

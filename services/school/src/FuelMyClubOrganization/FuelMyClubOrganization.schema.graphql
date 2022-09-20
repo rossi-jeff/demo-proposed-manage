@@ -1,0 +1,11 @@
+type FuelMyClubOrganization {
+  id: ID!
+  schoolId: String
+  data: String
+  fmcOrganization: String
+  fmcFundraiser: String
+  fmcParticipant: String
+  salesLink: String
+  createdAt: String
+  updatedAt: String
+}

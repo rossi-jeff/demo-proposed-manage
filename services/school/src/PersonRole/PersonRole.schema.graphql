@@ -1,0 +1,7 @@
+type PersonRole {
+  id: ID!
+  personId: String
+  roleId: String
+  createdAt: String
+  updatedAt: String
+}

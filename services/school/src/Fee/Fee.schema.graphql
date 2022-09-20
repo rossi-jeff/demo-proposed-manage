@@ -1,0 +1,12 @@
+type Fee {
+  id: ID!
+  type: FeeTypeEnum
+  amount: Int
+  createdAt: String
+  updatedAt: String
+}
+
+enum FeeTypeEnum {
+  FLAT
+  PERCENTAGE
+}

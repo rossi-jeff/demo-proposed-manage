@@ -1,0 +1,8 @@
+type GroupAward {
+  id: ID!
+  groupId: String
+  name: String
+  state: Int
+  createdAt: String
+  updatedAt: String
+}

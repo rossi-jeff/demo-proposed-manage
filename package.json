@@ -9,7 +9,13 @@
     "migrate:school": "cd services/school/ && npx prisma migrate dev",
     "migrate:activity": "cd services/activity/ && npx prisma migrate dev",
     "codegen:admin": "graphql-codegen --config codegen-admin.yml",
-    "codegen:activity": "graphql-codegen --config codegen-activity.yml"
+    "codegen:activity": "graphql-codegen --config codegen-activity.yml",
+    "codegen:school": "graphql-codegen --config codegen-school.yml",
+    "codegen": "concurrently npm:codegen:*",
+    "generate:admin": "cd services/admin/ && npx prisma generate",
+    "generate:activity": "cd services/activity/ && npx prisma generate",
+    "generate:school": "cd services/school/ && npx prisma generate",
+    "generate": "concurrently npm:generate:*"
   },
   "author": "Jeff Rossi",
   "license": "ISC",

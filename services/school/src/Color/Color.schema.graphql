@@ -1,0 +1,7 @@
+type Color {
+  id: ID!
+  name: String
+  schoolId: String
+  createdAt: String
+  updatedAt: String
+}

@@ -1,0 +1,7 @@
+type SchoolFee {
+  id: ID!
+  schoolId: String
+  feeId: String
+  createdAt: String
+  updatedAt: String
+}

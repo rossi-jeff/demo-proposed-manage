@@ -39,6 +39,8 @@ model ActivityFee {
     id         String @id @default(cuid())
     feeId      String
     activityId String
+    createdAt   DateTime
+    updatedAt   DateTime
 
     Activity Activity @relation(fields: [activityId], references: [id])
     Fee      Fee      @relation(fields: [feeId], references: [id])
@@ -96,6 +98,8 @@ model Color {
     id       String @id @default(cuid())
     name     String
     schoolId String
+    createdAt DateTime
+    updatedAt DateTime
 }
 
 model CustomDiscount {

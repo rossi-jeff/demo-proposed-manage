@@ -1,0 +1,16 @@
+type CustomQuestion {
+  id: ID!
+  schoolId: String
+  state: String
+  question: String
+  questionType: String
+  questionOptions: String
+  active: Boolean
+  required: Boolean
+  dependentOn: Int
+  dependentAnswer: String
+  sortOrder: Int
+  activityType: String
+  createdAt: String
+  updatedAt: String
+}

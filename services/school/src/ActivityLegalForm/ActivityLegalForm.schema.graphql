@@ -1,0 +1,7 @@
+type ActivityLegalForm {
+  id: ID!
+  activityId: String
+  legalFormId: String
+  createdAt: String
+  updatedAt: String
+}

@@ -1,0 +1,9 @@
+type MedicalForm {
+  id: ID!
+  schoolId: String
+  name: String
+  file: String
+  freshmanOnly: Boolean
+  createdAt: String
+  updatedAt: String
+}

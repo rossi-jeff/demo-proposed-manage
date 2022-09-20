@@ -1,0 +1,20 @@
+type Event {
+  id: ID!
+  activityId: String
+  name: String
+  description: String
+  registerable: Boolean
+  director: String
+  startTime: String
+  endTime: String
+  studentOnly: Boolean
+  location: String
+  registrationStart: String
+  registrationEnd: String
+  cancelled: Boolean
+  state: Int
+  eventDate: String
+  maxTicketCapacity: Int
+  createdAt: String
+  updatedAt: String
+}

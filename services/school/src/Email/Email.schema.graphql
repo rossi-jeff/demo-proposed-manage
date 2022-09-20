@@ -1,0 +1,12 @@
+type Email {
+  id: ID!
+  type: EmailTypeEnum
+  address: String
+  createdAt: String
+  updatedAt: String
+}
+
+enum EmailTypeEnum {
+  PERSONAL
+  BUSINESS
+}

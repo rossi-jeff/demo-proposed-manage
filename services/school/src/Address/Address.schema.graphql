@@ -1,0 +1,16 @@
+type Address {
+  id: ID!
+  type: AddresTypeEnum
+  lineOne: String
+  lineTwo: String
+  city: String
+  state: String
+  zipCode: String
+  createdAt: String
+  updatedAt: String
+}
+
+enum AddresTypeEnum {
+  PERSONAL
+  BUSINESS
+}

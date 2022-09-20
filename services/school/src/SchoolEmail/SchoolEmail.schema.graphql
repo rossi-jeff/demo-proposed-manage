@@ -1,0 +1,7 @@
+type SchoolEmail {
+  id: ID!
+  schoolId: String
+  emailId: String
+  createdAt: String
+  updatedAt: String
+}

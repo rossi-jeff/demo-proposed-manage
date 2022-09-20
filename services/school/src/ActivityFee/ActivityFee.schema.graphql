@@ -1,0 +1,7 @@
+type ActivityFee {
+    id: ID!
+    feeId:      String
+    activityId: String
+    createdAt:   String
+    updatedAt:   String
+}

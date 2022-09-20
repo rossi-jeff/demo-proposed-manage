@@ -1,0 +1,8 @@
+type FeatureForSeason {
+  id: ID!
+  schoolId: String
+  season: String
+  feature: String
+  createdAt: String
+  updatedAt: String
+}

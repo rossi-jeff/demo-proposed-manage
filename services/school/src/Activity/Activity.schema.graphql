@@ -1,0 +1,17 @@
+type Activity {
+  id: ID!
+  schoolId: String
+  registerable: Boolean
+  active: Boolean
+  archived: Boolean
+  steps: Int
+  emailFooter: String
+  termsAndConditions: String
+  kind: String
+  leadInMessage: String
+  noCut: Boolean
+  currentSeason: String
+  athleticSeason: String
+  createdAt: String
+  updatedAt: String
+}

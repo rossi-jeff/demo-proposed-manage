@@ -1,0 +1,9 @@
+type Award {
+  id: ID!
+  schoolId: String
+  name: String
+  position: Int
+  active: Boolean
+  createdAt: String
+  updatedAt: String
+}

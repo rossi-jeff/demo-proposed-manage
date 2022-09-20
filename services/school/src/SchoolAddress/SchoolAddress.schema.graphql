@@ -1,0 +1,7 @@
+type SchoolAddress {
+  id: ID!
+  schoolId: String
+  addressId: String
+  createdAt: String
+  updatedAt: String
+}

@@ -3,6 +3,8 @@ schema: "services/activity/**/*.schema.graphql"
 documents: null
 generates:
   services/activity/generated/graphql.ts:
+    config:
+      federation: true
     plugins:
       - "typescript"
       - "typescript-resolvers"

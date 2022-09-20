@@ -1,8 +1,8 @@
 overwrite: true
-schema: "services/admin/**/*.schema.graphql"
+schema: "services/school/**/*.schema.graphql"
 documents: null
 generates:
-  services/admin/generated/graphql.ts:
+  services/school/generated/graphql.ts:
     config:
       federation: true
     plugins:
