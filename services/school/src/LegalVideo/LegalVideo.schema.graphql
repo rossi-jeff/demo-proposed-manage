@@ -1,4 +1,4 @@
-type LegalVideo {
+type LegalVideo @key(fields: "id") {
   id: ID!
   schoolId: String
   name: String

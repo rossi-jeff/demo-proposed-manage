@@ -1,4 +1,4 @@
-type Activity {
+type Activity @key(fields: "id") {
   id: ID!
   schoolId: String
   registerable: Boolean

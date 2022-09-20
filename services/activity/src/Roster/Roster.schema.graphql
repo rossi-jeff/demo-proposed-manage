@@ -1,4 +1,4 @@
-type Roster {
+type Roster @key(fields: "id") {
   id: ID!
   groupId: String
   season: String

@@ -1,4 +1,4 @@
-type Fee {
+type Fee @key(fields: "id") {
   id: ID!
   type: FeeTypeEnum
   amount: Int

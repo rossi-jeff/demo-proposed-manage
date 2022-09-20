@@ -1,4 +1,4 @@
-type GroupAward {
+type GroupAward @key(fields: "id") {
   id: ID!
   groupId: String
   name: String

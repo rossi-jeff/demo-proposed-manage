@@ -1,4 +1,4 @@
-type Consent {
+type Consent @key(fields: "id") {
   id: ID!
   legalFormId: String
   registrationId: String

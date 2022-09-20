@@ -1,4 +1,4 @@
-type Phone {
+type Phone @key(fields: "id") {
   id: ID!
   type: PhoneTypeEnum
   numnber: String

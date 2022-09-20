@@ -1,4 +1,4 @@
-type Ticket {
+type Ticket @key(fields: "id") {
   id: ID!
   eventId: String
   kind: String

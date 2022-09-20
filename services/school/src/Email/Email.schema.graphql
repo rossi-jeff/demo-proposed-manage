@@ -1,4 +1,4 @@
-type Email {
+type Email @key(fields: "id") {
   id: ID!
   type: EmailTypeEnum
   address: String

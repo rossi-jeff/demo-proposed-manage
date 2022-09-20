@@ -1,4 +1,4 @@
-type Venture {
+type Venture @key(fields: "id") {
   id: ID!
   activityId: String
   name: String

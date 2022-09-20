@@ -1,4 +1,4 @@
-type CustomAnswer {
+type CustomAnswer @key(fields: "id") {
   id: ID!
   personId: String
   questionId: String

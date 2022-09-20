@@ -1,4 +1,4 @@
-type MedicalForm {
+type MedicalForm @key(fields: "id") {
   id: ID!
   schoolId: String
   name: String

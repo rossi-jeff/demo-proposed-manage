@@ -1,4 +1,4 @@
-type CustomQuestion {
+type CustomQuestion @key(fields: "id") {
   id: ID!
   schoolId: String
   state: String

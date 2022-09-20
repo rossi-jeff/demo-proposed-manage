@@ -1,4 +1,4 @@
-type Role {
+type Role @key(fields: "id") {
   id: ID!
   name: String
   isAdmin: Boolean

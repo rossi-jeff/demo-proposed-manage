@@ -1,4 +1,4 @@
-type LegalForm {
+type LegalForm @key(fields: "id") {
   id: ID!
   schoolId: String
   name: String

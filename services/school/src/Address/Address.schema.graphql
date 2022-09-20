@@ -1,4 +1,4 @@
-type Address {
+type Address @key(fields: "id") {
   id: ID!
   type: AddresTypeEnum
   lineOne: String

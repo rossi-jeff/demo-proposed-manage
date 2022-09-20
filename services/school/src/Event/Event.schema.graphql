@@ -1,4 +1,4 @@
-type Event {
+type Event @key(fields: "id") {
   id: ID!
   activityId: String
   name: String

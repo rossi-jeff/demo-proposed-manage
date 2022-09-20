@@ -1,4 +1,4 @@
-type Registration {
+type Registration @key(fields: "id") {
   id: ID!
   activityId: String
   participantId: String

@@ -1,4 +1,4 @@
-type Award {
+type Award @key(fields: "id") {
   id: ID!
   schoolId: String
   name: String
