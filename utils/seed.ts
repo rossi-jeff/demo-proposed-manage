@@ -49,7 +49,9 @@ const clear = async () => {
 };
 
 const seed = async () => {
-  let data: any;
+  await clear();
+
+  let data;
   let school: School;
   let activity: Activity;
   let person: Person;
@@ -139,7 +141,5 @@ const seed = async () => {
     } // end activites loop
   } // end school loop
 };
-
-clear().then(() => logger.info("Data cleared"));
 
 seed().then(() => logger.info("seed complete"));

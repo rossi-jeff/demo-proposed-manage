@@ -22,7 +22,7 @@
     "start:services": "concurrently npm:start:service:*",
     "start:gateway": "nodemon gateway/gateway.ts",
     "format": "prettier --write \"./gateway/*.{ts,tsx}\" \"./services/*/src/**/*.{ts,tsx,json,graphql}\" \"./utils/*.{ts,tsx}\"",
-    "lint": "eslint \"./services/*/src/*\"  --fix --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint \"./services/*/src/*\" \"./utils/*\" \"./gateway/*\"  --fix --ext .js,.jsx,.ts,.tsx",
     "seed": "ts-node ./utils/seed.ts",
     "prepare": "husky install"
   },
