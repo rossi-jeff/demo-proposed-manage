@@ -1,5 +1,25 @@
 import { Resolvers } from "../../generated/graphql";
 import { db } from "../db";
+import { PersonType } from "./types";
+
+export const getUserName = (parent: PersonType) => {
+  return parent.userName ?? null;
+};
+export const getPassWord = (parent: PersonType) => {
+  return parent.passWord ?? null;
+};
+export const getSchoolId = (parent: PersonType) => {
+  return parent.schoolId ?? null;
+};
+export const getAllowedToLogin = (parent: PersonType) => {
+  return parent.allowedToLogin ?? false;
+};
+export const getFirstName = (parent: PersonType) => {
+  return parent.firstName ?? null;
+};
+export const getLastName = (parent: PersonType) => {
+  return parent.lastName ?? null;
+};
 
 export const Person: Resolvers["Person"] = {
   __resolveReference: async (obj) => {
@@ -9,94 +29,82 @@ export const Person: Resolvers["Person"] = {
       },
     });
   },
-  userName: (parent) => {
-    return parent.userName ?? null;
-  },
-  passWord: (parent) => {
-    return parent.passWord ?? null;
-  },
-  schoolId: (parent) => {
-    return parent.schoolId ?? null;
-  },
-  allowedToLogin: (parent) => {
-    return parent.allowedToLogin ?? false;
-  },
-  firstName: (parent) => {
-    return parent.firstName ?? null;
-  },
-  lastName: (parent) => {
-    return parent.lastName ?? null;
-  },
-  sex: (parent) => {
+  userName: getUserName,
+  passWord: getPassWord,
+  schoolId: getSchoolId,
+  allowedToLogin: getAllowedToLogin,
+  firstName: getFirstName,
+  lastName: getLastName,
+  sex: (parent: PersonType) => {
     return parent.sex ?? null;
   },
-  birthDate: (parent) => {
+  birthDate: (parent: PersonType) => {
     return parent.birthDate?.toString() ?? null;
   },
-  highSchoolGraduationYear: (parent) => {
+  highSchoolGraduationYear: (parent: PersonType) => {
     return parent.highSchoolGraduationYear ?? null;
   },
-  insuranceCompany: (parent) => {
+  insuranceCompany: (parent: PersonType) => {
     return parent.insuranceCompany ?? null;
   },
-  insuranceAccountNumber: (parent) => {
+  insuranceAccountNumber: (parent: PersonType) => {
     return parent.insuranceAccountNumber ?? null;
   },
-  physicianName: (parent) => {
+  physicianName: (parent: PersonType) => {
     return parent.physicianName ?? null;
   },
-  physicianPhone: (parent) => {
+  physicianPhone: (parent: PersonType) => {
     return parent.physicianPhone ?? null;
   },
-  studentId: (parent) => {
+  studentId: (parent: PersonType) => {
     return parent.studentId ?? null;
   },
-  schoolTransferredFrom: (parent) => {
+  schoolTransferredFrom: (parent: PersonType) => {
     return parent.schoolTransferredFrom ?? null;
   },
-  medicalInformation: (parent) => {
+  medicalInformation: (parent: PersonType) => {
     return parent.medicalInformation ?? null;
   },
-  acceptsCOPPA: (parent) => {
+  acceptsCOPPA: (parent: PersonType) => {
     return parent.acceptsCOPPA ?? false;
   },
-  optsInToCommunications: (parent) => {
+  optsInToCommunications: (parent: PersonType) => {
     return parent.optsInToCommunications ?? false;
   },
-  physicalDate: (parent) => {
+  physicalDate: (parent: PersonType) => {
     return parent.physicalDate?.toString() ?? null;
   },
-  credit: (parent) => {
+  credit: (parent: PersonType) => {
     return parent.credit ?? 0;
   },
-  ethnicity: (parent) => {
+  ethnicity: (parent: PersonType) => {
     return parent.ethnicity ?? null;
   },
-  firstEnrollmentDate: (parent) => {
+  firstEnrollmentDate: (parent: PersonType) => {
     return parent.firstEnrollmentDate?.toString() ?? null;
   },
-  participationStatus: (parent) => {
+  participationStatus: (parent: PersonType) => {
     return parent.participationStatus ?? null;
   },
-  gpa: (parent) => {
+  gpa: (parent: PersonType) => {
     return parent.gpa ?? null;
   },
-  felonyInfo: (parent) => {
+  felonyInfo: (parent: PersonType) => {
     return parent.felonyInfo ?? 0;
   },
-  notifications: (parent) => {
+  notifications: (parent: PersonType) => {
     return parent.notifications ?? null;
   },
-  concussionTestDate: (parent) => {
+  concussionTestDate: (parent: PersonType) => {
     return parent.concussionTestDate?.toString() ?? null;
   },
-  adData: (parent) => {
+  adData: (parent: PersonType) => {
     return parent.adData ?? null;
   },
-  createdAt: (parent) => {
+  createdAt: (parent: PersonType) => {
     return parent.createdAt.toString() ?? null;
   },
-  updatedAt: (parent) => {
+  updatedAt: (parent: PersonType) => {
     return parent.updatedAt.toString() ?? null;
   },
   School: async (ref) => {
