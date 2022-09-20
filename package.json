@@ -20,7 +20,9 @@
     "start:service:admin": "nodemon services/admin/src/server.ts",
     "start:service:school": "nodemon services/school/src/server.ts",
     "start:services": "concurrently npm:start:service:*",
-    "start:gateway": "nodemon gateway/gateway.ts"
+    "start:gateway": "nodemon gateway/gateway.ts",
+    "format": "prettier --write \"./gateway/*.{ts,tsx}\" \"./services/*/src/**/*.{ts,tsx,json,graphql}\" \"./utils/*.{ts,tsx}\"",
+    "seed": "ts-node ./utils/seed.ts"
   },
   "author": "Jeff Rossi",
   "license": "ISC",
@@ -39,6 +41,7 @@
     "@graphql-codegen/cli": "2.12.0",
     "@graphql-codegen/typescript": "2.7.3",
     "@graphql-codegen/typescript-resolvers": "2.7.3",
+    "@ngneat/falso": "^6.1.0",
     "concurrently": "^7.4.0",
     "eslint": "^8.23.1",
     "husky": "^8.0.1",

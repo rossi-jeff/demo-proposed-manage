@@ -1,7 +1,7 @@
 type ActivityFee {
-    id: ID!
-    feeId:      String
-    activityId: String
-    createdAt:   String
-    updatedAt:   String
+  id: ID!
+  feeId: String
+  activityId: String
+  createdAt: String
+  updatedAt: String
 }
