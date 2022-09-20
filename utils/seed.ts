@@ -1,7 +1,7 @@
 import { db as adminDb } from "../services/admin/src/db";
 import { db as schoolDb } from "../services/school/src/db";
 import { School } from "../services/admin/generated/admin-db";
-import { Activity } from '../services/school/generated/school-db'
+import { Activity } from "../services/school/generated/school-db";
 import { logger } from "./logger";
 
 import {
@@ -27,7 +27,7 @@ const count = {
 const clear = async () => {
   // delete childeren first due to constraints
   // school db
-  await schoolDb.client.activity.deleteMany({})
+  await schoolDb.client.activity.deleteMany({});
   // admin db
   await adminDb.client.school.deleteMany({});
 };
@@ -35,7 +35,7 @@ const clear = async () => {
 const seed = async () => {
   let data: any;
   let school: School;
-  let activity: Activity
+  let activity: Activity;
   const now = new Date();
   for (let s = 0; s < count.schools; s++) {
     data = {
@@ -80,8 +80,8 @@ const seed = async () => {
         createdAt: now,
         updatedAt: now,
       };
-      activity = await schoolDb.client.activity.create({ data })
-      logger.info(`activity ${activity.id}: ${activity.kind}`)
+      activity = await schoolDb.client.activity.create({ data });
+      logger.info(`activity ${activity.id}: ${activity.kind}`);
     } // end activites loop
   } // end school loop
 };

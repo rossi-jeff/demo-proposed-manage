@@ -1,4 +1,4 @@
 type School @key(fields: "id") {
-    id: ID!
-    Activities: [Activity]
+  id: ID!
+  Activities: [Activity]
 }
