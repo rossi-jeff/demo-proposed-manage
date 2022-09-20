@@ -21,3 +21,8 @@ type School @key(fields: "id") {
   createdAt: String
   updatedAt: String
 }
+
+extend type Query {
+  schools: [School]
+  school(id: ID!): School
+}

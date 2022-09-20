@@ -8,3 +8,6 @@ generates:
     plugins:
       - "typescript"
       - "typescript-resolvers"
+config:
+  mappers:
+    School: "../src/School/types#SchoolType"
