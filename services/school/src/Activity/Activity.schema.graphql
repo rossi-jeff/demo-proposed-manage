@@ -14,4 +14,11 @@ type Activity @key(fields: "id") {
   athleticSeason: String
   createdAt: String
   updatedAt: String
+
+  School: School
+}
+
+extend type Query {
+  activities: [Activity]
+  activity(id: ID!): Activity
 }

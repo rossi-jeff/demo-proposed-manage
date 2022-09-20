@@ -1,6 +1,9 @@
 import { db as adminDb } from "../services/admin/src/db";
+import { db as schoolDb } from "../services/school/src/db";
 import { School } from "../services/admin/generated/admin-db";
+import { Activity } from '../services/school/generated/school-db'
 import { logger } from "./logger";
+
 import {
   randBoolean,
   randCompanyName,
@@ -18,15 +21,21 @@ import {
 
 const count = {
   schools: 10,
+  activities: 3,
 };
 
 const clear = async () => {
+  // delete childeren first due to constraints
+  // school db
+  await schoolDb.client.activity.deleteMany({})
+  // admin db
   await adminDb.client.school.deleteMany({});
 };
 
 const seed = async () => {
   let data: any;
   let school: School;
+  let activity: Activity
   const now = new Date();
   for (let s = 0; s < count.schools; s++) {
     data = {
@@ -53,6 +62,27 @@ const seed = async () => {
     };
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
+
+    for (let a = 0; a < count.activities; a++) {
+      data = {
+        schoolId: school.id,
+        registerable: randBoolean(),
+        active: randBoolean(),
+        archived: randBoolean(),
+        steps: randNumber({ min: 1, max: 1000 }),
+        emailFooter: randSentence(),
+        termsAndConditions: randSentence(),
+        kind: randCatchPhrase(),
+        leadInMessage: randSentence(),
+        noCut: randBoolean(),
+        currentSeason: "Fall",
+        athleticSeason: "Fall",
+        createdAt: now,
+        updatedAt: now,
+      };
+      activity = await schoolDb.client.activity.create({ data })
+      logger.info(`activity ${activity.id}: ${activity.kind}`)
+    } // end activites loop
   } // end school loop
 };
 
