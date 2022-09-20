@@ -1,0 +1,15 @@
+type TicketRegistration {
+  id: ID!
+  registrationId: String
+  ticketId: String
+  state: Int
+  ticketholderFirstName: String
+  ticketEmail: String
+  studentId: String
+  lineItemId: String
+  confirmationNumber: String
+  ticketholderLastName: String
+  comment: String
+  createdAt: String
+  updatedAt: String
+}

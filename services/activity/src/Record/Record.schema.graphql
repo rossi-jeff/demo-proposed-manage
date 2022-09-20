@@ -1,0 +1,11 @@
+type Record {
+  id: ID!
+  groupId: String
+  sportCode: String
+  title: String
+  recordCode: String
+  unit: String
+  kind: String
+  createdAt: String
+  updatedAt: String
+}

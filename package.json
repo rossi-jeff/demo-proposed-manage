@@ -8,7 +8,8 @@
     "migrate:admin": "cd services/admin/ && npx prisma migrate dev",
     "migrate:school": "cd services/school/ && npx prisma migrate dev",
     "migrate:activity": "cd services/activity/ && npx prisma migrate dev",
-    "codegen:admin": "graphql-codegen --config codegen-admin.yml"
+    "codegen:admin": "graphql-codegen --config codegen-admin.yml",
+    "codegen:activity": "graphql-codegen --config codegen-activity.yml"
   },
   "author": "Jeff Rossi",
   "license": "ISC",

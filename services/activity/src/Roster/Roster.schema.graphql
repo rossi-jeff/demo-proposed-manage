@@ -1,0 +1,8 @@
+type Roster {
+  id: ID!
+  groupId: String
+  season: String
+  final: Boolean
+  createdAt: String
+  updatedAt: String
+}

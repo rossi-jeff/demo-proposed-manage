@@ -1,0 +1,8 @@
+overwrite: true
+schema: "services/activity/**/*.schema.graphql"
+documents: null
+generates:
+  services/activity/generated/graphql.ts:
+    plugins:
+      - "typescript"
+      - "typescript-resolvers"

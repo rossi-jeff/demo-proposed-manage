@@ -1,0 +1,10 @@
+type VentureRegistration {
+  id: ID!
+  registrationId: String
+  ventureId: String
+  state: Int
+  comment: String
+  paymentCodeId: String
+  createdAt: String
+  updatedAt: String
+}

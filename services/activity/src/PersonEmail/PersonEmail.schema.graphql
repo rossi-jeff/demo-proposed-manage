@@ -1,0 +1,7 @@
+type PersonEmail {
+  id: ID!
+  personId: String
+  emailId: String
+  createdAt: String
+  updatedAt: String
+}

@@ -1,0 +1,7 @@
+type LineItemInvoice {
+  id: ID!
+  lineItemId: String
+  invoiceId: String
+  createdAt: String
+  updatedAt: String
+}

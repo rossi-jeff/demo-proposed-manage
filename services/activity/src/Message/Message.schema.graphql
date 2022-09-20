@@ -1,0 +1,18 @@
+type Message {
+  id: ID!
+  schoolId: String
+  activityId: String
+  ventureId: String
+  status: String
+  message: String
+  groupId: String
+  senderId: String
+  eventId: String
+  messageType: Int
+  superadminMessage: Boolean
+  documentFileName: String
+  documentContentType: String
+  documentFileSize: Int
+  createdAt: String
+  updatedAt: String
+}

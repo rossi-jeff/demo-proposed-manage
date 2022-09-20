@@ -1,0 +1,13 @@
+type Ticket {
+  id: ID!
+  eventId: String
+  kind: String
+  basePrice: Int
+  maxNumberOfTickets: Int
+  state: Int
+  title: String
+  groupSize: Int
+  commentsEnabled: Boolean
+  createdAt: String
+  updatedAt: String
+}

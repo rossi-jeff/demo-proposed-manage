@@ -1,0 +1,7 @@
+type PersonPhone {
+  id: ID!
+  personId: String
+  phoneId: String
+  createdAt: String
+  updatedAt: String
+}

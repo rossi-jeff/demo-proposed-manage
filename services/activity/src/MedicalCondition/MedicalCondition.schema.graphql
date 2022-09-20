@@ -1,0 +1,10 @@
+type MedicalCondition {
+  id: ID!
+  personId: String
+  name: String
+  physician: String
+  dateOfDiagnosis: String
+  emergencyPlan: String
+  createdAt: String
+  updatedAt: String
+}

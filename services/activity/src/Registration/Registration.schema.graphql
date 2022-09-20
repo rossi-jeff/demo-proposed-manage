@@ -1,0 +1,25 @@
+type Registration {
+  id: ID!
+  activityId: String
+  participantId: String
+  registeredById: String
+  paid: Boolean
+  season: String
+  groupId: String
+  tShirtSize: String
+  weight: Int
+  height: Int
+  comment: String
+  tryout: Boolean
+  state: Int
+  paymentOptionsComment: String
+  participationStatus: String
+  paymentCodeId: String
+  shortSize: String
+  equipmentJerseySize: String
+  equipmentPantSize: String
+  equipmentJacketSize: String
+  equipmentShoeSize: String
+  createdAt: String
+  updatedAt: String
+}

@@ -1,0 +1,12 @@
+type RecordAssignment {
+  id: ID!
+  recipientId: String
+  rosterId: String
+  recordId: String
+  recordSetDate: String
+  result: Float
+  state: Int
+  banner_year: String
+  createdAt: String
+  updatedAt: String
+}

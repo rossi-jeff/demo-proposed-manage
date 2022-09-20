@@ -1,0 +1,8 @@
+type Occurance {
+  id: ID!
+  from: String
+  to: String
+  ventureId: Int
+  createdAt: String
+  updatedAt: String
+}

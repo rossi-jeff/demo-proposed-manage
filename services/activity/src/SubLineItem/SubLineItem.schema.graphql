@@ -1,0 +1,10 @@
+type SubLineItem {
+  id: ID!
+  lineItemId: String
+  type: String
+  amount: Int
+  settledAt: String
+  remoteId: Int
+  createdAt: String
+  updatedAt: String
+}

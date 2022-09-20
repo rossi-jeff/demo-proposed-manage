@@ -1,0 +1,8 @@
+type Relationship {
+  id: ID!
+  subjectId: String
+  receiverId: String
+  relationshipType: String
+  createdAt: String
+  updatedAt: String
+}
