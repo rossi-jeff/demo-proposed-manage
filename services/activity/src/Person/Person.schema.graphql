@@ -30,4 +30,11 @@ type Person @key(fields: "id") {
   adData: String
   createdAt: String
   updatedAt: String
+
+  School: School
+}
+
+extend type Query {
+  people: [Person]
+  person(id: ID!): Person
 }
