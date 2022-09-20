@@ -5,7 +5,7 @@ import { School } from "../services/admin/generated/admin-db";
 import { Activity } from "../services/school/generated/school-db";
 import { Person } from "../services/activity/generated/activity-db";
 import { logger } from "./logger";
-import { sample } from './sample'
+import { sample } from "./sample";
 
 import {
   randBoolean,
