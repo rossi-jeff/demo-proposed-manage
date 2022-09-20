@@ -5,6 +5,7 @@ import { School } from "../services/admin/generated/admin-db";
 import { Activity } from "../services/school/generated/school-db";
 import { Person } from "../services/activity/generated/activity-db";
 import { logger } from "./logger";
+import { sample } from './sample'
 
 import {
   randBoolean,
@@ -33,7 +34,7 @@ import {
 } from "@ngneat/falso";
 
 const count = {
-  schools: 10,
+  schools: 5,
   activities: 3,
   people: 3,
 };
@@ -52,6 +53,7 @@ const seed = async () => {
   await clear();
 
   let data;
+  const ids: { [key: string]: string[] } = {};
   let school: School;
   let activity: Activity;
   let person: Person;
@@ -82,6 +84,7 @@ const seed = async () => {
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
 
+    ids.people = [];
     for (let p = 0; p < count.people; p++) {
       data = {
         userName: randEmail(),
@@ -116,9 +119,11 @@ const seed = async () => {
         updatedAt: now,
       };
       person = await activityDb.client.person.create({ data });
+      ids.people.push(person.id);
       logger.info(`person ${person.id}: ${person.userName}`);
     } // emnd people loop
 
+    ids.activities = [];
     for (let a = 0; a < count.activities; a++) {
       data = {
         schoolId: school.id,
@@ -137,9 +142,13 @@ const seed = async () => {
         updatedAt: now,
       };
       activity = await schoolDb.client.activity.create({ data });
+      ids.activities.push(activity.id);
       logger.info(`activity ${activity.id}: ${activity.kind}`);
     } // end activites loop
+    logger.info(`person id: ${sample(ids.people)}`);
   } // end school loop
 };
 
-seed().then(() => logger.info("seed complete"));
+seed()
+  .then(() => logger.info("seed complete"))
+  .catch((e) => logger.error(e));
