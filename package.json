@@ -24,7 +24,11 @@
     "format": "prettier --write \"./gateway/*.{ts,tsx}\" \"./services/*/src/**/*.{ts,tsx,json,graphql}\" \"./utils/*.{ts,tsx}\"",
     "lint": "eslint . --fix --ext ts",
     "seed": "ts-node ./utils/seed.ts",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "push:admin": "cd services/admin/ && npx prisma db push",
+    "push:activity": "cd services/activity/ && npx prisma db push",
+    "push:school": "cd services/school/ && npx prisma db push",
+    "push": "concurrently npm:push:*"
   },
   "author": "Jeff Rossi",
   "license": "ISC",
