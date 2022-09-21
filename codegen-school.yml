@@ -11,3 +11,6 @@ generates:
 config:
   mappers:
     Activity: "../src/Activity/types#ActivityType"
+    Address: "../src/Address/types#AddressType"
+  enumValues:
+    AddresTypeEnum: "../src/Address/types#AddresTypeEnum"
