@@ -9,9 +9,9 @@ describe("Person query resolvers", () => {
   });
   describe("people", () => {
     const stub = sandbox.stub(Q, "getPeople");
-    it("should call getPeople once", () => {
+    it("should call getPeople once", async () => {
       //@ts-expect-error stubbing
-      Q.people({}, {}, {});
+      await Q.people({}, {}, {});
       sandbox.assert.calledOnce(stub);
     });
   });
@@ -19,9 +19,9 @@ describe("Person query resolvers", () => {
     const stub = sandbox.stub(Q, "getPerson");
     const id = "1234-5678";
     const args = { id };
-    it("should call getPerson with args given", () => {
+    it("should call getPerson with args given", async () => {
       //@ts-expect-error stubbing
-      Q.person({}, args, {});
+      await Q.person({}, args, {});
       sandbox.assert.calledWith(stub, args);
     });
   });
