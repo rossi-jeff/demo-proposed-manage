@@ -20,6 +20,78 @@ export const getFirstName = (parent: PersonType) => {
 export const getLastName = (parent: PersonType) => {
   return parent.lastName ?? null;
 };
+export const getSex = (parent: PersonType) => {
+  return parent.sex ?? null;
+};
+export const getBirthDate = (parent: PersonType) => {
+  return parent.birthDate?.toString() ?? null;
+};
+export const getHighSchoolGraduationYear = (parent: PersonType) => {
+  return parent.highSchoolGraduationYear ?? null;
+};
+export const getInsuranceCompany = (parent: PersonType) => {
+  return parent.insuranceCompany ?? null;
+};
+export const getInsuranceAccountNumber = (parent: PersonType) => {
+  return parent.insuranceAccountNumber ?? null;
+};
+export const getPhysicianName = (parent: PersonType) => {
+  return parent.physicianName ?? null;
+};
+export const getPhysicianPhone = (parent: PersonType) => {
+  return parent.physicianPhone ?? null;
+};
+export const getStudentId = (parent: PersonType) => {
+  return parent.studentId ?? null;
+};
+export const getSchoolTransferredFrom = (parent: PersonType) => {
+  return parent.schoolTransferredFrom ?? null;
+};
+export const getMedicalInformation = (parent: PersonType) => {
+  return parent.medicalInformation ?? null;
+};
+export const getAcceptsCOPPA = (parent: PersonType) => {
+  return parent.acceptsCOPPA ?? false;
+};
+export const getOptsInToCommunications = (parent: PersonType) => {
+  return parent.optsInToCommunications ?? false;
+};
+export const getPhysicalDate = (parent: PersonType) => {
+  return parent.physicalDate?.toString() ?? null;
+};
+export const getCredit = (parent: PersonType) => {
+  return parent.credit ?? 0;
+};
+export const getEthnicity = (parent: PersonType) => {
+  return parent.ethnicity ?? null;
+};
+export const getFirstEnrollmentDate = (parent: PersonType) => {
+  return parent.firstEnrollmentDate?.toString() ?? null;
+};
+export const getParticipationStatus = (parent: PersonType) => {
+  return parent.participationStatus ?? null;
+};
+export const getGpa = (parent: PersonType) => {
+  return parent.gpa ?? null;
+};
+export const getFelonyInfo = (parent: PersonType) => {
+  return parent.felonyInfo ?? 0;
+};
+export const getNotifications = (parent: PersonType) => {
+  return parent.notifications ?? null;
+};
+export const getConcussionTestDate = (parent: PersonType) => {
+  return parent.concussionTestDate?.toString() ?? null;
+};
+export const getAdData = (parent: PersonType) => {
+  return parent.adData ?? null;
+};
+export const getCreatedAt = (parent: PersonType) => {
+  return parent.createdAt.toString() ?? null;
+};
+export const getUpdatedAt = (parent: PersonType) => {
+  return parent.updatedAt.toString() ?? null;
+};
 
 export const Person: Resolvers["Person"] = {
   __resolveReference: async (obj) => {
@@ -35,79 +107,31 @@ export const Person: Resolvers["Person"] = {
   allowedToLogin: getAllowedToLogin,
   firstName: getFirstName,
   lastName: getLastName,
-  sex: (parent: PersonType) => {
-    return parent.sex ?? null;
-  },
-  birthDate: (parent: PersonType) => {
-    return parent.birthDate?.toString() ?? null;
-  },
-  highSchoolGraduationYear: (parent: PersonType) => {
-    return parent.highSchoolGraduationYear ?? null;
-  },
-  insuranceCompany: (parent: PersonType) => {
-    return parent.insuranceCompany ?? null;
-  },
-  insuranceAccountNumber: (parent: PersonType) => {
-    return parent.insuranceAccountNumber ?? null;
-  },
-  physicianName: (parent: PersonType) => {
-    return parent.physicianName ?? null;
-  },
-  physicianPhone: (parent: PersonType) => {
-    return parent.physicianPhone ?? null;
-  },
-  studentId: (parent: PersonType) => {
-    return parent.studentId ?? null;
-  },
-  schoolTransferredFrom: (parent: PersonType) => {
-    return parent.schoolTransferredFrom ?? null;
-  },
-  medicalInformation: (parent: PersonType) => {
-    return parent.medicalInformation ?? null;
-  },
-  acceptsCOPPA: (parent: PersonType) => {
-    return parent.acceptsCOPPA ?? false;
-  },
-  optsInToCommunications: (parent: PersonType) => {
-    return parent.optsInToCommunications ?? false;
-  },
-  physicalDate: (parent: PersonType) => {
-    return parent.physicalDate?.toString() ?? null;
-  },
-  credit: (parent: PersonType) => {
-    return parent.credit ?? 0;
-  },
-  ethnicity: (parent: PersonType) => {
-    return parent.ethnicity ?? null;
-  },
-  firstEnrollmentDate: (parent: PersonType) => {
-    return parent.firstEnrollmentDate?.toString() ?? null;
-  },
-  participationStatus: (parent: PersonType) => {
-    return parent.participationStatus ?? null;
-  },
-  gpa: (parent: PersonType) => {
-    return parent.gpa ?? null;
-  },
-  felonyInfo: (parent: PersonType) => {
-    return parent.felonyInfo ?? 0;
-  },
-  notifications: (parent: PersonType) => {
-    return parent.notifications ?? null;
-  },
-  concussionTestDate: (parent: PersonType) => {
-    return parent.concussionTestDate?.toString() ?? null;
-  },
-  adData: (parent: PersonType) => {
-    return parent.adData ?? null;
-  },
-  createdAt: (parent: PersonType) => {
-    return parent.createdAt.toString() ?? null;
-  },
-  updatedAt: (parent: PersonType) => {
-    return parent.updatedAt.toString() ?? null;
-  },
-  School: async (ref) => {
+  sex: getSex,
+  birthDate: getBirthDate,
+  highSchoolGraduationYear: getHighSchoolGraduationYear,
+  insuranceCompany: getInsuranceCompany,
+  insuranceAccountNumber: getInsuranceAccountNumber,
+  physicianName: getPhysicianName,
+  physicianPhone: getPhysicianPhone,
+  studentId: getStudentId,
+  schoolTransferredFrom: getSchoolTransferredFrom,
+  medicalInformation: getMedicalInformation,
+  acceptsCOPPA: getAcceptsCOPPA,
+  optsInToCommunications: getOptsInToCommunications,
+  physicalDate: getPhysicalDate,
+  credit: getCredit,
+  ethnicity: getEthnicity,
+  firstEnrollmentDate: getFirstEnrollmentDate,
+  participationStatus: getParticipationStatus,
+  gpa: getGpa,
+  felonyInfo: getFelonyInfo,
+  notifications: getNotifications,
+  concussionTestDate: getConcussionTestDate,
+  adData: getAdData,
+  createdAt: getCreatedAt,
+  updatedAt: getUpdatedAt,
+  School: async (ref: PersonType) => {
     if (ref.schoolId === null) return null;
     return {
       __typename: "School",
