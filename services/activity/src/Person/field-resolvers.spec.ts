@@ -4,7 +4,7 @@ import { PersonType } from "./types";
 
 describe("Person field resolvers", () => {
   beforeEach(() => {
-    sinon.reset();
+    sinon.restore();
   });
   const parent: PersonType = {
     id: "id-string",
