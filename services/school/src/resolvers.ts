@@ -3,6 +3,8 @@ import { Activity } from "./Activity/field-resolvers";
 import { activities, activity } from "./Activity/query-resolvers";
 import { Address } from "./Address/field-resolvers";
 import { address, addresses } from "./Address/query-resolvers";
+import { Email } from "./Email/field-resolvers";
+import { email, emails } from "./Email/query-resolvers";
 import { School } from "./School/field-resolvers";
 
 export const resolvers: Resolvers = {
@@ -11,8 +13,11 @@ export const resolvers: Resolvers = {
     activity,
     addresses,
     address,
+    emails,
+    email,
   },
   Activity,
   Address,
+  Email,
   School,
 };
