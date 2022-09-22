@@ -34,6 +34,7 @@ type Person @key(fields: "id") {
   School: School
   Addresses: [Address]
   Emails: [Email]
+  Phones: [Phone]
 }
 
 extend type Query {

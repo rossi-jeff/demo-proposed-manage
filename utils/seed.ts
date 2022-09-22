@@ -6,18 +6,23 @@ import {
   Activity,
   Address,
   Email,
+  Phone,
   SchoolAddress,
   SchoolEmail,
+  SchoolPhone,
 } from "../services/school/generated/school-db";
 import {
   Person,
   PersonAddress,
   PersonEmail,
+  PersonPhone,
 } from "../services/activity/generated/activity-db";
 import { logger } from "./logger";
 import { sample } from "./sample";
 import { AddresTypeEnum } from "../services/school/src/Address/types";
 import { EmailTypeEnum } from "../services/school/src/Email/types";
+import { PhoneTypeEnum } from "../services/school/src/Phone/types";
+
 
 import {
   randBoolean,
@@ -48,10 +53,18 @@ import {
   randZipCode,
 } from "@ngneat/falso";
 
+const phoneTypes = [
+  PhoneTypeEnum.CELL,
+  PhoneTypeEnum.FAX,
+  PhoneTypeEnum.HOME,
+  PhoneTypeEnum.OFFICE,
+];
+
 const count = {
   schools: 5,
   activities: 3,
   people: 3,
+  phones: 2,
   emails: 2,
 };
 
@@ -60,6 +73,7 @@ const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.personPhone.deleteMany({});
   await activityDb.client.personAddress.deleteMany({});
   await activityDb.client.personEmail.deleteMany({});
   await activityDb.client.person.deleteMany({});
@@ -68,6 +82,8 @@ const clear = async () => {
   await schoolDb.client.address.deleteMany({});
   await schoolDb.client.schoolEmail.deleteMany({});
   await schoolDb.client.email.deleteMany({});
+  await schoolDb.client.schoolPhone.deleteMany({});
+  await schoolDb.client.phone.deleteMany({});
   await schoolDb.client.activity.deleteMany({});
   // admin db
   await adminDb.client.school.deleteMany({});
@@ -81,6 +97,9 @@ const seed = async () => {
   let school: School;
   let activity: Activity;
   let person: Person;
+  let phone: Phone;
+  let schoolPhone: SchoolPhone;
+  let personPhone: PersonPhone;
   let email: Email;
   let schoolEmail: SchoolEmail;
   let personEmail: PersonEmail;
@@ -114,7 +133,7 @@ const seed = async () => {
     };
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
-
+    
     for (let e = 0; e < count.emails; e++) {
       data = {
         type: sample(emailTypes) ?? EmailTypeEnum.BUSINESS,
@@ -156,6 +175,26 @@ const seed = async () => {
     };
     schoolAddress = await schoolDb.client.schoolAddress.create({ data });
     logger.info(`school addess: ${schoolAddress.id}`);
+    
+    for (let ph = 0; ph < count.phones; ph++) {
+      data = {
+        type: sample(phoneTypes) ?? PhoneTypeEnum.OFFICE,
+        numnber: randPhoneNumber(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      phone = await schoolDb.client.phone.create({ data });
+      logger.info(`phone ${phone.id}: ${phone.numnber}`);
+
+      data = {
+        schoolId: school.id,
+        phoneId: phone.id,
+        createdAt: now,
+        updatedAt: now,
+      };
+      schoolPhone = await schoolDb.client.schoolPhone.create({ data });
+      logger.info(`school phone ${schoolPhone.id}`);
+    } // end phone loop
 
     ids.people = [];
     for (let p = 0; p < count.people; p++) {
@@ -194,7 +233,7 @@ const seed = async () => {
       person = await activityDb.client.person.create({ data });
       ids.people.push(person.id);
       logger.info(`person ${person.id}: ${person.userName}`);
-
+      
       for (let e = 0; e < count.emails; e++) {
         data = {
           type: sample(emailTypes) ?? EmailTypeEnum.PERSONAL,
@@ -236,6 +275,27 @@ const seed = async () => {
       };
       personAddress = await activityDb.client.personAddress.create({ data });
       logger.info(`person address: ${personAddress.id}`);
+      
+      for (let ph = 0; ph < count.phones; ph++) {
+        data = {
+          type: sample(phoneTypes) ?? PhoneTypeEnum.OFFICE,
+          numnber: randPhoneNumber(),
+          createdAt: now,
+          updatedAt: now,
+        };
+        phone = await schoolDb.client.phone.create({ data });
+        logger.info(`phone ${phone.id}: ${phone.numnber}`);
+
+        data = {
+          personId: person.id,
+          phoneId: phone.id,
+          createdAt: now,
+          updatedAt: now,
+        };
+        personPhone = await activityDb.client.personPhone.create({ data });
+        logger.info(`person phone ${personPhone.id}`);
+      } // end phone loop
+      
     } // end people loop
 
     ids.activities = [];
