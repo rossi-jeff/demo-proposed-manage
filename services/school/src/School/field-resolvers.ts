@@ -41,5 +41,5 @@ export const School: Resolvers["School"] = {
       },
     });
     return schollPhones.map((s) => s.Phone);
-  }, 
+  },
 };

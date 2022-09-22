@@ -23,7 +23,6 @@ import { AddresTypeEnum } from "../services/school/src/Address/types";
 import { EmailTypeEnum } from "../services/school/src/Email/types";
 import { PhoneTypeEnum } from "../services/school/src/Phone/types";
 
-
 import {
   randBoolean,
   randCompanyName,
@@ -133,7 +132,7 @@ const seed = async () => {
     };
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
-    
+
     for (let e = 0; e < count.emails; e++) {
       data = {
         type: sample(emailTypes) ?? EmailTypeEnum.BUSINESS,
@@ -175,7 +174,7 @@ const seed = async () => {
     };
     schoolAddress = await schoolDb.client.schoolAddress.create({ data });
     logger.info(`school addess: ${schoolAddress.id}`);
-    
+
     for (let ph = 0; ph < count.phones; ph++) {
       data = {
         type: sample(phoneTypes) ?? PhoneTypeEnum.OFFICE,
@@ -233,7 +232,7 @@ const seed = async () => {
       person = await activityDb.client.person.create({ data });
       ids.people.push(person.id);
       logger.info(`person ${person.id}: ${person.userName}`);
-      
+
       for (let e = 0; e < count.emails; e++) {
         data = {
           type: sample(emailTypes) ?? EmailTypeEnum.PERSONAL,
@@ -275,7 +274,7 @@ const seed = async () => {
       };
       personAddress = await activityDb.client.personAddress.create({ data });
       logger.info(`person address: ${personAddress.id}`);
-      
+
       for (let ph = 0; ph < count.phones; ph++) {
         data = {
           type: sample(phoneTypes) ?? PhoneTypeEnum.OFFICE,
@@ -295,7 +294,6 @@ const seed = async () => {
         personPhone = await activityDb.client.personPhone.create({ data });
         logger.info(`person phone ${personPhone.id}`);
       } // end phone loop
-      
     } // end people loop
 
     ids.activities = [];

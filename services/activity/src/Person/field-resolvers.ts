@@ -167,5 +167,5 @@ export const Person: Resolvers["Person"] = {
     return personPhones.map((p) => {
       return { __typename: "Phone", id: p.phoneId };
     });
-  },  
+  },
 };
