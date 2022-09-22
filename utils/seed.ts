@@ -2,10 +2,18 @@ import { db as adminDb } from "../services/admin/src/db";
 import { db as schoolDb } from "../services/school/src/db";
 import { db as activityDb } from "../services/activity/src/db";
 import { School } from "../services/admin/generated/admin-db";
-import { Activity } from "../services/school/generated/school-db";
-import { Person } from "../services/activity/generated/activity-db";
+import {
+  Activity,
+  Email,
+  SchoolEmail,
+} from "../services/school/generated/school-db";
+import {
+  Person,
+  PersonEmail,
+} from "../services/activity/generated/activity-db";
 import { logger } from "./logger";
 import { sample } from "./sample";
+import { EmailTypeEnum } from "../services/school/src/Email/types";
 
 import {
   randBoolean,
@@ -37,13 +45,19 @@ const count = {
   schools: 5,
   activities: 3,
   people: 3,
+  emails: 2,
 };
+
+const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
 
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.personEmail.deleteMany({});
   await activityDb.client.person.deleteMany({});
   // school db
+  await schoolDb.client.schoolEmail.deleteMany({});
+  await schoolDb.client.email.deleteMany({});
   await schoolDb.client.activity.deleteMany({});
   // admin db
   await adminDb.client.school.deleteMany({});
@@ -57,6 +71,9 @@ const seed = async () => {
   let school: School;
   let activity: Activity;
   let person: Person;
+  let email: Email;
+  let schoolEmail: SchoolEmail;
+  let personEmail: PersonEmail;
   const now = new Date();
   for (let s = 0; s < count.schools; s++) {
     data = {
@@ -83,6 +100,26 @@ const seed = async () => {
     };
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
+
+    for (let e = 0; e < count.emails; e++) {
+      data = {
+        type: sample(emailTypes) ?? EmailTypeEnum.BUSINESS,
+        address: randEmail(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      email = await schoolDb.client.email.create({ data });
+      logger.info(`email ${email.id}: ${email.address}`);
+
+      data = {
+        schoolId: school.id,
+        emailId: email.id,
+        createdAt: now,
+        updatedAt: now,
+      };
+      schoolEmail = await schoolDb.client.schoolEmail.create({ data });
+      logger.info(`school email ${schoolEmail.id}`);
+    } // end email loop
 
     ids.people = [];
     for (let p = 0; p < count.people; p++) {
@@ -121,6 +158,26 @@ const seed = async () => {
       person = await activityDb.client.person.create({ data });
       ids.people.push(person.id);
       logger.info(`person ${person.id}: ${person.userName}`);
+
+      for (let e = 0; e < count.emails; e++) {
+        data = {
+          type: sample(emailTypes) ?? EmailTypeEnum.PERSONAL,
+          address: randEmail(),
+          createdAt: now,
+          updatedAt: now,
+        };
+        email = await schoolDb.client.email.create({ data });
+        logger.info(`email ${email.id}: ${email.address}`);
+
+        data = {
+          personId: person.id,
+          emailId: email.id,
+          createdAt: now,
+          updatedAt: now,
+        };
+        personEmail = await activityDb.client.personEmail.create({ data });
+        logger.info(`person email ${personEmail.id}`);
+      } // end email loop
     } // emnd people loop
 
     ids.activities = [];

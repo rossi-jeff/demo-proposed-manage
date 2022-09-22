@@ -11,3 +11,6 @@ generates:
 config:
   mappers:
     Activity: "../src/Activity/types#ActivityType"
+    Email: "../src/Email/types#EmailType"
+  enumValues:
+    EmailTypeEnum: "../src/Email/types#EmailTypeEnum"

@@ -9,4 +9,15 @@ export const School: Resolvers["School"] = {
       },
     });
   },
+  Emails: async (parent) => {
+    const schoolEmails = await db.client.schoolEmail.findMany({
+      where: {
+        schoolId: parent.id,
+      },
+      include: {
+        Email: true,
+      },
+    });
+    return schoolEmails.map((s) => s.Email);
+  },
 };
