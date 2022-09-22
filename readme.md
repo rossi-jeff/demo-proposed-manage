@@ -20,6 +20,10 @@ edit .env file to contain your username for local postgress
 
 `npm run seed`
 
+## run tests
+
+`npm test`
+
 ## start servers
 
 `npm run start:services`
