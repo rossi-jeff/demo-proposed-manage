@@ -138,6 +138,26 @@ export const Person: Resolvers["Person"] = {
       id: ref.schoolId,
     };
   },
+  Addresses: async (ref: PersonType) => {
+    const personAddresses = await db.client.personAddress.findMany({
+      where: {
+        personId: ref.id,
+      },
+    });
+    return personAddresses.map((p) => {
+      return { __typename: "Address", id: p.addressId };
+    });
+  },
+  Emails: async (ref: PersonType) => {
+    const personEmails = await db.client.personEmail.findMany({
+      where: {
+        personId: ref.id,
+      },
+    });
+    return personEmails.map((p) => {
+      return { __typename: "Email", id: p.emailId };
+    });
+  },
   Phones: async (ref: PersonType) => {
     const personPhones = await db.client.personPhone.findMany({
       where: {
@@ -147,5 +167,5 @@ export const Person: Resolvers["Person"] = {
     return personPhones.map((p) => {
       return { __typename: "Phone", id: p.phoneId };
     });
-  },
+  },  
 };

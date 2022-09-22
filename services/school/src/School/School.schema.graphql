@@ -1,5 +1,8 @@
 type School @key(fields: "id") {
   id: ID!
+
   Activities: [Activity]
+  Addresses: [Address]
+  Emails: [Email]
   Phones: [Phone]
 }

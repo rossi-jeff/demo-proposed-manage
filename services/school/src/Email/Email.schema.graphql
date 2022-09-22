@@ -10,3 +10,8 @@ enum EmailTypeEnum {
   PERSONAL
   BUSINESS
 }
+
+extend type Query {
+  emails: [Email]
+  email(id: ID!): Email
+}

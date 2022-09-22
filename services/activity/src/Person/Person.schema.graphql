@@ -32,6 +32,8 @@ type Person @key(fields: "id") {
   updatedAt: String
 
   School: School
+  Addresses: [Address]
+  Emails: [Email]
   Phones: [Phone]
 }
 
