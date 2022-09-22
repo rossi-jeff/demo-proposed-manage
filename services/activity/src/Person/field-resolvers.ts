@@ -143,9 +143,19 @@ export const Person: Resolvers["Person"] = {
       where: {
         personId: ref.id,
       },
-    });
-    return personEmails.map((p) => {
+     });
+     return personEmails.map((p) => {
       return { __typename: "Email", id: p.emailId };
+     };
+   },
+  Addresses: async (ref: PersonType) => {
+    const personAddresses = await db.client.personAddress.findMany({
+      where: {
+        personId: ref.id,
+      },
     });
-  },
+    return personAddresses.map((p) => {
+      return { __typename: "Address", id: p.addressId };
+    };
+   },
 };

@@ -9,7 +9,18 @@ export const School: Resolvers["School"] = {
       },
     });
   },
-  Emails: async (parent) => {
+  Addresses: async (parent) => {
+    const schoolAddresses = await db.client.schoolAddress.findMany({
+      where: {
+        schoolId: parent.id,
+      },
+      include: {
+        Address: true,
+      },
+    });
+    return schoolAddresses.map((s) => s.Address);
+   },
+   Emails: async (parent) => {
     const schoolEmails = await db.client.schoolEmail.findMany({
       where: {
         schoolId: parent.id,
@@ -19,5 +30,5 @@ export const School: Resolvers["School"] = {
       },
     });
     return schoolEmails.map((s) => s.Email);
-  },
+   },
 };

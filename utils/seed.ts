@@ -4,15 +4,19 @@ import { db as activityDb } from "../services/activity/src/db";
 import { School } from "../services/admin/generated/admin-db";
 import {
   Activity,
+  Address,
   Email,
+  SchoolAddress,
   SchoolEmail,
 } from "../services/school/generated/school-db";
 import {
   Person,
+  PersonAddress,
   PersonEmail,
 } from "../services/activity/generated/activity-db";
 import { logger } from "./logger";
 import { sample } from "./sample";
+import { AddresTypeEnum } from "../services/school/src/Address/types";
 import { EmailTypeEnum } from "../services/school/src/Email/types";
 
 import {
@@ -39,6 +43,9 @@ import {
   randFullName,
   randPhoneNumber,
   randLanguage,
+  randStreetAddress,
+  randState,
+  randZipCode,
 } from "@ngneat/falso";
 
 const count = {
@@ -53,9 +60,12 @@ const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.personAddress.deleteMany({});
   await activityDb.client.personEmail.deleteMany({});
   await activityDb.client.person.deleteMany({});
   // school db
+  await schoolDb.client.schoolAddress.deleteMany({});
+  await schoolDb.client.address.deleteMany({});
   await schoolDb.client.schoolEmail.deleteMany({});
   await schoolDb.client.email.deleteMany({});
   await schoolDb.client.activity.deleteMany({});
@@ -74,6 +84,10 @@ const seed = async () => {
   let email: Email;
   let schoolEmail: SchoolEmail;
   let personEmail: PersonEmail;
+  let address: Address;
+  let schoolAddress: SchoolAddress;
+  let personAddress: PersonAddress;
+
   const now = new Date();
   for (let s = 0; s < count.schools; s++) {
     data = {
@@ -101,6 +115,7 @@ const seed = async () => {
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
 
+
     for (let e = 0; e < count.emails; e++) {
       data = {
         type: sample(emailTypes) ?? EmailTypeEnum.BUSINESS,
@@ -120,6 +135,28 @@ const seed = async () => {
       schoolEmail = await schoolDb.client.schoolEmail.create({ data });
       logger.info(`school email ${schoolEmail.id}`);
     } // end email loop
+
+    data = {
+      type: AddresTypeEnum.BUSINESS,
+      lineOne: randStreetAddress(),
+      lineTwo: "",
+      city: randCity(),
+      state: randState(),
+      zipCode: randZipCode(),
+      createdAt: now,
+      updatedAt: now,
+    };
+    address = await schoolDb.client.address.create({ data });
+    logger.info(`addess ${address.id}: ${address.lineOne}`);
+
+    data = {
+      schoolId: school.id,
+      addressId: address.id,
+      createdAt: now,
+      updatedAt: now,
+    };
+    schoolAddress = await schoolDb.client.schoolAddress.create({ data });
+    logger.info(`school addess: ${schoolAddress.id}`);
 
     ids.people = [];
     for (let p = 0; p < count.people; p++) {
@@ -159,6 +196,7 @@ const seed = async () => {
       ids.people.push(person.id);
       logger.info(`person ${person.id}: ${person.userName}`);
 
+
       for (let e = 0; e < count.emails; e++) {
         data = {
           type: sample(emailTypes) ?? EmailTypeEnum.PERSONAL,
@@ -178,7 +216,30 @@ const seed = async () => {
         personEmail = await activityDb.client.personEmail.create({ data });
         logger.info(`person email ${personEmail.id}`);
       } // end email loop
-    } // emnd people loop
+      
+      data = {
+        type: AddresTypeEnum.PERSONAL,
+        lineOne: randStreetAddress(),
+        lineTwo: "",
+        city: randCity(),
+        state: randState(),
+        zipCode: randZipCode(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      address = await schoolDb.client.address.create({ data });
+      logger.info(`addess ${address.id}: ${address.lineOne}`);
+
+      data = {
+        personId: person.id,
+        addressId: address.id,
+        createdAt: now,
+        updatedAt: now,
+      };
+      personAddress = await activityDb.client.personAddress.create({ data });
+      logger.info(`person address: ${personAddress.id}`);
+ 
+    } // end people loop
 
     ids.activities = [];
     for (let a = 0; a < count.activities; a++) {
