@@ -1,5 +1,6 @@
 import { QueryResolvers, QueryEmailArgs } from "../../generated/graphql";
 import { db } from "../db";
+import { idArgs } from "../../../../utils/id-args";
 
 export const getEmails = async () => {
   return await db.client.email.findMany();
@@ -10,7 +11,7 @@ export const emails: QueryResolvers["emails"] = async () => {
 };
 
 export const getEmail = async (args: QueryEmailArgs) => {
-  const { id } = args;
+  const { id } = idArgs(args);
   return await db.client.email.findFirst({
     where: {
       id,
