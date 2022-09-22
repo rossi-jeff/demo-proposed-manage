@@ -1,5 +1,6 @@
 import { QueryResolvers, QueryPersonArgs } from "../../generated/graphql";
 import { db } from "../db";
+import { idArgs } from "../../../../utils/id-args";
 
 export const getPeople = async () => {
   return await db.client.person.findMany();
@@ -10,7 +11,7 @@ export const people: QueryResolvers["people"] = async () => {
 };
 
 export const getPerson = async (args: QueryPersonArgs) => {
-  const { id } = args;
+  const { id } = idArgs(args);
   return await db.client.person.findFirst({
     where: {
       id,

@@ -1,5 +1,6 @@
 import { QueryResolvers, QueryActivityArgs } from "../../generated/graphql";
 import { db } from "../db";
+import { idArgs } from "../../../../utils/id-args";
 
 export const getActivities = async () => {
   return await db.client.activity.findMany();
@@ -10,7 +11,7 @@ export const activities: QueryResolvers["activities"] = async () => {
 };
 
 export const getActivity = async (args: QueryActivityArgs) => {
-  const { id } = args;
+  const { id } = idArgs(args);
   return await db.client.activity.findFirst({
     where: {
       id,
