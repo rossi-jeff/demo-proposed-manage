@@ -2,10 +2,18 @@ import { db as adminDb } from "../services/admin/src/db";
 import { db as schoolDb } from "../services/school/src/db";
 import { db as activityDb } from "../services/activity/src/db";
 import { School } from "../services/admin/generated/admin-db";
-import { Activity } from "../services/school/generated/school-db";
-import { Person } from "../services/activity/generated/activity-db";
+import {
+  Activity,
+  Address,
+  SchoolAddress,
+} from "../services/school/generated/school-db";
+import {
+  Person,
+  PersonAddress,
+} from "../services/activity/generated/activity-db";
 import { logger } from "./logger";
 import { sample } from "./sample";
+import { AddresTypeEnum } from "../services/school/src/Address/types";
 
 import {
   randBoolean,
@@ -31,6 +39,9 @@ import {
   randFullName,
   randPhoneNumber,
   randLanguage,
+  randStreetAddress,
+  randState,
+  randZipCode,
 } from "@ngneat/falso";
 
 const count = {
@@ -42,8 +53,11 @@ const count = {
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.personAddress.deleteMany({});
   await activityDb.client.person.deleteMany({});
   // school db
+  await schoolDb.client.schoolAddress.deleteMany({});
+  await schoolDb.client.address.deleteMany({});
   await schoolDb.client.activity.deleteMany({});
   // admin db
   await adminDb.client.school.deleteMany({});
@@ -57,6 +71,9 @@ const seed = async () => {
   let school: School;
   let activity: Activity;
   let person: Person;
+  let address: Address;
+  let schoolAddress: SchoolAddress;
+  let personAddress: PersonAddress;
   const now = new Date();
   for (let s = 0; s < count.schools; s++) {
     data = {
@@ -83,6 +100,28 @@ const seed = async () => {
     };
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
+
+    data = {
+      type: AddresTypeEnum.BUSINESS,
+      lineOne: randStreetAddress(),
+      lineTwo: "",
+      city: randCity(),
+      state: randState(),
+      zipCode: randZipCode(),
+      createdAt: now,
+      updatedAt: now,
+    };
+    address = await schoolDb.client.address.create({ data });
+    logger.info(`addess ${address.id}: ${address.lineOne}`);
+
+    data = {
+      schoolId: school.id,
+      addressId: address.id,
+      createdAt: now,
+      updatedAt: now,
+    };
+    schoolAddress = await schoolDb.client.schoolAddress.create({ data });
+    logger.info(`school addess: ${schoolAddress.id}`);
 
     ids.people = [];
     for (let p = 0; p < count.people; p++) {
@@ -121,7 +160,29 @@ const seed = async () => {
       person = await activityDb.client.person.create({ data });
       ids.people.push(person.id);
       logger.info(`person ${person.id}: ${person.userName}`);
-    } // emnd people loop
+
+      data = {
+        type: AddresTypeEnum.PERSONAL,
+        lineOne: randStreetAddress(),
+        lineTwo: "",
+        city: randCity(),
+        state: randState(),
+        zipCode: randZipCode(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      address = await schoolDb.client.address.create({ data });
+      logger.info(`addess ${address.id}: ${address.lineOne}`);
+
+      data = {
+        personId: person.id,
+        addressId: address.id,
+        createdAt: now,
+        updatedAt: now,
+      };
+      personAddress = await activityDb.client.personAddress.create({ data });
+      logger.info(`person address: ${personAddress.id}`);
+    } // end people loop
 
     ids.activities = [];
     for (let a = 0; a < count.activities; a++) {
