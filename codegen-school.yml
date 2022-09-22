@@ -11,3 +11,6 @@ generates:
 config:
   mappers:
     Activity: "../src/Activity/types#ActivityType"
+    Phone: "../src/Phone/types#PhoneType"
+  enumValues:
+    PhoneTypeEnum: "../src/Phone/types#PhoneTypeEnum"

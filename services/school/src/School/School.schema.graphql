@@ -1,4 +1,5 @@
 type School @key(fields: "id") {
   id: ID!
   Activities: [Activity]
+  Phones: [Phone]
 }

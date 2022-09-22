@@ -138,4 +138,14 @@ export const Person: Resolvers["Person"] = {
       id: ref.schoolId,
     };
   },
+  Phones: async (ref: PersonType) => {
+    const personPhones = await db.client.personPhone.findMany({
+      where: {
+        personId: ref.id,
+      },
+    });
+    return personPhones.map((p) => {
+      return { __typename: "Phone", id: p.phoneId };
+    });
+  },
 };

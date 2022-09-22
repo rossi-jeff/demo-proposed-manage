@@ -9,4 +9,15 @@ export const School: Resolvers["School"] = {
       },
     });
   },
+  Phones: async (parent) => {
+    const schollPhones = await db.client.schoolPhone.findMany({
+      where: {
+        schoolId: parent.id,
+      },
+      include: {
+        Phone: true,
+      },
+    });
+    return schollPhones.map((s) => s.Phone);
+  },
 };

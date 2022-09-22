@@ -12,3 +12,8 @@ enum PhoneTypeEnum {
   FAX
   CELL
 }
+
+extend type Query {
+  phones: [Phone]
+  phone(id: ID!): Phone
+}
