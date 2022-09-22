@@ -19,8 +19,8 @@ export const School: Resolvers["School"] = {
       },
     });
     return schoolAddresses.map((s) => s.Address);
-   },
-   Emails: async (parent) => {
+  },
+  Emails: async (parent) => {
     const schoolEmails = await db.client.schoolEmail.findMany({
       where: {
         schoolId: parent.id,
@@ -30,5 +30,5 @@ export const School: Resolvers["School"] = {
       },
     });
     return schoolEmails.map((s) => s.Email);
-   },
+  },
 };

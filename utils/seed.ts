@@ -115,7 +115,6 @@ const seed = async () => {
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
 
-
     for (let e = 0; e < count.emails; e++) {
       data = {
         type: sample(emailTypes) ?? EmailTypeEnum.BUSINESS,
@@ -196,7 +195,6 @@ const seed = async () => {
       ids.people.push(person.id);
       logger.info(`person ${person.id}: ${person.userName}`);
 
-
       for (let e = 0; e < count.emails; e++) {
         data = {
           type: sample(emailTypes) ?? EmailTypeEnum.PERSONAL,
@@ -216,7 +214,7 @@ const seed = async () => {
         personEmail = await activityDb.client.personEmail.create({ data });
         logger.info(`person email ${personEmail.id}`);
       } // end email loop
-      
+
       data = {
         type: AddresTypeEnum.PERSONAL,
         lineOne: randStreetAddress(),
@@ -238,7 +236,6 @@ const seed = async () => {
       };
       personAddress = await activityDb.client.personAddress.create({ data });
       logger.info(`person address: ${personAddress.id}`);
- 
     } // end people loop
 
     ids.activities = [];
