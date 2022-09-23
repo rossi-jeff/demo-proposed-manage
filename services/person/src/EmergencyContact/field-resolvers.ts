@@ -1,5 +1,4 @@
 import { Resolvers } from "../../generated/graphql";
-import { db } from "../db";
 import { EmergencyContactType } from "./types";
 
 export const getCreatedAt = (parent: EmergencyContactType) => {
@@ -34,10 +33,9 @@ export const EmergencyContact: Resolvers["EmergencyContact"] = {
   updatedAt: getUpdatedAt,
   Person: async (parent) => {
     if (parent.personId === null) return null;
-    return await db.client.person.findFirst({
-      where: {
-        id: parent.personId,
-      },
-    });
+    return {
+      __typename: "Person",
+      id: parent.personId,
+    };
   },
 };

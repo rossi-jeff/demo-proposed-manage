@@ -32,10 +32,6 @@ type Person @key(fields: "id") {
   updatedAt: String
 
   School: School
-  Addresses: [Address]
-  Emails: [Email]
-  EmergencyContacts: [EmergencyContact]
-  Phones: [Phone]
 }
 
 extend type Query {
