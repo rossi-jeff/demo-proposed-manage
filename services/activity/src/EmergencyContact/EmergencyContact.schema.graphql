@@ -7,4 +7,11 @@ type EmergencyContact {
   relationship: String
   createdAt: String
   updatedAt: String
+
+  Person: Person
+}
+
+extend type Query {
+  emergencyContacts: [EmergencyContact]
+  emergencyContact(id: ID!): EmergencyContact
 }
