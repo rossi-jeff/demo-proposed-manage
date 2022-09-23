@@ -9,4 +9,11 @@ type LegalForm @key(fields: "id") {
   state: Int
   createdAt: String
   updatedAt: String
+
+  School: School
+}
+
+extend type Query {
+  legalForms: [LegalForm]
+  legalForm(id: ID!): LegalForm
 }

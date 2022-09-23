@@ -5,6 +5,8 @@ import { Address } from "./Address/field-resolvers";
 import { address, addresses } from "./Address/query-resolvers";
 import { Email } from "./Email/field-resolvers";
 import { email, emails } from "./Email/query-resolvers";
+import { LegalForm } from "./LegalForm/field-resolvers";
+import { legalForm, legalForms } from "./LegalForm/query-resolvers";
 import { Phone } from "./Phone/field-resolvers";
 import { phone, phones } from "./Phone/query-resolvers";
 import { School } from "./School/field-resolvers";
@@ -17,12 +19,15 @@ export const resolvers: Resolvers = {
     address,
     emails,
     email,
+    legalForms,
+    legalForm,
     phones,
     phone,
   },
   Activity,
   Address,
   Email,
+  LegalForm,
   Phone,
   School,
 };
