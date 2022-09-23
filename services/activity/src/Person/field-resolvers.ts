@@ -168,4 +168,11 @@ export const Person: Resolvers["Person"] = {
       return { __typename: "Phone", id: p.phoneId };
     });
   },
+  EmergencyContacts: async (parent) => {
+    return await db.client.emergencyContact.findMany({
+      where: {
+        personId: parent.id,
+      },
+    });
+  },
 };

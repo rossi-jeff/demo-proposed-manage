@@ -13,6 +13,7 @@ import {
   SchoolPhone,
 } from "../services/school/generated/school-db";
 import {
+  EmergencyContact,
   Person,
   PersonAddress,
   PersonEmail,
@@ -67,14 +68,27 @@ const count = {
   people: 3,
   phones: 2,
   emails: 2,
+  emergencyContacts: 2,
   legalForms: 2,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
 
+const relationships = [
+  "Motheer",
+  "Father",
+  "Sister",
+  "Brother",
+  "Aunt",
+  "Uncle",
+  "Grandmother",
+  "Grandfather",
+];
+
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.emergencyContact.deleteMany({});
   await activityDb.client.personPhone.deleteMany({});
   await activityDb.client.personAddress.deleteMany({});
   await activityDb.client.personEmail.deleteMany({});
@@ -109,6 +123,7 @@ const seed = async () => {
   let address: Address;
   let schoolAddress: SchoolAddress;
   let personAddress: PersonAddress;
+  let emergencyContact: EmergencyContact;
   let legalForm: LegalForm;
 
   const now = new Date();
@@ -315,6 +330,24 @@ const seed = async () => {
         personPhone = await activityDb.client.personPhone.create({ data });
         logger.info(`person phone ${personPhone.id}`);
       } // end phone loop
+
+      for (let e = 0; e < count.emergencyContacts; e++) {
+        data = {
+          personId: person.id,
+          firstName: randFirstName(),
+          lastName: randLastName(),
+          phoneNumber: randPhoneNumber(),
+          relationship: sample(relationships),
+          createdAt: now,
+          updatedAt: now,
+        };
+        emergencyContact = await activityDb.client.emergencyContact.create({
+          data,
+        });
+        logger.info(
+          `emergency contact ${emergencyContact.id}: ${emergencyContact.phoneNumber}`
+        );
+      } // end emergency contact loop
     } // end people loop
 
     ids.activities = [];
@@ -339,7 +372,6 @@ const seed = async () => {
       ids.activities.push(activity.id);
       logger.info(`activity ${activity.id}: ${activity.kind}`);
     } // end activites loop
-    logger.info(`person id: ${sample(ids.people)}`);
   } // end school loop
 };
 

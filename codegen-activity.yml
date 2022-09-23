@@ -10,4 +10,5 @@ generates:
       - "typescript-resolvers"
 config:
   mappers:
+    EmergencyContact: "../src/EmergencyContact/types#EmergencyContactType"
     Person: "../src/Person/types#PersonType"
