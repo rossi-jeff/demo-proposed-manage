@@ -36,11 +36,11 @@ model Activity {
 }
 
 model ActivityFee {
-    id         String @id @default(cuid())
+    id         String   @id @default(cuid())
     feeId      String
     activityId String
-    createdAt   DateTime
-    updatedAt   DateTime
+    createdAt  DateTime
+    updatedAt  DateTime
 
     Activity Activity @relation(fields: [activityId], references: [id])
     Fee      Fee      @relation(fields: [feeId], references: [id])
@@ -67,6 +67,7 @@ model Address {
     createdAt       DateTime
     updatedAt       DateTime
     SchoolAddresses SchoolAddress[]
+    PersonAddress   PersonAddress[]
 }
 
 enum AddresTypeEnum {
@@ -84,20 +85,10 @@ model Award {
     updatedAt DateTime
 }
 
-model CoachCertification {
-    id        String   @id @default(cuid())
-    personId  String
-    value     String?
-    state     String?
-    code      String?
-    createdAt DateTime
-    updatedAt DateTime
-}
-
 model Color {
-    id       String @id @default(cuid())
-    name     String
-    schoolId String
+    id        String   @id @default(cuid())
+    name      String
+    schoolId  String
     createdAt DateTime
     updatedAt DateTime
 }
@@ -134,15 +125,6 @@ model CustomQuestion {
     updatedAt       DateTime
 }
 
-model DirectingRole {
-    id        String   @id @default(cuid())
-    personId  String
-    eventId   String
-    createdAt DateTime
-    updatedAt DateTime
-    Event     Event    @relation(fields: [eventId], references: [id])
-}
-
 model Email {
     id           String        @id @default(cuid())
     type         EmailTypeEnum
@@ -150,6 +132,7 @@ model Email {
     createdAt    DateTime
     updatedAt    DateTime
     SchoolEmails SchoolEmail[]
+    PersonEmail  PersonEmail[]
 }
 
 enum EmailTypeEnum {
@@ -177,8 +160,7 @@ model Event {
     createdAt         DateTime
     updatedAt         DateTime
 
-    Activity       Activity        @relation(fields: [activityId], references: [id])
-    DirectingRoles DirectingRole[]
+    Activity Activity @relation(fields: [activityId], references: [id])
 }
 
 model FeatureForSeason {
@@ -192,6 +174,7 @@ model FeatureForSeason {
 
 model Fee {
     id           String        @id @default(cuid())
+    name         String
     type         FeeTypeEnum
     amount       Int
     createdAt    DateTime
@@ -326,6 +309,33 @@ model PaymentCode {
     updatedAt DateTime
 }
 
+model PersonAddress {
+    id        String   @id @default(cuid())
+    personId  String
+    addressId String
+    createdAt DateTime
+    updatedAt DateTime
+    Address   Address  @relation(fields: [addressId], references: [id])
+}
+
+model PersonEmail {
+    id        String   @id @default(cuid())
+    personId  String
+    emailId   String
+    createdAt DateTime
+    updatedAt DateTime
+    Email     Email    @relation(fields: [emailId], references: [id])
+}
+
+model PersonPhone {
+    id        String   @id @default(cuid())
+    personId  String
+    phoneId   String
+    createdAt DateTime
+    updatedAt DateTime
+    Phone     Phone    @relation(fields: [phoneId], references: [id])
+}
+
 model PersonRole {
     id        String   @id @default(cuid())
     personId  String
@@ -337,10 +347,11 @@ model PersonRole {
 model Phone {
     id           String        @id @default(cuid())
     type         PhoneTypeEnum
-    numnber      String
+    number       String
     createdAt    DateTime
     updatedAt    DateTime
     SchoolPhones SchoolPhone[]
+    PersonPhone  PersonPhone[]
 }
 
 enum PhoneTypeEnum {

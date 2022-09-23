@@ -10,6 +10,7 @@ const services = [
   { name: "activity", url: "http://localhost:4001" },
   { name: "admin", url: "http://localhost:4002" },
   { name: "school", url: "http://localhost:4003" },
+  { name: "person", url: "http://localhost:4004" },
 ];
 
 const supergraphSdl = new IntrospectAndCompose({

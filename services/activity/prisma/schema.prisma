@@ -8,27 +8,6 @@ generator client {
     output   = "../generated/activity-db"
 }
 
-model Affiliation {
-    id              String   @id @default(cuid())
-    personId        String
-    schoolId        String?
-    affiliationType String?
-    createdAt       DateTime
-    updatedAt       DateTime
-    Person          Person   @relation(fields: [personId], references: [id])
-}
-
-model AlergicCondition {
-    id               String   @id @default(cuid())
-    personId         String
-    allergyCondition String?
-    severity         String?
-    reaction         String?
-    createdAt        DateTime
-    updatedAt        DateTime
-    Person           Person   @relation(fields: [personId], references: [id])
-}
-
 model AwardAssignment {
     id          String   @id @default(cuid())
     recipientId String
@@ -102,30 +81,6 @@ model Consent {
     Registration Registration @relation(fields: [registrationId], references: [id])
 }
 
-model CustomAnswer {
-    id         String   @id @default(cuid())
-    personId   String
-    questionId String?
-    answer     String?  @db.Text()
-    createdAt  DateTime
-    updatedAt  DateTime
-
-    Person Person @relation(fields: [personId], references: [id])
-}
-
-model EmergencyContact {
-    id           String   @id @default(cuid())
-    personId     String
-    firstName    String?
-    lastName     String?
-    phoneNumber  String?
-    relationship String?
-    createdAt    DateTime
-    updatedAt    DateTime
-
-    Person Person @relation(fields: [personId], references: [id])
-}
-
 model FuelMyClubRegistration {
     id             String   @id @default(cuid())
     registrationId String?  @unique
@@ -164,33 +119,6 @@ model GroupRegistration {
     RecordAssignments     RecordAssignment[]
 }
 
-model Invite {
-    id          String   @id @default(cuid())
-    personId    String?
-    invitedById String?
-    schoolId    String?
-    accepted    Boolean  @default(false)
-    secret      String
-    createdAt   DateTime
-    updatedAt   DateTime
-
-    Person    Person? @relation(fields: [personId], references: [id], name: "recipient")
-    InvitedBy Person? @relation(fields: [invitedById], references: [id], name: "invited_by")
-}
-
-model Invoice {
-    id                   String   @id @default(cuid())
-    personId             String?
-    credit               Int?     @default(0)
-    invoiceTransactionId String?
-    createdAt            DateTime
-    updatedAt            DateTime
-
-    Person          Person?           @relation(fields: [personId], references: [id])
-    LineItem        LineItem[]
-    LineItemInvoice LineItemInvoice[]
-}
-
 model InvoiceTransaction {
     id              String    @id @default(cuid())
     remoteId        String?
@@ -202,17 +130,6 @@ model InvoiceTransaction {
     details         String?   @db.Text
     createdAt       DateTime
     updatedAt       DateTime
-}
-
-model LegalVideoConsent {
-    id           String   @id @default(cuid())
-    legalVideoId String?
-    personId     String?
-    season       String?
-    createdAt    DateTime
-    updatedAt    DateTime
-
-    Person Person? @relation(fields: [personId], references: [id])
 }
 
 model LineItem {
@@ -234,7 +151,6 @@ model LineItem {
     updatedAt      DateTime
 
     Registration        Registration?        @relation(fields: [registrationId], references: [id])
-    Invoice             Invoice?             @relation(fields: [invoiceId], references: [id])
     Ticket              Ticket?              @relation(fields: [ticketId], references: [id])
     LineItemInvoices    LineItemInvoice[]
     SubLineItem         SubLineItem[]
@@ -249,52 +165,26 @@ model LineItemInvoice {
     updatedAt  DateTime
 
     LineItem LineItem @relation(fields: [lineItemId], references: [id])
-    Invoice  Invoice  @relation(fields: [invoiceId], references: [id])
-}
-
-model MedicalCondition {
-    id              String    @id @default(cuid())
-    personId        String
-    name            String?
-    physician       String?
-    dateOfDiagnosis DateTime? @db.Date
-    emergencyPlan   String?
-    createdAt       DateTime
-    updatedAt       DateTime
-
-    Person Person @relation(fields: [personId], references: [id])
 }
 
 model Message {
-    id                  String          @id @default(cuid())
+    id                  String   @id @default(cuid())
     schoolId            String?
     activityId          String?
     ventureId           String?
     status              String?
-    message             String?         @db.Text
+    message             String?  @db.Text
     groupId             String?
     senderId            String?
     eventId             String?
-    messageType         Int?            @default(0)
-    superadminMessage   Boolean?        @default(false)
+    messageType         Int?     @default(0)
+    superadminMessage   Boolean? @default(false)
     documentFileName    String?
     documentContentType String?
     documentFileSize    Int?
     createdAt           DateTime
     updatedAt           DateTime
-    Sender              Person?         @relation(fields: [senderId], references: [id])
-    MessagePeople       MessagePerson[]
-}
-
-model MessagePerson {
-    id        String   @id @default(cuid())
-    messageId String
-    personId  String
-    createdAt DateTime
-    updatedAt DateTime
-
-    Message Message @relation(fields: [messageId], references: [id])
-    Person  Person  @relation(fields: [personId], references: [id])
+    Sender              Person?  @relation(fields: [senderId], references: [id])
 }
 
 model Occurance {
@@ -307,15 +197,15 @@ model Occurance {
 }
 
 model Person {
-    id                       String               @id @default(cuid())
+    id                       String    @id @default(cuid())
     userName                 String
     passWord                 String
     schoolId                 String?
-    allowedToLogin           Boolean?             @default(false)
+    allowedToLogin           Boolean?  @default(false)
     firstName                String?
     lastName                 String?
     sex                      String?
-    birthDate                DateTime?            @db.Date
+    birthDate                DateTime? @db.Date
     highSchoolGraduationYear String?
     insuranceCompany         String?
     insuranceAccountNumber   String?
@@ -323,69 +213,29 @@ model Person {
     physicianPhone           String?
     studentId                String?
     schoolTransferredFrom    String?
-    medicalInformation       String?              @db.Text
+    medicalInformation       String?   @db.Text
     acceptsCOPPA             Boolean?
-    optsInToCommunications   Boolean?             @default(true)
-    physicalDate             DateTime?            @db.Date
+    optsInToCommunications   Boolean?  @default(true)
+    physicalDate             DateTime? @db.Date
     credit                   Int?
     ethnicity                String?
-    firstEnrollmentDate      DateTime?            @db.Date
+    firstEnrollmentDate      DateTime? @db.Date
     participationStatus      String?
     gpa                      Float?
-    felonyInfo               Int?                 @default(0)
-    notifications            Int?                 @default(31)
-    concussionTestDate       DateTime?            @db.Date
-    adData                   String?              @db.Text
+    felonyInfo               Int?      @default(0)
+    notifications            Int?      @default(31)
+    concussionTestDate       DateTime? @db.Date
+    adData                   String?   @db.Text
     createdAt                DateTime
     updatedAt                DateTime
-    Phones                   PersonPhone[]
-    Emails                   PersonEmail[]
-    Addresses                PersonAddress[]
-    Affiliations             Affiliation[]
-    AlergicConditions        AlergicCondition[]
-    SubjectRelationships     Relationship[]       @relation("subject")
-    ReceiverRelationships    Relationship[]       @relation("receiver")
-    CampTshirtOrders         CampTshirtOrder[]
-    CustomAnswers            CustomAnswer[]
-    EmergencyContacts        EmergencyContact[]
-    InvitesSent              Invite[]             @relation("invited_by")
-    InvitesReceived          Invite[]             @relation("recipient")
-    Invoices                 Invoice[]
-    LegalVideoConsents       LegalVideoConsent[]
-    MedicalConditions        MedicalCondition[]
-    MessagePeople            MessagePerson[]
-    Messages                 Message[]
-    Participants             Registration[]       @relation("participant")
-    RegisteredBy             Registration[]       @relation("registered_by")
-    TicketRegistrations      TicketRegistration[]
-}
 
-model PersonAddress {
-    id        String   @id @default(cuid())
-    personId  String
-    addressId String
-    createdAt DateTime
-    updatedAt DateTime
-    Person    Person   @relation(fields: [personId], references: [id])
-}
-
-model PersonEmail {
-    id        String   @id @default(cuid())
-    personId  String
-    emailId   String
-    createdAt DateTime
-    updatedAt DateTime
-    Person    Person   @relation(fields: [personId], references: [id])
-}
-
-model PersonPhone {
-    id        String   @id @default(cuid())
-    personId  String
-    phoneId   String
-    createdAt DateTime
-    updatedAt DateTime
-
-    Person Person @relation(fields: [personId], references: [id])
+    SubjectRelationships  Relationship[]       @relation("subject")
+    ReceiverRelationships Relationship[]       @relation("receiver")
+    CampTshirtOrders      CampTshirtOrder[]
+    Messages              Message[]
+    Participants          Registration[]       @relation("participant")
+    RegisteredBy          Registration[]       @relation("registered_by")
+    TicketRegistrations   TicketRegistration[]
 }
 
 model Record {

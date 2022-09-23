@@ -1,3 +1,4 @@
 ADMIN_DATABASE_URL="postgresql://<put your name here>@localhost:5432/proposed_admin"
 SCHOOL_DATABASE_URL="postgresql://<put your name here>@localhost:5432/proposed_school"
 ACTIVITY_DATABASE_URL="postgresql://<put your name here>@localhost:5432/proposed_activity"
+PERSON_DATABASE_URL="postgresql://<put your name here>@localhost:5432/proposed_person"

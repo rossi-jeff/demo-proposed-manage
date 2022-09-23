@@ -1,8 +1,8 @@
 overwrite: true
-schema: "services/activity/**/*.schema.graphql"
+schema: "services/person/**/*.schema.graphql"
 documents: null
 generates:
-  services/activity/generated/graphql.ts:
+  services/person/generated/graphql.ts:
     config:
       federation: true
     plugins:
@@ -10,4 +10,4 @@ generates:
       - "typescript-resolvers"
 config:
   mappers:
-    Person: "../src/Person/types#PersonType"
+    EmergencyContact: "../src/EmergencyContact/types#EmergencyContactType"

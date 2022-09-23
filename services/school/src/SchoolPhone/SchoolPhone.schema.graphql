@@ -1,7 +1,0 @@
-type SchoolPhone {
-  id: ID!
-  schoolId: String
-  phoneId: String
-  createdAt: String
-  updatedAt: String
-}

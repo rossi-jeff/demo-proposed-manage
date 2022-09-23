@@ -1,7 +1,0 @@
-type PersonAddress {
-  id: ID!
-  personId: String
-  addressId: String
-  createdAt: String
-  updatedAt: String
-}

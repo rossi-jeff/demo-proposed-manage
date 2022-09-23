@@ -5,8 +5,8 @@ import { PhoneType, PhoneTypeEnum } from "./types";
 export const getCreatedAt = (parent: PhoneType) => {
   return parent.createdAt != null ? parent.createdAt.toString() : null;
 };
-export const getNumnber = (parent: PhoneType) => {
-  return parent.numnber ?? null;
+export const getNumber = (parent: PhoneType) => {
+  return parent.number ?? null;
 };
 export const getType = (parent: PhoneType) => {
   switch (parent.type) {
@@ -35,7 +35,7 @@ export const Phone: Resolvers["Phone"] = {
     });
   },
   type: getType,
-  numnber: getNumnber,
+  number: getNumber,
   createdAt: getCreatedAt,
   updatedAt: getUpdatedAt,
 };

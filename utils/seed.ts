@@ -1,24 +1,23 @@
 import { db as adminDb } from "../services/admin/src/db";
 import { db as schoolDb } from "../services/school/src/db";
 import { db as activityDb } from "../services/activity/src/db";
+import { db as personDb } from "../services/person/src/db";
 import { School } from "../services/admin/generated/admin-db";
 import {
   Activity,
   Address,
   Email,
   LegalForm,
+  PersonAddress,
+  PersonEmail,
+  PersonPhone,
   Phone,
   SchoolAddress,
   SchoolEmail,
   SchoolPhone,
 } from "../services/school/generated/school-db";
-import {
-  EmergencyContact,
-  Person,
-  PersonAddress,
-  PersonEmail,
-  PersonPhone,
-} from "../services/activity/generated/activity-db";
+import { Person } from "../services/activity/generated/activity-db";
+import { EmergencyContact } from "../services/person/generated/person-db";
 import { logger } from "./logger";
 import { sample } from "./sample";
 import { AddresTypeEnum } from "../services/school/src/Address/types";
@@ -88,12 +87,11 @@ const relationships = [
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
-  await activityDb.client.emergencyContact.deleteMany({});
-  await activityDb.client.personPhone.deleteMany({});
-  await activityDb.client.personAddress.deleteMany({});
-  await activityDb.client.personEmail.deleteMany({});
   await activityDb.client.person.deleteMany({});
   // school db
+  await schoolDb.client.personPhone.deleteMany({});
+  await schoolDb.client.personAddress.deleteMany({});
+  await schoolDb.client.personEmail.deleteMany({});
   await schoolDb.client.schoolAddress.deleteMany({});
   await schoolDb.client.address.deleteMany({});
   await schoolDb.client.schoolEmail.deleteMany({});
@@ -102,6 +100,8 @@ const clear = async () => {
   await schoolDb.client.phone.deleteMany({});
   await schoolDb.client.legalForm.deleteMany({});
   await schoolDb.client.activity.deleteMany({});
+  // person db
+  await personDb.client.emergencyContact.deleteMany({});
   // admin db
   await adminDb.client.school.deleteMany({});
 };
@@ -198,12 +198,12 @@ const seed = async () => {
     for (let ph = 0; ph < count.phones; ph++) {
       data = {
         type: sample(phoneTypes) ?? PhoneTypeEnum.OFFICE,
-        numnber: randPhoneNumber(),
+        number: randPhoneNumber(),
         createdAt: now,
         updatedAt: now,
       };
       phone = await schoolDb.client.phone.create({ data });
-      logger.info(`phone ${phone.id}: ${phone.numnber}`);
+      logger.info(`phone ${phone.id}: ${phone.number}`);
 
       data = {
         schoolId: school.id,
@@ -285,7 +285,7 @@ const seed = async () => {
           createdAt: now,
           updatedAt: now,
         };
-        personEmail = await activityDb.client.personEmail.create({ data });
+        personEmail = await schoolDb.client.personEmail.create({ data });
         logger.info(`person email ${personEmail.id}`);
       } // end email loop
 
@@ -308,18 +308,18 @@ const seed = async () => {
         createdAt: now,
         updatedAt: now,
       };
-      personAddress = await activityDb.client.personAddress.create({ data });
+      personAddress = await schoolDb.client.personAddress.create({ data });
       logger.info(`person address: ${personAddress.id}`);
 
       for (let ph = 0; ph < count.phones; ph++) {
         data = {
           type: sample(phoneTypes) ?? PhoneTypeEnum.OFFICE,
-          numnber: randPhoneNumber(),
+          number: randPhoneNumber(),
           createdAt: now,
           updatedAt: now,
         };
         phone = await schoolDb.client.phone.create({ data });
-        logger.info(`phone ${phone.id}: ${phone.numnber}`);
+        logger.info(`phone ${phone.id}: ${phone.number}`);
 
         data = {
           personId: person.id,
@@ -327,7 +327,7 @@ const seed = async () => {
           createdAt: now,
           updatedAt: now,
         };
-        personPhone = await activityDb.client.personPhone.create({ data });
+        personPhone = await schoolDb.client.personPhone.create({ data });
         logger.info(`person phone ${personPhone.id}`);
       } // end phone loop
 
@@ -341,7 +341,7 @@ const seed = async () => {
           createdAt: now,
           updatedAt: now,
         };
-        emergencyContact = await activityDb.client.emergencyContact.create({
+        emergencyContact = await personDb.client.emergencyContact.create({
           data,
         });
         logger.info(

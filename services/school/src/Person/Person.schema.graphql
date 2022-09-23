@@ -1,0 +1,7 @@
+type Person @key(fields: "id") {
+  id: ID!
+
+  Addresses: [Address]
+  Emails: [Email]
+  Phones: [Phone]
+}
