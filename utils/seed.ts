@@ -6,6 +6,7 @@ import {
   Activity,
   Address,
   Email,
+  LegalForm,
   Phone,
   SchoolAddress,
   SchoolEmail,
@@ -51,6 +52,7 @@ import {
   randStreetAddress,
   randState,
   randZipCode,
+  randFilePath,
 } from "@ngneat/falso";
 
 const phoneTypes = [
@@ -67,6 +69,7 @@ const count = {
   phones: 2,
   emails: 2,
   emergencyContacts: 2,
+  legalForms: 2,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -97,6 +100,7 @@ const clear = async () => {
   await schoolDb.client.email.deleteMany({});
   await schoolDb.client.schoolPhone.deleteMany({});
   await schoolDb.client.phone.deleteMany({});
+  await schoolDb.client.legalForm.deleteMany({});
   await schoolDb.client.activity.deleteMany({});
   // admin db
   await adminDb.client.school.deleteMany({});
@@ -120,6 +124,7 @@ const seed = async () => {
   let schoolAddress: SchoolAddress;
   let personAddress: PersonAddress;
   let emergencyContact: EmergencyContact;
+  let legalForm: LegalForm;
 
   const now = new Date();
   for (let s = 0; s < count.schools; s++) {
@@ -209,6 +214,22 @@ const seed = async () => {
       schoolPhone = await schoolDb.client.schoolPhone.create({ data });
       logger.info(`school phone ${schoolPhone.id}`);
     } // end phone loop
+
+    for (let l = 0; l < count.legalForms; l++) {
+      data = {
+        schoolId: school.id,
+        name: randCatchPhrase(),
+        checkboxText: randSentence(),
+        emailToChild: randBoolean(),
+        file: randFilePath(),
+        requireStudentSignOff: randBoolean(),
+        state: randNumber({ min: 1, max: 1000 }),
+        createdAt: now,
+        updatedAt: now,
+      };
+      legalForm = await schoolDb.client.legalForm.create({ data });
+      logger.info(`legal form ${legalForm.id}: ${legalForm.name}`);
+    } // end legal form loop
 
     ids.people = [];
     for (let p = 0; p < count.people; p++) {
