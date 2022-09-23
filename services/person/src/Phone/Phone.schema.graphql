@@ -1,3 +1,0 @@
-type Phone @key(fields: "id") {
-  id: ID!
-}
