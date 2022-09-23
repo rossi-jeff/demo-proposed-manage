@@ -9,7 +9,7 @@ describe("Phone field resolvers", () => {
   const parent: PhoneType = {
     id: "123-456",
     type: "HOME",
-    numnber: "987-654-3210",
+    number: "987-654-3210",
     createdAt: new Date(),
     updatedAt: new Date(),
   };
@@ -17,9 +17,9 @@ describe("Phone field resolvers", () => {
     const result = F.getCreatedAt(parent);
     sinon.assert.match(result, parent.createdAt.toString());
   });
-  it("numnber", () => {
-    const result = F.getNumnber(parent);
-    sinon.assert.match(result, parent.numnber);
+  it("number", () => {
+    const result = F.getNumber(parent);
+    sinon.assert.match(result, parent.number);
   });
   it("type", () => {
     const result = F.getType(parent);

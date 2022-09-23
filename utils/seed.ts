@@ -198,12 +198,12 @@ const seed = async () => {
     for (let ph = 0; ph < count.phones; ph++) {
       data = {
         type: sample(phoneTypes) ?? PhoneTypeEnum.OFFICE,
-        numnber: randPhoneNumber(),
+        number: randPhoneNumber(),
         createdAt: now,
         updatedAt: now,
       };
       phone = await schoolDb.client.phone.create({ data });
-      logger.info(`phone ${phone.id}: ${phone.numnber}`);
+      logger.info(`phone ${phone.id}: ${phone.number}`);
 
       data = {
         schoolId: school.id,
@@ -314,12 +314,12 @@ const seed = async () => {
       for (let ph = 0; ph < count.phones; ph++) {
         data = {
           type: sample(phoneTypes) ?? PhoneTypeEnum.OFFICE,
-          numnber: randPhoneNumber(),
+          number: randPhoneNumber(),
           createdAt: now,
           updatedAt: now,
         };
         phone = await schoolDb.client.phone.create({ data });
-        logger.info(`phone ${phone.id}: ${phone.numnber}`);
+        logger.info(`phone ${phone.id}: ${phone.number}`);
 
         data = {
           personId: person.id,

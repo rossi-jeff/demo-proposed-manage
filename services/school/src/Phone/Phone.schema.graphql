@@ -1,7 +1,7 @@
 type Phone @key(fields: "id") {
   id: ID!
   type: PhoneTypeEnum
-  numnber: String
+  number: String
   createdAt: String
   updatedAt: String
 }

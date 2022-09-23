@@ -1,3 +1,0 @@
-type Email @key(fields: "id") {
-  id: ID!
-}
