@@ -24,15 +24,11 @@ model Activity {
     athleticSeason                      String?                               @default("none")
     createdAt                           DateTime
     updatedAt                           DateTime
-    ActivityFees                        ActivityFee[]
-    Events                              Event[]
     CustomDiscounts                     CustomDiscount[]
-    Groups                              Group[]
     ParticipantInformationConfiguration ParticipantInformationConfiguration[]
-    Ventures                            Venture[]
-    ActivityLegalForms                  ActivityLegalForm[]
-    FuelMyClubActivities                FuelMyClubActivity?
     Settlements                         Settlement[]
+    ActivityFee                         ActivityFee[]
+    ActivityLegalForm                   ActivityLegalForm[]
 }
 
 model ActivityFee {
@@ -42,18 +38,19 @@ model ActivityFee {
     createdAt  DateTime
     updatedAt  DateTime
 
-    Activity Activity @relation(fields: [activityId], references: [id])
-    Fee      Fee      @relation(fields: [feeId], references: [id])
+    Activity Activity? @relation(fields: [activityId], references: [id])
+    Fee      Fee       @relation(fields: [feeId], references: [id])
 }
 
 model ActivityLegalForm {
-    id          String    @id @default(cuid())
+    id          String   @id @default(cuid())
     activityId  String
     legalFormId String
     createdAt   DateTime
     updatedAt   DateTime
-    Activity    Activity  @relation(fields: [activityId], references: [id])
-    LegalForm   LegalForm @relation(fields: [legalFormId], references: [id])
+
+    Activity  Activity? @relation(fields: [activityId], references: [id])
+    LegalForm LegalForm @relation(fields: [legalFormId], references: [id])
 }
 
 model Address {
@@ -140,29 +137,6 @@ enum EmailTypeEnum {
     BUSINESS
 }
 
-model Event {
-    id                String    @id @default(cuid())
-    activityId        String
-    name              String?
-    description       String?   @db.Text()
-    registerable      Boolean?  @default(false)
-    director          String?
-    startTime         DateTime? @db.Time()
-    endTime           DateTime? @db.Time()
-    studentOnly       Boolean?  @default(false)
-    location          String?
-    registrationStart DateTime? @db.Date
-    registrationEnd   DateTime? @db.Date
-    cancelled         Boolean?  @default(false)
-    state             Int?      @default(0)
-    eventDate         DateTime? @db.Date
-    maxTicketCapacity Int?
-    createdAt         DateTime
-    updatedAt         DateTime
-
-    Activity Activity @relation(fields: [activityId], references: [id])
-}
-
 model FeatureForSeason {
     id        String   @id @default(cuid())
     schoolId  String?
@@ -173,44 +147,19 @@ model FeatureForSeason {
 }
 
 model Fee {
-    id           String        @id @default(cuid())
-    name         String
-    type         FeeTypeEnum
-    amount       Int
-    createdAt    DateTime
-    updatedAt    DateTime
-    ActivityFees ActivityFee[]
-    SchoolFees   SchoolFee[]
+    id          String        @id @default(cuid())
+    name        String
+    type        FeeTypeEnum
+    amount      Int
+    createdAt   DateTime
+    updatedAt   DateTime
+    SchoolFees  SchoolFee[]
+    ActivityFee ActivityFee[]
 }
 
 enum FeeTypeEnum {
     FLAT
     PERCENTAGE
-}
-
-model FuelMyClubActivity {
-    id                        String   @id @default(cuid())
-    activityId                String?  @unique
-    externalFmcOrganizationId String?
-    createdAt                 DateTime
-    updatedAt                 DateTime
-
-    Activity             Activity?              @relation(fields: [activityId], references: [id])
-    FuelMyClubFundraiser FuelMyClubFundraiser[]
-}
-
-model FuelMyClubFundraiser {
-    id                      String   @id @default(cuid())
-    fuelMyClubActivityId    String
-    season                  String?
-    externalFmcFundraiserId String?
-    contactPersonId         String?
-    config                  Int?     @default(0)
-    leadInMessage           String?  @db.Text
-    createdAt               DateTime
-    updatedAt               DateTime
-
-    FuelMyClubActivity FuelMyClubActivity @relation(fields: [fuelMyClubActivityId], references: [id])
 }
 
 model FuelMyClubOrganization {
@@ -225,32 +174,6 @@ model FuelMyClubOrganization {
     updatedAt       DateTime
 }
 
-model Group {
-    id                     String       @id @default(cuid())
-    activityId             String
-    name                   String?
-    level                  String?
-    gender                 String?
-    a2kSiteschoolsportId   Int?
-    sportName              String?
-    rosterwebserviceAccess Boolean?     @default(false)
-    state                  Int?         @default(0)
-    createdAt              DateTime
-    updatedAt              DateTime
-    Activity               Activity     @relation(fields: [activityId], references: [id])
-    GroupAwards            GroupAward[]
-}
-
-model GroupAward {
-    id        String   @id @default(cuid())
-    groupId   String
-    name      String?
-    state     Int?     @default(0)
-    createdAt DateTime
-    updatedAt DateTime
-    Group     Group    @relation(fields: [groupId], references: [id])
-}
-
 model LegalForm {
     id                    String              @id @default(cuid())
     schoolId              String
@@ -262,7 +185,7 @@ model LegalForm {
     state                 Int?                @default(0)
     createdAt             DateTime
     updatedAt             DateTime
-    ActivityLegalForms    ActivityLegalForm[]
+    ActivityLegalForm     ActivityLegalForm[]
 }
 
 model LegalVideo {
@@ -309,6 +232,46 @@ model PaymentCode {
     updatedAt DateTime
 }
 
+model Person {
+    id                       String          @id @default(cuid())
+    userName                 String
+    passWord                 String
+    schoolId                 String?
+    allowedToLogin           Boolean?        @default(false)
+    firstName                String?
+    lastName                 String?
+    sex                      String?
+    birthDate                DateTime?       @db.Date
+    highSchoolGraduationYear String?
+    insuranceCompany         String?
+    insuranceAccountNumber   String?
+    physicianName            String?
+    physicianPhone           String?
+    studentId                String?
+    schoolTransferredFrom    String?
+    medicalInformation       String?         @db.Text
+    acceptsCOPPA             Boolean?
+    optsInToCommunications   Boolean?        @default(true)
+    physicalDate             DateTime?       @db.Date
+    credit                   Int?
+    ethnicity                String?
+    firstEnrollmentDate      DateTime?       @db.Date
+    participationStatus      String?
+    gpa                      Float?
+    felonyInfo               Int?            @default(0)
+    notifications            Int?            @default(31)
+    concussionTestDate       DateTime?       @db.Date
+    adData                   String?         @db.Text
+    createdAt                DateTime
+    updatedAt                DateTime
+    SubjectRelationship      Relationship[]  @relation("subject")
+    ReceiverRelationship     Relationship[]  @relation("receiver")
+    PersonAddress            PersonAddress[]
+    PersonEmail              PersonEmail[]
+    PersonPhone              PersonPhone[]
+    PersonRole               PersonRole[]
+}
+
 model PersonAddress {
     id        String   @id @default(cuid())
     personId  String
@@ -316,6 +279,7 @@ model PersonAddress {
     createdAt DateTime
     updatedAt DateTime
     Address   Address  @relation(fields: [addressId], references: [id])
+    Person    Person   @relation(fields: [personId], references: [id])
 }
 
 model PersonEmail {
@@ -325,6 +289,7 @@ model PersonEmail {
     createdAt DateTime
     updatedAt DateTime
     Email     Email    @relation(fields: [emailId], references: [id])
+    Person    Person   @relation(fields: [personId], references: [id])
 }
 
 model PersonPhone {
@@ -334,6 +299,7 @@ model PersonPhone {
     createdAt DateTime
     updatedAt DateTime
     Phone     Phone    @relation(fields: [phoneId], references: [id])
+    Person    Person   @relation(fields: [personId], references: [id])
 }
 
 model PersonRole {
@@ -342,6 +308,7 @@ model PersonRole {
     roleId    String
     createdAt DateTime
     updatedAt DateTime
+    Person    Person   @relation(fields: [personId], references: [id])
 }
 
 model Phone {
@@ -359,6 +326,18 @@ enum PhoneTypeEnum {
     OFFICE
     FAX
     CELL
+}
+
+model Relationship {
+    id               String   @id @default(cuid())
+    subjectId        String?
+    receiverId       String?
+    relationshipType String?
+    createdAt        DateTime
+    updatedAt        DateTime
+
+    Subject  Person? @relation(fields: [subjectId], references: [id], name: "subject")
+    Receiver Person? @relation(fields: [receiverId], references: [id], name: "receiver")
 }
 
 model SchoolAddress {
@@ -422,30 +401,4 @@ model Settlement {
     updatedAt        DateTime
 
     Activity Activity? @relation(fields: [activityId], references: [id])
-}
-
-model Venture {
-    id                      String    @id @default(cuid())
-    activityId              String
-    name                    String?
-    description             String?   @db.Text
-    type                    String?
-    gender                  String?
-    grade                   String?
-    basePrice               Int?
-    nonDistrictBasePrice    Int?
-    registrationStart       DateTime? @db.Date
-    registrationEnd         DateTime? @db.Date
-    director                String?
-    directorBio             String?   @db.Text
-    registerable            Boolean?  @default(false)
-    maxNumberOfParticipants Int?      @default(0)
-    location                String?
-    cancelled               Boolean?  @default(false)
-    state                   Int?      @default(0)
-    season                  String?
-    sourceVentureId         Int?
-    createdAt               DateTime
-    updatedAt               DateTime
-    Activity                Activity  @relation(fields: [activityId], references: [id])
 }

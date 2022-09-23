@@ -378,3 +378,5 @@ const seed = async () => {
 seed()
   .then(() => logger.info("seed complete"))
   .catch((e) => logger.error(e));
+
+// clear().then(() => logger.info('data cleared'))
