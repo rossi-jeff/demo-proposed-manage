@@ -26,8 +26,4 @@ edit .env file to contain your username for local postgress
 
 ## start servers
 
-`npm run start:services`
-
-open a new console tab
-
-`npm run start:gateway`
+`npm start`

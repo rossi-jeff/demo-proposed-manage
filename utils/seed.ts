@@ -8,18 +8,16 @@ import {
   Address,
   Email,
   LegalForm,
+  PersonAddress,
+  PersonEmail,
+  PersonPhone,
   Phone,
   SchoolAddress,
   SchoolEmail,
   SchoolPhone,
 } from "../services/school/generated/school-db";
 import { Person } from "../services/activity/generated/activity-db";
-import {
-  EmergencyContact,
-  PersonAddress,
-  PersonEmail,
-  PersonPhone,
-} from "../services/person/generated/person-db";
+import { EmergencyContact } from "../services/person/generated/person-db";
 import { logger } from "./logger";
 import { sample } from "./sample";
 import { AddresTypeEnum } from "../services/school/src/Address/types";
@@ -91,6 +89,9 @@ const clear = async () => {
   // activity db
   await activityDb.client.person.deleteMany({});
   // school db
+  await schoolDb.client.personPhone.deleteMany({});
+  await schoolDb.client.personAddress.deleteMany({});
+  await schoolDb.client.personEmail.deleteMany({});
   await schoolDb.client.schoolAddress.deleteMany({});
   await schoolDb.client.address.deleteMany({});
   await schoolDb.client.schoolEmail.deleteMany({});
@@ -101,9 +102,6 @@ const clear = async () => {
   await schoolDb.client.activity.deleteMany({});
   // person db
   await personDb.client.emergencyContact.deleteMany({});
-  await personDb.client.personPhone.deleteMany({});
-  await personDb.client.personAddress.deleteMany({});
-  await personDb.client.personEmail.deleteMany({});
   // admin db
   await adminDb.client.school.deleteMany({});
 };
@@ -287,7 +285,7 @@ const seed = async () => {
           createdAt: now,
           updatedAt: now,
         };
-        personEmail = await personDb.client.personEmail.create({ data });
+        personEmail = await schoolDb.client.personEmail.create({ data });
         logger.info(`person email ${personEmail.id}`);
       } // end email loop
 
@@ -310,7 +308,7 @@ const seed = async () => {
         createdAt: now,
         updatedAt: now,
       };
-      personAddress = await personDb.client.personAddress.create({ data });
+      personAddress = await schoolDb.client.personAddress.create({ data });
       logger.info(`person address: ${personAddress.id}`);
 
       for (let ph = 0; ph < count.phones; ph++) {
@@ -329,7 +327,7 @@ const seed = async () => {
           createdAt: now,
           updatedAt: now,
         };
-        personPhone = await personDb.client.personPhone.create({ data });
+        personPhone = await schoolDb.client.personPhone.create({ data });
         logger.info(`person phone ${personPhone.id}`);
       } // end phone loop
 

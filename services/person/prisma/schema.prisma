@@ -112,35 +112,3 @@ model MessagePerson {
     createdAt DateTime
     updatedAt DateTime
 }
-
-model PersonAddress {
-    id        String   @id @default(cuid())
-    personId  String
-    addressId String
-    createdAt DateTime
-    updatedAt DateTime
-}
-
-model PersonEmail {
-    id        String   @id @default(cuid())
-    personId  String
-    emailId   String
-    createdAt DateTime
-    updatedAt DateTime
-}
-
-model PersonPhone {
-    id        String   @id @default(cuid())
-    personId  String
-    phoneId   String
-    createdAt DateTime
-    updatedAt DateTime
-}
-
-model PersonRole {
-    id        String   @id @default(cuid())
-    personId  String
-    roleId    String
-    createdAt DateTime
-    updatedAt DateTime
-}
