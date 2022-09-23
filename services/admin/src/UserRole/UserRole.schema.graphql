@@ -1,7 +1,0 @@
-type UserRole {
-  id: ID!
-  userId: Int
-  roleId: String
-  createdAt: String
-  updatedAt: String
-}
