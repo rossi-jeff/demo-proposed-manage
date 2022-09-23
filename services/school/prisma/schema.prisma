@@ -36,11 +36,11 @@ model Activity {
 }
 
 model ActivityFee {
-    id         String @id @default(cuid())
+    id         String   @id @default(cuid())
     feeId      String
     activityId String
-    createdAt   DateTime
-    updatedAt   DateTime
+    createdAt  DateTime
+    updatedAt  DateTime
 
     Activity Activity @relation(fields: [activityId], references: [id])
     Fee      Fee      @relation(fields: [feeId], references: [id])
@@ -84,20 +84,10 @@ model Award {
     updatedAt DateTime
 }
 
-model CoachCertification {
-    id        String   @id @default(cuid())
-    personId  String
-    value     String?
-    state     String?
-    code      String?
-    createdAt DateTime
-    updatedAt DateTime
-}
-
 model Color {
-    id       String @id @default(cuid())
-    name     String
-    schoolId String
+    id        String   @id @default(cuid())
+    name      String
+    schoolId  String
     createdAt DateTime
     updatedAt DateTime
 }
@@ -134,15 +124,6 @@ model CustomQuestion {
     updatedAt       DateTime
 }
 
-model DirectingRole {
-    id        String   @id @default(cuid())
-    personId  String
-    eventId   String
-    createdAt DateTime
-    updatedAt DateTime
-    Event     Event    @relation(fields: [eventId], references: [id])
-}
-
 model Email {
     id           String        @id @default(cuid())
     type         EmailTypeEnum
@@ -177,8 +158,7 @@ model Event {
     createdAt         DateTime
     updatedAt         DateTime
 
-    Activity       Activity        @relation(fields: [activityId], references: [id])
-    DirectingRoles DirectingRole[]
+    Activity Activity @relation(fields: [activityId], references: [id])
 }
 
 model FeatureForSeason {
@@ -322,14 +302,6 @@ model PaymentCode {
     name      String?
     code      String?
     active    Boolean? @default(true)
-    createdAt DateTime
-    updatedAt DateTime
-}
-
-model PersonRole {
-    id        String   @id @default(cuid())
-    personId  String
-    roleId    String
     createdAt DateTime
     updatedAt DateTime
 }

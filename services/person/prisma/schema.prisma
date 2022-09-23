@@ -1,0 +1,146 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("PERSON_DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "../generated/person-db"
+}
+
+model Affiliation {
+    id              String   @id @default(cuid())
+    personId        String
+    schoolId        String?
+    affiliationType String?
+    createdAt       DateTime
+    updatedAt       DateTime
+}
+
+model AlergicCondition {
+    id               String   @id @default(cuid())
+    personId         String
+    allergyCondition String?
+    severity         String?
+    reaction         String?
+    createdAt        DateTime
+    updatedAt        DateTime
+}
+
+model CoachCertification {
+    id        String   @id @default(cuid())
+    personId  String
+    value     String?
+    state     String?
+    code      String?
+    createdAt DateTime
+    updatedAt DateTime
+}
+
+model CustomAnswer {
+    id         String   @id @default(cuid())
+    personId   String
+    questionId String?
+    answer     String?  @db.Text()
+    createdAt  DateTime
+    updatedAt  DateTime
+}
+
+model DirectingRole {
+    id        String   @id @default(cuid())
+    personId  String
+    eventId   String
+    createdAt DateTime
+    updatedAt DateTime
+}
+
+model EmergencyContact {
+    id           String   @id @default(cuid())
+    personId     String
+    firstName    String?
+    lastName     String?
+    phoneNumber  String?
+    relationship String?
+    createdAt    DateTime
+    updatedAt    DateTime
+}
+
+model Invite {
+    id          String   @id @default(cuid())
+    personId    String?
+    invitedById String?
+    schoolId    String?
+    accepted    Boolean  @default(false)
+    secret      String
+    createdAt   DateTime
+    updatedAt   DateTime
+}
+
+model Invoice {
+    id                   String   @id @default(cuid())
+    personId             String?
+    credit               Int?     @default(0)
+    invoiceTransactionId String?
+    createdAt            DateTime
+    updatedAt            DateTime
+}
+
+model LegalVideoConsent {
+    id           String   @id @default(cuid())
+    legalVideoId String?
+    personId     String?
+    season       String?
+    createdAt    DateTime
+    updatedAt    DateTime
+}
+
+model MedicalCondition {
+    id              String    @id @default(cuid())
+    personId        String
+    name            String?
+    physician       String?
+    dateOfDiagnosis DateTime? @db.Date
+    emergencyPlan   String?
+    createdAt       DateTime
+    updatedAt       DateTime
+}
+
+model MessagePerson {
+    id        String   @id @default(cuid())
+    messageId String
+    personId  String
+    createdAt DateTime
+    updatedAt DateTime
+}
+
+model PersonAddress {
+    id        String   @id @default(cuid())
+    personId  String
+    addressId String
+    createdAt DateTime
+    updatedAt DateTime
+}
+
+model PersonEmail {
+    id        String   @id @default(cuid())
+    personId  String
+    emailId   String
+    createdAt DateTime
+    updatedAt DateTime
+}
+
+model PersonPhone {
+    id        String   @id @default(cuid())
+    personId  String
+    phoneId   String
+    createdAt DateTime
+    updatedAt DateTime
+}
+
+model PersonRole {
+    id        String   @id @default(cuid())
+    personId  String
+    roleId    String
+    createdAt DateTime
+    updatedAt DateTime
+}

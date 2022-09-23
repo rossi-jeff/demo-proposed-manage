@@ -8,6 +8,7 @@
     "migrate:admin": "cd services/admin/ && npx prisma migrate dev",
     "migrate:school": "cd services/school/ && npx prisma migrate dev",
     "migrate:activity": "cd services/activity/ && npx prisma migrate dev",
+    "migrate:person": "cd services/person/ && npx prisma migrate dev",
     "codegen:admin": "graphql-codegen --config codegen-admin.yml",
     "codegen:activity": "graphql-codegen --config codegen-activity.yml",
     "codegen:school": "graphql-codegen --config codegen-school.yml",
@@ -15,6 +16,7 @@
     "generate:admin": "cd services/admin/ && npx prisma generate",
     "generate:activity": "cd services/activity/ && npx prisma generate",
     "generate:school": "cd services/school/ && npx prisma generate",
+    "generate:person": "cd services/person/ && npx prisma generate",
     "generate": "concurrently npm:generate:*",
     "start:service:activity": "nodemon services/activity/src/server.ts",
     "start:service:admin": "nodemon services/admin/src/server.ts",
@@ -28,6 +30,7 @@
     "push:admin": "cd services/admin/ && npx prisma db push",
     "push:activity": "cd services/activity/ && npx prisma db push",
     "push:school": "cd services/school/ && npx prisma db push",
+    "push:person": "cd services/person/ && npx prisma db push",
     "push": "concurrently npm:push:*"
   },
   "author": "Jeff Rossi",
