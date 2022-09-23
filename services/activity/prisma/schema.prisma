@@ -79,16 +79,6 @@ model Consent {
     Registration Registration @relation(fields: [registrationId], references: [id])
 }
 
-model FuelMyClubRegistration {
-    id             String   @id @default(cuid())
-    registrationId String?  @unique
-    data           String?  @db.Text
-    createdAt      DateTime
-    updatedAt      DateTime
-
-    Registration Registration? @relation(fields: [registrationId], references: [id])
-}
-
 model Event {
     id                String    @id @default(cuid())
     activityId        String
@@ -131,6 +121,16 @@ model FuelMyClubFundraiser {
     updatedAt               DateTime
 
     FuelMyClubActivity FuelMyClubActivity @relation(fields: [fuelMyClubActivityId], references: [id])
+}
+
+model FuelMyClubRegistration {
+    id             String   @id @default(cuid())
+    registrationId String?  @unique
+    data           String?  @db.Text
+    createdAt      DateTime
+    updatedAt      DateTime
+
+    Registration Registration? @relation(fields: [registrationId], references: [id])
 }
 
 model Group {

@@ -1,6 +1,6 @@
 import { db as adminDb } from "../services/admin/src/db";
 import { db as schoolDb } from "../services/school/src/db";
-import { db as activityDb } from "../services/activity/src/db";
+// import { db as activityDb } from "../services/activity/src/db";
 import { db as personDb } from "../services/person/src/db";
 import { School } from "../services/admin/generated/admin-db";
 import {
@@ -8,6 +8,7 @@ import {
   Address,
   Email,
   LegalForm,
+  Person,
   PersonAddress,
   PersonEmail,
   PersonPhone,
@@ -16,7 +17,6 @@ import {
   SchoolEmail,
   SchoolPhone,
 } from "../services/school/generated/school-db";
-import { Person } from "../services/activity/generated/activity-db";
 import { EmergencyContact } from "../services/person/generated/person-db";
 import { logger } from "./logger";
 import { sample } from "./sample";
@@ -87,7 +87,7 @@ const relationships = [
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
-  await activityDb.client.person.deleteMany({});
+
   // school db
   await schoolDb.client.personPhone.deleteMany({});
   await schoolDb.client.personAddress.deleteMany({});
@@ -100,6 +100,7 @@ const clear = async () => {
   await schoolDb.client.phone.deleteMany({});
   await schoolDb.client.legalForm.deleteMany({});
   await schoolDb.client.activity.deleteMany({});
+  await schoolDb.client.person.deleteMany({});
   // person db
   await personDb.client.emergencyContact.deleteMany({});
   // admin db
@@ -265,7 +266,7 @@ const seed = async () => {
         createdAt: now,
         updatedAt: now,
       };
-      person = await activityDb.client.person.create({ data });
+      person = await schoolDb.client.person.create({ data });
       ids.people.push(person.id);
       logger.info(`person ${person.id}: ${person.userName}`);
 

@@ -8,6 +8,7 @@ import { email, emails } from "./Email/query-resolvers";
 import { LegalForm } from "./LegalForm/field-resolvers";
 import { legalForm, legalForms } from "./LegalForm/query-resolvers";
 import { Person } from "./Person/field-resolvers";
+import { people, person } from "./Person/query-resolvers";
 import { Phone } from "./Phone/field-resolvers";
 import { phone, phones } from "./Phone/query-resolvers";
 import { School } from "./School/field-resolvers";
@@ -22,6 +23,8 @@ export const resolvers: Resolvers = {
     email,
     legalForms,
     legalForm,
+    people,
+    person,
     phones,
     phone,
   },
