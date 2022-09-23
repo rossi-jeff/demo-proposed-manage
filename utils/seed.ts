@@ -1,8 +1,9 @@
 import { db as adminDb } from "../services/admin/src/db";
 import { db as schoolDb } from "../services/school/src/db";
-// import { db as activityDb } from "../services/activity/src/db";
+import { db as activityDb } from "../services/activity/src/db";
 import { db as personDb } from "../services/person/src/db";
 import { School } from "../services/admin/generated/admin-db";
+import { Group } from "../services/activity/generated/activity-db";
 import {
   Activity,
   Address,
@@ -52,6 +53,7 @@ import {
   randState,
   randZipCode,
   randFilePath,
+  randSports,
 } from "@ngneat/falso";
 
 const phoneTypes = [
@@ -69,6 +71,7 @@ const count = {
   emails: 2,
   emergencyContacts: 2,
   legalForms: 2,
+  groups: 3,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -87,7 +90,7 @@ const relationships = [
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
-
+  await activityDb.client.group.deleteMany({});
   // school db
   await schoolDb.client.personPhone.deleteMany({});
   await schoolDb.client.personAddress.deleteMany({});
@@ -105,6 +108,7 @@ const clear = async () => {
   await personDb.client.emergencyContact.deleteMany({});
   // admin db
   await adminDb.client.school.deleteMany({});
+  logger.info("data cleared");
 };
 
 const seed = async () => {
@@ -126,6 +130,7 @@ const seed = async () => {
   let personAddress: PersonAddress;
   let emergencyContact: EmergencyContact;
   let legalForm: LegalForm;
+  let group: Group;
 
   const now = new Date();
   for (let s = 0; s < count.schools; s++) {
@@ -372,6 +377,23 @@ const seed = async () => {
       activity = await schoolDb.client.activity.create({ data });
       ids.activities.push(activity.id);
       logger.info(`activity ${activity.id}: ${activity.kind}`);
+
+      for (let g = 0; g < count.groups; g++) {
+        data = {
+          activityId: activity.id,
+          name: randCatchPhrase(),
+          level: randNumber({ min: 1, max: 1000 }).toString(),
+          gender: randGender(),
+          a2kSiteschoolsportId: randNumber({ min: 1, max: 1000 }),
+          sportName: randSports(),
+          rosterwebserviceAccess: randBoolean(),
+          state: randNumber({ min: 1, max: 1000 }),
+          createdAt: now,
+          updatedAt: now,
+        };
+        group = await activityDb.client.group.create({ data });
+        logger.info(`group ${group.id}: ${group.name}`);
+      } // end group loop
     } // end activites loop
   } // end school loop
 };

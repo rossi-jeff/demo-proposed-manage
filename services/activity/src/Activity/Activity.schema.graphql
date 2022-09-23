@@ -1,0 +1,5 @@
+type Activity @key(fields: "id") {
+  id: ID!
+
+  Groups: [Group]
+}
