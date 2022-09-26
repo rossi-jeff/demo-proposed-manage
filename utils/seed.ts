@@ -3,7 +3,7 @@ import { db as schoolDb } from "../services/school/src/db";
 import { db as activityDb } from "../services/activity/src/db";
 import { db as personDb } from "../services/person/src/db";
 import { School } from "../services/admin/generated/admin-db";
-import { Group } from "../services/activity/generated/activity-db";
+import { Group, Event } from "../services/activity/generated/activity-db";
 import {
   Activity,
   Address,
@@ -54,6 +54,7 @@ import {
   randZipCode,
   randFilePath,
   randSports,
+  randAddress,
 } from "@ngneat/falso";
 
 const phoneTypes = [
@@ -72,6 +73,7 @@ const count = {
   emergencyContacts: 2,
   legalForms: 2,
   groups: 3,
+  events: 2,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -90,6 +92,7 @@ const relationships = [
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
   await schoolDb.client.personPhone.deleteMany({});
@@ -131,6 +134,7 @@ const seed = async () => {
   let emergencyContact: EmergencyContact;
   let legalForm: LegalForm;
   let group: Group;
+  let event: Event;
 
   const now = new Date();
   for (let s = 0; s < count.schools; s++) {
@@ -394,6 +398,30 @@ const seed = async () => {
         group = await activityDb.client.group.create({ data });
         logger.info(`group ${group.id}: ${group.name}`);
       } // end group loop
+
+      for (let e = 0; e < count.events; e++) {
+        data = {
+          activityId: activity.id,
+          name: randCatchPhrase(),
+          description: randSentence(),
+          registerable: randBoolean(),
+          director: randFullName(),
+          startTime: randFutureDate(),
+          endTime: randFutureDate(),
+          studentOnly: randBoolean(),
+          location: randStreetAddress(),
+          registrationStart: randFutureDate(),
+          registrationEnd: randFutureDate(),
+          cancelled: randBoolean(),
+          state: randNumber({ min: 1, max: 1000 }),
+          eventDate: randFutureDate(),
+          maxTicketCapacity: randNumber({ min: 1, max: 1000 }),
+          createdAt: now,
+          updatedAt: now,
+        };
+        event = await activityDb.client.event.create({ data });
+        logger.info(`event ${event.id}: ${event.name}`);
+      } // end events loop
     } // end activites loop
   } // end school loop
 };
