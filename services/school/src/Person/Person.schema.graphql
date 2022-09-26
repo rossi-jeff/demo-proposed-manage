@@ -1,7 +1,43 @@
 type Person @key(fields: "id") {
   id: ID!
+  userName: String
+  passWord: String
+  schoolId: String
+  allowedToLogin: Boolean
+  firstName: String
+  lastName: String
+  sex: String
+  birthDate: String
+  highSchoolGraduationYear: String
+  insuranceCompany: String
+  insuranceAccountNumber: String
+  physicianName: String
+  physicianPhone: String
+  studentId: String
+  schoolTransferredFrom: String
+  medicalInformation: String
+  acceptsCOPPA: Boolean
+  optsInToCommunications: Boolean
+  physicalDate: String
+  credit: Int
+  ethnicity: String
+  firstEnrollmentDate: String
+  participationStatus: String
+  gpa: Float
+  felonyInfo: Int
+  notifications: Int
+  concussionTestDate: String
+  adData: String
+  createdAt: String
+  updatedAt: String
 
+  School: School
   Addresses: [Address]
   Emails: [Email]
   Phones: [Phone]
+}
+
+extend type Query {
+  people: [Person]
+  person(id: ID!): Person
 }

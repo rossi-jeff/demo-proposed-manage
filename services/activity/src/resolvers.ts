@@ -1,13 +1,13 @@
 import type { Resolvers } from "../generated/graphql";
-import { Person } from "./Person/field-resolvers";
-import { people, person } from "./Person/query-resolvers";
-import { School } from "./School/field-resolvers";
+import { Activity } from "./Activity/field-resolvers";
+import { Group } from "./Group/field-resolvers";
+import { group, groups } from "./Group/query-resolvers";
 
 export const resolvers: Resolvers = {
   Query: {
-    people,
-    person,
+    groups,
+    group,
   },
-  Person,
-  School,
+  Activity,
+  Group,
 };

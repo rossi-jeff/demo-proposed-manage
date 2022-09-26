@@ -10,4 +10,11 @@ type Group @key(fields: "id") {
   state: Int
   createdAt: String
   updatedAt: String
+
+  Activity: Activity
+}
+
+extend type Query {
+  groups: [Group]
+  group(id: ID!): Group
 }

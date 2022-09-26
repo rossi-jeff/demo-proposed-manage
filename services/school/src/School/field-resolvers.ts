@@ -38,6 +38,13 @@ export const School: Resolvers["School"] = {
       },
     });
   },
+  People: async (parent) => {
+    return await db.client.person.findMany({
+      where: {
+        schoolId: parent.id,
+      },
+    });
+  },
   Phones: async (parent) => {
     const schollPhones = await db.client.schoolPhone.findMany({
       where: {

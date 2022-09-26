@@ -64,8 +64,6 @@ model CampTshirtOrder {
     createdAt          DateTime
     updatedAt          DateTime
     CampShortOrders    CampShortOrder[]
-
-    Coach Person? @relation(fields: [coachId], references: [id])
 }
 
 model Consent {
@@ -81,6 +79,50 @@ model Consent {
     Registration Registration @relation(fields: [registrationId], references: [id])
 }
 
+model Event {
+    id                String    @id @default(cuid())
+    activityId        String
+    name              String?
+    description       String?   @db.Text()
+    registerable      Boolean?  @default(false)
+    director          String?
+    startTime         DateTime? @db.Time()
+    endTime           DateTime? @db.Time()
+    studentOnly       Boolean?  @default(false)
+    location          String?
+    registrationStart DateTime? @db.Date
+    registrationEnd   DateTime? @db.Date
+    cancelled         Boolean?  @default(false)
+    state             Int?      @default(0)
+    eventDate         DateTime? @db.Date
+    maxTicketCapacity Int?
+    createdAt         DateTime
+    updatedAt         DateTime
+}
+
+model FuelMyClubActivity {
+    id                        String                 @id @default(cuid())
+    activityId                String?                @unique
+    externalFmcOrganizationId String?
+    createdAt                 DateTime
+    updatedAt                 DateTime
+    FuelMyClubFundraiser      FuelMyClubFundraiser[]
+}
+
+model FuelMyClubFundraiser {
+    id                      String   @id @default(cuid())
+    fuelMyClubActivityId    String
+    season                  String?
+    externalFmcFundraiserId String?
+    contactPersonId         String?
+    config                  Int?     @default(0)
+    leadInMessage           String?  @db.Text
+    createdAt               DateTime
+    updatedAt               DateTime
+
+    FuelMyClubActivity FuelMyClubActivity @relation(fields: [fuelMyClubActivityId], references: [id])
+}
+
 model FuelMyClubRegistration {
     id             String   @id @default(cuid())
     registrationId String?  @unique
@@ -89,6 +131,29 @@ model FuelMyClubRegistration {
     updatedAt      DateTime
 
     Registration Registration? @relation(fields: [registrationId], references: [id])
+}
+
+model Group {
+    id                     String   @id @default(cuid())
+    activityId             String
+    name                   String?
+    level                  String?
+    gender                 String?
+    a2kSiteschoolsportId   Int?
+    sportName              String?
+    rosterwebserviceAccess Boolean? @default(false)
+    state                  Int?     @default(0)
+    createdAt              DateTime
+    updatedAt              DateTime
+}
+
+model GroupAward {
+    id        String   @id @default(cuid())
+    groupId   String
+    name      String?
+    state     Int?     @default(0)
+    createdAt DateTime
+    updatedAt DateTime
 }
 
 model GroupAwardAssignment {
@@ -184,7 +249,6 @@ model Message {
     documentFileSize    Int?
     createdAt           DateTime
     updatedAt           DateTime
-    Sender              Person?  @relation(fields: [senderId], references: [id])
 }
 
 model Occurance {
@@ -194,48 +258,6 @@ model Occurance {
     ventureId Int?
     createdAt DateTime
     updatedAt DateTime
-}
-
-model Person {
-    id                       String    @id @default(cuid())
-    userName                 String
-    passWord                 String
-    schoolId                 String?
-    allowedToLogin           Boolean?  @default(false)
-    firstName                String?
-    lastName                 String?
-    sex                      String?
-    birthDate                DateTime? @db.Date
-    highSchoolGraduationYear String?
-    insuranceCompany         String?
-    insuranceAccountNumber   String?
-    physicianName            String?
-    physicianPhone           String?
-    studentId                String?
-    schoolTransferredFrom    String?
-    medicalInformation       String?   @db.Text
-    acceptsCOPPA             Boolean?
-    optsInToCommunications   Boolean?  @default(true)
-    physicalDate             DateTime? @db.Date
-    credit                   Int?
-    ethnicity                String?
-    firstEnrollmentDate      DateTime? @db.Date
-    participationStatus      String?
-    gpa                      Float?
-    felonyInfo               Int?      @default(0)
-    notifications            Int?      @default(31)
-    concussionTestDate       DateTime? @db.Date
-    adData                   String?   @db.Text
-    createdAt                DateTime
-    updatedAt                DateTime
-
-    SubjectRelationships  Relationship[]       @relation("subject")
-    ReceiverRelationships Relationship[]       @relation("receiver")
-    CampTshirtOrders      CampTshirtOrder[]
-    Messages              Message[]
-    Participants          Registration[]       @relation("participant")
-    RegisteredBy          Registration[]       @relation("registered_by")
-    TicketRegistrations   TicketRegistration[]
 }
 
 model Record {
@@ -296,21 +318,7 @@ model Registration {
     FuelMyClubRegistration FuelMyClubRegistration?
     GroupRegistrations     GroupRegistration[]
     LineItems              LineItem[]
-    Participant            Person?                 @relation(fields: [participantId], references: [id], name: "participant")
-    RegisteredBy           Person?                 @relation(fields: [registeredById], references: [id], name: "registered_by")
     TicketRegistrations    TicketRegistration[]
-}
-
-model Relationship {
-    id               String   @id @default(cuid())
-    subjectId        String?
-    receiverId       String?
-    relationshipType String?
-    createdAt        DateTime
-    updatedAt        DateTime
-
-    Subject  Person? @relation(fields: [subjectId], references: [id], name: "subject")
-    Receiver Person? @relation(fields: [receiverId], references: [id], name: "receiver")
 }
 
 model Roster {
@@ -369,8 +377,32 @@ model TicketRegistration {
 
     Ticket       Ticket?       @relation(fields: [ticketId], references: [id])
     Registration Registration? @relation(fields: [registrationId], references: [id])
-    Student      Person?       @relation(fields: [studentId], references: [id])
     LineItem     LineItem?     @relation(fields: [lineItemId], references: [id])
+}
+
+model Venture {
+    id                      String    @id @default(cuid())
+    activityId              String
+    name                    String?
+    description             String?   @db.Text
+    type                    String?
+    gender                  String?
+    grade                   String?
+    basePrice               Int?
+    nonDistrictBasePrice    Int?
+    registrationStart       DateTime? @db.Date
+    registrationEnd         DateTime? @db.Date
+    director                String?
+    directorBio             String?   @db.Text
+    registerable            Boolean?  @default(false)
+    maxNumberOfParticipants Int?      @default(0)
+    location                String?
+    cancelled               Boolean?  @default(false)
+    state                   Int?      @default(0)
+    season                  String?
+    sourceVentureId         Int?
+    createdAt               DateTime
+    updatedAt               DateTime
 }
 
 model VentureRegistration {

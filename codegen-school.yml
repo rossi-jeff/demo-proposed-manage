@@ -14,6 +14,7 @@ config:
     Address: "../src/Address/types#AddressType"
     Email: "../src/Email/types#EmailType"
     LegalForm: "../src/LegalForm/types#LegalFormType"
+    Person: "../src/Person/types#PersonType"
     Phone: "../src/Phone/types#PhoneType"
   enumValues:
     AddresTypeEnum: "../src/Address/types#AddresTypeEnum"
