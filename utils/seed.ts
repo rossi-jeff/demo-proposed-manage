@@ -6,6 +6,7 @@ import { School } from "../services/admin/generated/admin-db";
 import {
   Group,
   Event,
+  Registration,
   Venture,
 } from "../services/activity/generated/activity-db";
 import {
@@ -78,6 +79,7 @@ const count = {
   groups: 3,
   events: 2,
   ventures: 2,
+  registrations: 3,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -93,10 +95,12 @@ const relationships = [
   "Grandfather",
 ];
 const seasons = ["Winter", "Spring", "Summer", "Fall"];
+const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.registration.deleteMany({});
   await activityDb.client.venture.deleteMany({});
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
@@ -142,6 +146,7 @@ const seed = async () => {
   let group: Group;
   let event: Event;
   let venture: Venture;
+  let registration: Registration;
 
   const now = new Date();
   for (let s = 0; s < count.schools; s++) {
@@ -404,6 +409,35 @@ const seed = async () => {
         };
         group = await activityDb.client.group.create({ data });
         logger.info(`group ${group.id}: ${group.name}`);
+
+        for (let r = 0; r < count.registrations; r++) {
+          data = {
+            activityId: activity.id,
+            participantId: sample(ids.people),
+            registeredById: sample(ids.people),
+            paid: randBoolean(),
+            season: sample(seasons),
+            groupId: group.id,
+            tShirtSize: sample(sizes),
+            weight: randNumber({ min: 1, max: 200 }),
+            height: randNumber({ min: 1, max: 200 }),
+            comment: randSentence(),
+            tryout: randBoolean(),
+            state: randNumber({ min: 1, max: 1000 }),
+            paymentOptionsComment: randSentence(),
+            participationStatus: randWord(),
+            paymentCodeId: randAbbreviation(),
+            shortSize: sample(sizes),
+            equipmentJerseySize: sample(sizes),
+            equipmentPantSize: sample(sizes),
+            equipmentJacketSize: sample(sizes),
+            equipmentShoeSize: randNumber({ min: 6, max: 15 }).toString(),
+            createdAt: now,
+            updatedAt: now,
+          };
+          registration = await activityDb.client.registration.create({ data });
+          logger.info(`registration ${registration.id}`);
+        } // end registrations loop
       } // end group loop
 
       for (let e = 0; e < count.events; e++) {

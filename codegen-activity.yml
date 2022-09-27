@@ -12,4 +12,5 @@ config:
   mappers:
     Event: "../src/Event/types#EventType"
     Group: "../src/Group/types#GroupType"
+    Registration: "../src/Registration/types#RegistrationType"
     Venture: "../src/Venture/types#VentureType"
