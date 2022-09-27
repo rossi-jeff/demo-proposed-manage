@@ -18,3 +18,8 @@ type Event @key(fields: "id") {
   createdAt: String
   updatedAt: String
 }
+
+extend type Query {
+  events: [Event]
+  event(id: ID!): Event
+}

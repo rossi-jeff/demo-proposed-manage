@@ -10,4 +10,5 @@ generates:
       - "typescript-resolvers"
 config:
   mappers:
+    Event: "../src/Event/types#EventType"
     Group: "../src/Group/types#GroupType"
