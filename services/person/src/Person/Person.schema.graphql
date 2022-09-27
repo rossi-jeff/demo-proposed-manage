@@ -1,5 +1,6 @@
 type Person @key(fields: "id") {
   id: ID!
 
+  AlergicConditions: [AlergicCondition]
   EmergencyContacts: [EmergencyContact]
 }
