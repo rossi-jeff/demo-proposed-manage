@@ -3,7 +3,11 @@ import { db as schoolDb } from "../services/school/src/db";
 import { db as activityDb } from "../services/activity/src/db";
 import { db as personDb } from "../services/person/src/db";
 import { School } from "../services/admin/generated/admin-db";
-import { Group, Event } from "../services/activity/generated/activity-db";
+import {
+  Group,
+  Event,
+  Venture,
+} from "../services/activity/generated/activity-db";
 import {
   Activity,
   Address,
@@ -76,6 +80,7 @@ const count = {
   groups: 3,
   events: 2,
   colors: 3,
+  ventures: 2,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -90,10 +95,12 @@ const relationships = [
   "Grandmother",
   "Grandfather",
 ];
+const seasons = ["Winter", "Spring", "Summer", "Fall"];
 
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.venture.deleteMany({});
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
@@ -139,6 +146,7 @@ const seed = async () => {
   let group: Group;
   let event: Event;
   let color: Color;
+  let venture: Venture;
 
   const now = new Date();
   for (let s = 0; s < count.schools; s++) {
@@ -437,6 +445,34 @@ const seed = async () => {
         event = await activityDb.client.event.create({ data });
         logger.info(`event ${event.id}: ${event.name}`);
       } // end events loop
+
+      for (let v = 0; v < count.ventures; v++) {
+        data = {
+          activityId: activity.id,
+          name: randCatchPhrase(),
+          description: randSentence(),
+          type: randWord(),
+          gender: randGender(),
+          grade: randWord(),
+          basePrice: randNumber({ min: 1, max: 1000 }),
+          nonDistrictBasePrice: randNumber({ min: 1, max: 1000 }),
+          registrationStart: randFutureDate(),
+          registrationEnd: randFutureDate(),
+          director: randFullName(),
+          directorBio: randSentence(),
+          registerable: randBoolean(),
+          maxNumberOfParticipants: randNumber({ min: 1, max: 1000 }),
+          location: randStreetAddress(),
+          cancelled: randBoolean(),
+          state: randNumber({ min: 1, max: 1000 }),
+          season: sample(seasons),
+          sourceVentureId: randNumber({ min: 1, max: 1000 }),
+          createdAt: now,
+          updatedAt: now,
+        };
+        venture = await activityDb.client.venture.create({ data });
+        logger.info(`venture ${venture.id}: ${venture.name}`);
+      } // end ventures loop
     } // end activites loop
   } // end school loop
 };
