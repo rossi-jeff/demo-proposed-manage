@@ -7,6 +7,7 @@ import { Group, Event } from "../services/activity/generated/activity-db";
 import {
   Activity,
   Address,
+  Color,
   Email,
   LegalForm,
   Person,
@@ -54,6 +55,7 @@ import {
   randZipCode,
   randFilePath,
   randSports,
+  randColor,
 } from "@ngneat/falso";
 
 const phoneTypes = [
@@ -73,6 +75,7 @@ const count = {
   legalForms: 2,
   groups: 3,
   events: 2,
+  colors: 3,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -94,6 +97,7 @@ const clear = async () => {
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
+  await schoolDb.client.color.deleteMany({});
   await schoolDb.client.personPhone.deleteMany({});
   await schoolDb.client.personAddress.deleteMany({});
   await schoolDb.client.personEmail.deleteMany({});
@@ -134,6 +138,7 @@ const seed = async () => {
   let legalForm: LegalForm;
   let group: Group;
   let event: Event;
+  let color: Color;
 
   const now = new Date();
   for (let s = 0; s < count.schools; s++) {
@@ -161,6 +166,17 @@ const seed = async () => {
     };
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
+
+    for (let c = 0; c < count.colors; c++) {
+      data = {
+        schoolId: school.id,
+        name: randColor(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      color = await schoolDb.client.color.create({ data });
+      logger.info(`color ${color.id}: ${color.name}`);
+    } // end colors loop
 
     for (let e = 0; e < count.emails; e++) {
       data = {
