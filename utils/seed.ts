@@ -18,7 +18,10 @@ import {
   SchoolEmail,
   SchoolPhone,
 } from "../services/school/generated/school-db";
-import { EmergencyContact } from "../services/person/generated/person-db";
+import {
+  EmergencyContact,
+  AlergicCondition,
+} from "../services/person/generated/person-db";
 import { logger } from "./logger";
 import { sample } from "./sample";
 import { AddresTypeEnum } from "../services/school/src/Address/types";
@@ -54,6 +57,8 @@ import {
   randZipCode,
   randFilePath,
   randSports,
+  randProductAdjective,
+  randVerb,
 } from "@ngneat/falso";
 
 const phoneTypes = [
@@ -73,6 +78,7 @@ const count = {
   legalForms: 2,
   groups: 3,
   events: 2,
+  alergies: 2,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -107,6 +113,7 @@ const clear = async () => {
   await schoolDb.client.activity.deleteMany({});
   await schoolDb.client.person.deleteMany({});
   // person db
+  await personDb.client.alergicCondition.deleteMany({});
   await personDb.client.emergencyContact.deleteMany({});
   // admin db
   await adminDb.client.school.deleteMany({});
@@ -134,6 +141,7 @@ const seed = async () => {
   let legalForm: LegalForm;
   let group: Group;
   let event: Event;
+  let alergy: AlergicCondition;
 
   const now = new Date();
   for (let s = 0; s < count.schools; s++) {
@@ -357,6 +365,21 @@ const seed = async () => {
           `emergency contact ${emergencyContact.id}: ${emergencyContact.phoneNumber}`
         );
       } // end emergency contact loop
+
+      for (let a = 0; a < count.alergies; a++) {
+        data = {
+          personId: person.id,
+          allergyCondition: randCatchPhrase(),
+          severity: randProductAdjective(),
+          reaction: randVerb(),
+          createdAt: now,
+          updatedAt: now,
+        };
+        alergy = await personDb.client.alergicCondition.create({ data });
+        logger.info(
+          `alergic condition ${alergy.id}: ${alergy.allergyCondition}`
+        );
+      } // end alergic conditions loop
     } // end people loop
 
     ids.activities = [];

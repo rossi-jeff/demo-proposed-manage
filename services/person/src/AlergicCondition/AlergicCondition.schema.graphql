@@ -6,4 +6,11 @@ type AlergicCondition {
   reaction: String
   createdAt: String
   updatedAt: String
+
+  Person: Person
+}
+
+extend type Query {
+  alergicConditions: [AlergicCondition]
+  alergicCondition(id: ID!): AlergicCondition
 }

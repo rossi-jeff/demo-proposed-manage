@@ -10,4 +10,5 @@ generates:
       - "typescript-resolvers"
 config:
   mappers:
+    AlergicCondition: "../src/AlergicCondition/types#AlergicConditionType"
     EmergencyContact: "../src/EmergencyContact/types#EmergencyContactType"
