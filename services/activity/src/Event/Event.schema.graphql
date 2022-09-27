@@ -17,6 +17,8 @@ type Event @key(fields: "id") {
   maxTicketCapacity: Int
   createdAt: String
   updatedAt: String
+
+  Activity: Activity
 }
 
 extend type Query {

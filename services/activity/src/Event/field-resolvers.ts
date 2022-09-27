@@ -79,4 +79,11 @@ export const Event: Resolvers["Event"] = {
   maxTicketCapacity: getMaxTicketCapacity,
   createdAt: getCreatedAt,
   updatedAt: getUpdatedAt,
+  Activity: async (ref) => {
+    if (ref.activityId === null) return null;
+    return {
+      __typename: "Activity",
+      id: ref.activityId,
+    };
+  },
 };

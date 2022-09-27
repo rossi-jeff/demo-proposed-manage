@@ -16,4 +16,11 @@ export const Activity: Resolvers["Activity"] = {
       },
     });
   },
+  Ventures: async (parent) => {
+    return await db.client.venture.findMany({
+      where: {
+        activityId: parent.id,
+      },
+    });
+  },
 };

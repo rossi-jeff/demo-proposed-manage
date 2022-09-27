@@ -21,4 +21,11 @@ type Venture @key(fields: "id") {
   sourceVentureId: Int
   createdAt: String
   updatedAt: String
+
+  Activity: Activity
+}
+
+extend type Query {
+  ventures: [Venture]
+  venture(id: ID!): Venture
 }
