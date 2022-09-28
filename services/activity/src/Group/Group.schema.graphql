@@ -13,6 +13,7 @@ type Group @key(fields: "id") {
 
   Activity: Activity
   Registrations: [Registration]
+  Rosters: [Roster]
 }
 
 extend type Query {
