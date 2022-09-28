@@ -25,6 +25,7 @@ import {
 import {
   EmergencyContact,
   AlergicCondition,
+  Invite,
 } from "../services/person/generated/person-db";
 import { logger } from "./logger";
 import { sample } from "./sample";
@@ -75,7 +76,7 @@ const phoneTypes = [
 const count = {
   schools: 5,
   activities: 3,
-  people: 3,
+  people: 4,
   phones: 2,
   emails: 2,
   emergencyContacts: 2,
@@ -84,6 +85,7 @@ const count = {
   events: 2,
   alergies: 2,
   ventures: 2,
+  invites: 2,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -120,6 +122,7 @@ const clear = async () => {
   await schoolDb.client.activity.deleteMany({});
   await schoolDb.client.person.deleteMany({});
   // person db
+  await personDb.client.invite.deleteMany({});
   await personDb.client.alergicCondition.deleteMany({});
   await personDb.client.emergencyContact.deleteMany({});
   // admin db
@@ -150,6 +153,7 @@ const seed = async () => {
   let event: Event;
   let alergy: AlergicCondition;
   let venture: Venture;
+  let invite: Invite;
 
   const now = new Date();
   for (let s = 0; s < count.schools; s++) {
@@ -389,6 +393,20 @@ const seed = async () => {
         );
       } // end alergic conditions loop
     } // end people loop
+
+    for (let i = 0; i < count.invites; i++) {
+      data = {
+        schoolId: school.id,
+        personId: sample(ids.people),
+        invitedById: sample(ids.people),
+        accepted: randBoolean(),
+        secret: randUuid(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      invite = await personDb.client.invite.create({ data });
+      logger.info(`invite ${invite.id}`);
+    } // end invites loop
 
     ids.activities = [];
     for (let a = 0; a < count.activities; a++) {
