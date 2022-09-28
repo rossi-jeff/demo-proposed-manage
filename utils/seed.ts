@@ -6,11 +6,13 @@ import { School } from "../services/admin/generated/admin-db";
 import {
   Group,
   Event,
+  Registration,
   Venture,
 } from "../services/activity/generated/activity-db";
 import {
   Activity,
   Address,
+  Color,
   Email,
   LegalForm,
   Person,
@@ -62,6 +64,7 @@ import {
   randZipCode,
   randFilePath,
   randSports,
+  randColor,
   randProductAdjective,
   randVerb,
 } from "@ngneat/falso";
@@ -83,9 +86,11 @@ const count = {
   legalForms: 2,
   groups: 3,
   events: 2,
+  colors: 3,
   alergies: 2,
   ventures: 2,
   invites: 2,
+  registrations: 3,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -101,14 +106,17 @@ const relationships = [
   "Grandfather",
 ];
 const seasons = ["Winter", "Spring", "Summer", "Fall"];
+const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.registration.deleteMany({});
   await activityDb.client.venture.deleteMany({});
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
+  await schoolDb.client.color.deleteMany({});
   await schoolDb.client.personPhone.deleteMany({});
   await schoolDb.client.personAddress.deleteMany({});
   await schoolDb.client.personEmail.deleteMany({});
@@ -151,9 +159,11 @@ const seed = async () => {
   let legalForm: LegalForm;
   let group: Group;
   let event: Event;
+  let color: Color;
   let alergy: AlergicCondition;
   let venture: Venture;
   let invite: Invite;
+  let registration: Registration;
 
   const now = new Date();
   for (let s = 0; s < count.schools; s++) {
@@ -181,6 +191,17 @@ const seed = async () => {
     };
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
+
+    for (let c = 0; c < count.colors; c++) {
+      data = {
+        schoolId: school.id,
+        name: randColor(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      color = await schoolDb.client.color.create({ data });
+      logger.info(`color ${color.id}: ${color.name}`);
+    } // end colors loop
 
     for (let e = 0; e < count.emails; e++) {
       data = {
@@ -445,6 +466,35 @@ const seed = async () => {
         };
         group = await activityDb.client.group.create({ data });
         logger.info(`group ${group.id}: ${group.name}`);
+
+        for (let r = 0; r < count.registrations; r++) {
+          data = {
+            activityId: activity.id,
+            participantId: sample(ids.people),
+            registeredById: sample(ids.people),
+            paid: randBoolean(),
+            season: sample(seasons),
+            groupId: group.id,
+            tShirtSize: sample(sizes),
+            weight: randNumber({ min: 1, max: 200 }),
+            height: randNumber({ min: 1, max: 200 }),
+            comment: randSentence(),
+            tryout: randBoolean(),
+            state: randNumber({ min: 1, max: 1000 }),
+            paymentOptionsComment: randSentence(),
+            participationStatus: randWord(),
+            paymentCodeId: randAbbreviation(),
+            shortSize: sample(sizes),
+            equipmentJerseySize: sample(sizes),
+            equipmentPantSize: sample(sizes),
+            equipmentJacketSize: sample(sizes),
+            equipmentShoeSize: randNumber({ min: 6, max: 15 }).toString(),
+            createdAt: now,
+            updatedAt: now,
+          };
+          registration = await activityDb.client.registration.create({ data });
+          logger.info(`registration ${registration.id}`);
+        } // end registrations loop
       } // end group loop
 
       for (let e = 0; e < count.events; e++) {

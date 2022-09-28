@@ -5,3 +5,8 @@ type Color {
   createdAt: String
   updatedAt: String
 }
+
+extend type Query {
+  colors: [Color]
+  color(id: ID!): Color
+}
