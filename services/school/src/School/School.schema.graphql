@@ -5,6 +5,7 @@ type School @key(fields: "id") {
   Addresses: [Address]
   Colors: [Color]
   Emails: [Email]
+  Fees: [Fee]
   LegalForms: [LegalForm]
   People: [Person]
   Phones: [Phone]
