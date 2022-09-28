@@ -74,4 +74,15 @@ export const Activity: Resolvers["Activity"] = {
       id: ref.schoolId,
     };
   },
+  Fees: async (parent) => {
+    const activityFees = await db.client.activityFee.findMany({
+      where: {
+        activityId: parent.id,
+      },
+      include: {
+        Fee: true,
+      },
+    });
+    return activityFees.map((a) => a.Fee);
+  },
 };

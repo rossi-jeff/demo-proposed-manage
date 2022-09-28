@@ -11,9 +11,11 @@ import {
 } from "../services/activity/generated/activity-db";
 import {
   Activity,
+  ActivityFee,
   Address,
   Color,
   Email,
+  Fee,
   LegalForm,
   Person,
   PersonAddress,
@@ -22,6 +24,7 @@ import {
   Phone,
   SchoolAddress,
   SchoolEmail,
+  SchoolFee,
   SchoolPhone,
 } from "../services/school/generated/school-db";
 import {
@@ -34,6 +37,7 @@ import { sample } from "./sample";
 import { AddresTypeEnum } from "../services/school/src/Address/types";
 import { EmailTypeEnum } from "../services/school/src/Email/types";
 import { PhoneTypeEnum } from "../services/school/src/Phone/types";
+import { FeeTypeEnum } from "../services/school/src/Fee/types";
 
 import {
   randBoolean,
@@ -91,9 +95,12 @@ const count = {
   ventures: 2,
   invites: 2,
   registrations: 3,
+  fees: 3,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
+
+const feeTypes = [FeeTypeEnum.FLAT, FeeTypeEnum.PERCENTAGE];
 
 const relationships = [
   "Motheer",
@@ -116,6 +123,9 @@ const clear = async () => {
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
+  await schoolDb.client.activityFee.deleteMany({});
+  await schoolDb.client.schoolFee.deleteMany({});
+  await schoolDb.client.fee.deleteMany({});
   await schoolDb.client.color.deleteMany({});
   await schoolDb.client.personPhone.deleteMany({});
   await schoolDb.client.personAddress.deleteMany({});
@@ -164,6 +174,9 @@ const seed = async () => {
   let venture: Venture;
   let invite: Invite;
   let registration: Registration;
+  let fee: Fee;
+  let activityFee: ActivityFee;
+  let schoolFee: SchoolFee;
 
   const now = new Date();
   for (let s = 0; s < count.schools; s++) {
@@ -202,6 +215,27 @@ const seed = async () => {
       color = await schoolDb.client.color.create({ data });
       logger.info(`color ${color.id}: ${color.name}`);
     } // end colors loop
+
+    for (let f = 0; f < count.fees; f++) {
+      data = {
+        name: randWord(),
+        type: sample(feeTypes) ?? FeeTypeEnum.FLAT,
+        amount: randNumber({ min: 1, max: 100 }),
+        createdAt: now,
+        updatedAt: now,
+      };
+      fee = await schoolDb.client.fee.create({ data });
+      logger.info(`fee ${fee.id}: ${fee.amount}`);
+
+      data = {
+        schoolId: school.id,
+        feeId: fee.id,
+        createdAt: now,
+        updatedAt: now,
+      };
+      schoolFee = await schoolDb.client.schoolFee.create({ data });
+      logger.info(`school fee ${schoolFee.id}`);
+    } // end fees loop
 
     for (let e = 0; e < count.emails; e++) {
       data = {
@@ -548,6 +582,27 @@ const seed = async () => {
         venture = await activityDb.client.venture.create({ data });
         logger.info(`venture ${venture.id}: ${venture.name}`);
       } // end ventures loop
+
+      for (let f = 0; f < count.fees; f++) {
+        data = {
+          name: randWord(),
+          type: sample(feeTypes) ?? FeeTypeEnum.FLAT,
+          amount: randNumber({ min: 1, max: 100 }),
+          createdAt: now,
+          updatedAt: now,
+        };
+        fee = await schoolDb.client.fee.create({ data });
+        logger.info(`fee ${fee.id}: ${fee.amount}`);
+
+        data = {
+          activityId: activity.id,
+          feeId: fee.id,
+          createdAt: now,
+          updatedAt: now,
+        };
+        activityFee = await schoolDb.client.activityFee.create({ data });
+        logger.info(`activity fee ${activityFee.id}`);
+      } // end fees loop
     } // end activites loop
   } // end school loop
 };

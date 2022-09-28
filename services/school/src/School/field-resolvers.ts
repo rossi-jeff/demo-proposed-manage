@@ -52,6 +52,17 @@ export const School: Resolvers["School"] = {
       },
     });
   },
+  Fees: async (parent) => {
+    const schoolFees = await db.client.schoolFee.findMany({
+      where: {
+        schoolId: parent.id,
+      },
+      include: {
+        Fee: true,
+      },
+    });
+    return schoolFees.map((s) => s.Fee);
+  },
   Phones: async (parent) => {
     const schollPhones = await db.client.schoolPhone.findMany({
       where: {
