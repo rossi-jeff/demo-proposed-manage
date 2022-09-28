@@ -22,4 +22,14 @@ type Registration @key(fields: "id") {
   equipmentShoeSize: String
   createdAt: String
   updatedAt: String
+
+  Activity: Activity
+  Group: Group
+  Participant: Person
+  RegisteredBy: Person
+}
+
+extend type Query {
+  registrations: [Registration]
+  registration(id: ID!): Registration
 }

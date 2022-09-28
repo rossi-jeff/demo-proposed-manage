@@ -16,6 +16,13 @@ export const Activity: Resolvers["Activity"] = {
       },
     });
   },
+  Registrations: async (parent) => {
+    return await db.client.registration.findMany({
+      where: {
+        activityId: parent.id,
+      },
+    });
+  },
   Ventures: async (parent) => {
     return await db.client.venture.findMany({
       where: {

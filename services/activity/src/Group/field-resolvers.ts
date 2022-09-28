@@ -57,4 +57,11 @@ export const Group: Resolvers["Group"] = {
       id: ref.activityId,
     };
   },
+  Registrations: async (parent) => {
+    return await db.client.registration.findMany({
+      where: {
+        groupId: parent.id,
+      },
+    });
+  },
 };

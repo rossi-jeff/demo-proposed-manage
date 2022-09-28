@@ -3,5 +3,6 @@ type Activity @key(fields: "id") {
 
   Events: [Event]
   Groups: [Group]
+  Registrations: [Registration]
   Ventures: [Venture]
 }
