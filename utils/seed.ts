@@ -2,7 +2,7 @@ import { db as adminDb } from "../services/admin/src/db";
 import { db as schoolDb } from "../services/school/src/db";
 import { db as activityDb } from "../services/activity/src/db";
 import { db as personDb } from "../services/person/src/db";
-import { School } from "../services/admin/generated/admin-db";
+import { School, Role } from "../services/admin/generated/admin-db";
 import {
   Group,
   Event,
@@ -96,6 +96,7 @@ const count = {
   invites: 2,
   registrations: 3,
   fees: 3,
+  roles: 3,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -144,6 +145,7 @@ const clear = async () => {
   await personDb.client.alergicCondition.deleteMany({});
   await personDb.client.emergencyContact.deleteMany({});
   // admin db
+  await adminDb.client.role.deleteMany({});
   await adminDb.client.school.deleteMany({});
   logger.info("data cleared");
 };
@@ -177,8 +179,20 @@ const seed = async () => {
   let fee: Fee;
   let activityFee: ActivityFee;
   let schoolFee: SchoolFee;
+  let role: Role;
 
   const now = new Date();
+  for (let r = 0; r < count.roles; r++) {
+    data = {
+      name: randColor(),
+      isAdmin: randBoolean(),
+      createdAt: now,
+      updatedAt: now,
+    };
+    role = await adminDb.client.role.create({ data });
+    logger.info(`role ${role.id}: ${role.name}`);
+  } // end roles loop
+
   for (let s = 0; s < count.schools; s++) {
     data = {
       name: randCompanyName(),
