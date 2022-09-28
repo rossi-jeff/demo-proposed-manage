@@ -3,4 +3,5 @@ type Person @key(fields: "id") {
 
   AlergicConditions: [AlergicCondition]
   EmergencyContacts: [EmergencyContact]
+  MedicalConditions: [MedicalCondition]
 }
