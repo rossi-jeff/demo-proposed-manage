@@ -7,4 +7,13 @@ type Invite {
   secret: String
   createdAt: String
   updatedAt: String
+
+  Person: Person
+  InvitedBy: Person
+  School: School
+}
+
+extend type Query {
+  invites: [Invite]
+  invite(id: ID!): Invite
 }
