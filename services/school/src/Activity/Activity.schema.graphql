@@ -16,6 +16,7 @@ type Activity @key(fields: "id") {
   updatedAt: String
 
   School: School
+  Fees: [Fee]
 }
 
 extend type Query {

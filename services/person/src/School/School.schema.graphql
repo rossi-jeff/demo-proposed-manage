@@ -1,0 +1,5 @@
+type School @key(fields: "id") {
+  id: ID!
+
+  Invites: [Invite]
+}

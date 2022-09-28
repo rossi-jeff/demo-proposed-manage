@@ -7,6 +7,8 @@ import { Color } from "./Color/field-resolvers";
 import { color, colors } from "./Color/query-resolvers";
 import { Email } from "./Email/field-resolvers";
 import { email, emails } from "./Email/query-resolvers";
+import { Fee } from "./Fee/field-resolvers";
+import { fees, fee } from "./Fee/query-resolvers";
 import { LegalForm } from "./LegalForm/field-resolvers";
 import { legalForm, legalForms } from "./LegalForm/query-resolvers";
 import { Person } from "./Person/field-resolvers";
@@ -25,6 +27,8 @@ export const resolvers: Resolvers = {
     color,
     emails,
     email,
+    fees,
+    fee,
     legalForms,
     legalForm,
     people,
@@ -36,6 +40,7 @@ export const resolvers: Resolvers = {
   Address,
   Color,
   Email,
+  Fee,
   LegalForm,
   Person,
   Phone,

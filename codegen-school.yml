@@ -14,10 +14,12 @@ config:
     Address: "../src/Address/types#AddressType"
     Color: "../src/Color/types#ColorType"
     Email: "../src/Email/types#EmailType"
+    Fee: "../src/Fee/types#FeeType"
     LegalForm: "../src/LegalForm/types#LegalFormType"
     Person: "../src/Person/types#PersonType"
     Phone: "../src/Phone/types#PhoneType"
   enumValues:
     AddresTypeEnum: "../src/Address/types#AddresTypeEnum"
     EmailTypeEnum: "../src/Email/types#EmailTypeEnum"
+    FeeTypeEnum: "../src/Fee/types#FeeTypeEnum"
     PhoneTypeEnum: "../src/Phone/types#PhoneTypeEnum"

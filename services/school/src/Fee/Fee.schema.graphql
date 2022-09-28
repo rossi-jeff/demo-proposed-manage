@@ -1,5 +1,6 @@
 type Fee @key(fields: "id") {
   id: ID!
+  name: String
   type: FeeTypeEnum
   amount: Int
   createdAt: String
@@ -9,4 +10,9 @@ type Fee @key(fields: "id") {
 enum FeeTypeEnum {
   FLAT
   PERCENTAGE
+}
+
+extend type Query {
+  fees: [Fee]
+  fee(id: ID!): Fee
 }
