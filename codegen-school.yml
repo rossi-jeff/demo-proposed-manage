@@ -12,6 +12,7 @@ config:
   mappers:
     Activity: "../src/Activity/types#ActivityType"
     Address: "../src/Address/types#AddressType"
+    Color: "../src/Color/types#ColorType"
     Email: "../src/Email/types#EmailType"
     LegalForm: "../src/LegalForm/types#LegalFormType"
     Person: "../src/Person/types#PersonType"
