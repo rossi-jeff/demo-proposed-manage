@@ -17,6 +17,7 @@ import {
   Email,
   Fee,
   LegalForm,
+  PaymentCode,
   Person,
   PersonAddress,
   PersonEmail,
@@ -96,6 +97,7 @@ const count = {
   invites: 2,
   registrations: 3,
   fees: 3,
+  paymentCodes: 3,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -123,6 +125,7 @@ const clear = async () => {
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
+  await schoolDb.client.paymentCode.deleteMany({});
   await schoolDb.client.activityFee.deleteMany({});
   await schoolDb.client.schoolFee.deleteMany({});
   await schoolDb.client.fee.deleteMany({});
@@ -177,6 +180,7 @@ const seed = async () => {
   let fee: Fee;
   let activityFee: ActivityFee;
   let schoolFee: SchoolFee;
+  let paymentCode: PaymentCode;
 
   const now = new Date();
   for (let s = 0; s < count.schools; s++) {
@@ -204,6 +208,19 @@ const seed = async () => {
     };
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
+
+    for (let p = 0; p < count.paymentCodes; p++) {
+      data = {
+        schoolId: school.id,
+        name: randCatchPhrase(),
+        code: randAbbreviation(),
+        active: randBoolean(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      paymentCode = await schoolDb.client.paymentCode.create({ data });
+      logger.info(`payment code ${paymentCode.id}: ${paymentCode.code}`);
+    } // end payment codes loop
 
     for (let c = 0; c < count.colors; c++) {
       data = {

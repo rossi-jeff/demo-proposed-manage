@@ -16,6 +16,7 @@ config:
     Email: "../src/Email/types#EmailType"
     Fee: "../src/Fee/types#FeeType"
     LegalForm: "../src/LegalForm/types#LegalFormType"
+    PaymentCode: "../src/PaymentCode/types#PaymentCodeType"
     Person: "../src/Person/types#PersonType"
     Phone: "../src/Phone/types#PhoneType"
   enumValues:

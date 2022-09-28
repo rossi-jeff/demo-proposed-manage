@@ -6,4 +6,11 @@ type PaymentCode @key(fields: "id") {
   active: Boolean
   createdAt: String
   updatedAt: String
+
+  School: School
+}
+
+extend type Query {
+  paymentCodes: [PaymentCode]
+  paymentCode(id: ID!): PaymentCode
 }
