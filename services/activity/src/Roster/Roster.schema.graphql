@@ -7,6 +7,7 @@ type Roster @key(fields: "id") {
   updatedAt: String
 
   Group: Group
+  GroupRegistrations: [GroupRegistration]
 }
 
 extend type Query {
