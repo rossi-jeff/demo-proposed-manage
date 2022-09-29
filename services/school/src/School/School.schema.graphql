@@ -7,6 +7,7 @@ type School @key(fields: "id") {
   Emails: [Email]
   Fees: [Fee]
   LegalForms: [LegalForm]
+  PaymentCodes: [PaymentCode]
   People: [Person]
   Phones: [Phone]
 }

@@ -11,6 +11,8 @@ import { Fee } from "./Fee/field-resolvers";
 import { fees, fee } from "./Fee/query-resolvers";
 import { LegalForm } from "./LegalForm/field-resolvers";
 import { legalForm, legalForms } from "./LegalForm/query-resolvers";
+import { PaymentCode } from "./PaymentCode/field-resolvers";
+import { paymentCode, paymentCodes } from "./PaymentCode/query-resolvers";
 import { Person } from "./Person/field-resolvers";
 import { people, person } from "./Person/query-resolvers";
 import { Phone } from "./Phone/field-resolvers";
@@ -31,6 +33,8 @@ export const resolvers: Resolvers = {
     fee,
     legalForms,
     legalForm,
+    paymentCodes,
+    paymentCode,
     people,
     person,
     phones,
@@ -42,6 +46,7 @@ export const resolvers: Resolvers = {
   Email,
   Fee,
   LegalForm,
+  PaymentCode,
   Person,
   Phone,
   School,
