@@ -2,11 +2,12 @@ import { db as adminDb } from "../services/admin/src/db";
 import { db as schoolDb } from "../services/school/src/db";
 import { db as activityDb } from "../services/activity/src/db";
 import { db as personDb } from "../services/person/src/db";
-import { School } from "../services/admin/generated/admin-db";
+import { School, Role } from "../services/admin/generated/admin-db";
 import {
   Group,
   Event,
   Registration,
+  Roster,
   Venture,
 } from "../services/activity/generated/activity-db";
 import {
@@ -32,6 +33,7 @@ import {
   EmergencyContact,
   AlergicCondition,
   Invite,
+  MedicalCondition,
 } from "../services/person/generated/person-db";
 import { logger } from "./logger";
 import { sample } from "./sample";
@@ -96,8 +98,11 @@ const count = {
   ventures: 2,
   invites: 2,
   registrations: 3,
+  rosters: 2,
   fees: 3,
   paymentCodes: 3,
+  medicalConditions: 2,
+  roles: 3,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -120,6 +125,7 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.roster.deleteMany({});
   await activityDb.client.registration.deleteMany({});
   await activityDb.client.venture.deleteMany({});
   await activityDb.client.event.deleteMany({});
@@ -143,10 +149,12 @@ const clear = async () => {
   await schoolDb.client.activity.deleteMany({});
   await schoolDb.client.person.deleteMany({});
   // person db
+  await personDb.client.medicalCondition.deleteMany({});
   await personDb.client.invite.deleteMany({});
   await personDb.client.alergicCondition.deleteMany({});
   await personDb.client.emergencyContact.deleteMany({});
   // admin db
+  await adminDb.client.role.deleteMany({});
   await adminDb.client.school.deleteMany({});
   logger.info("data cleared");
 };
@@ -177,12 +185,26 @@ const seed = async () => {
   let venture: Venture;
   let invite: Invite;
   let registration: Registration;
+  let roster: Roster;
   let fee: Fee;
   let activityFee: ActivityFee;
   let schoolFee: SchoolFee;
   let paymentCode: PaymentCode;
+  let medical: MedicalCondition;
+  let role: Role;
 
   const now = new Date();
+  for (let r = 0; r < count.roles; r++) {
+    data = {
+      name: randColor(),
+      isAdmin: randBoolean(),
+      createdAt: now,
+      updatedAt: now,
+    };
+    role = await adminDb.client.role.create({ data });
+    logger.info(`role ${role.id}: ${role.name}`);
+  } // end roles loop
+
   for (let s = 0; s < count.schools; s++) {
     data = {
       name: randCompanyName(),
@@ -464,6 +486,20 @@ const seed = async () => {
           `alergic condition ${alergy.id}: ${alergy.allergyCondition}`
         );
       } // end alergic conditions loop
+
+      for (let m = 0; m < count.medicalConditions; m++) {
+        data = {
+          personId: person.id,
+          name: randCatchPhrase(),
+          physician: randFullName(),
+          dateOfDiagnosis: randRecentDate(),
+          emergencyPlan: randSentence(),
+          createdAt: now,
+          updatedAt: now,
+        };
+        medical = await personDb.client.medicalCondition.create({ data });
+        logger.info(`medical condition ${medical.id}: ${medical.name}`);
+      } // end medical conditions loop
     } // end people loop
 
     for (let i = 0; i < count.invites; i++) {
@@ -546,6 +582,18 @@ const seed = async () => {
           registration = await activityDb.client.registration.create({ data });
           logger.info(`registration ${registration.id}`);
         } // end registrations loop
+
+        for (let r = 0; r < count.rosters; r++) {
+          data = {
+            groupId: group.id,
+            season: sample(seasons),
+            final: randBoolean(),
+            createdAt: now,
+            updatedAt: now,
+          };
+          roster = await activityDb.client.roster.create({ data });
+          logger.info(`roster ${roster.id}: ${roster.season}`);
+        } // end rosters loop
       } // end group loop
 
       for (let e = 0; e < count.events; e++) {

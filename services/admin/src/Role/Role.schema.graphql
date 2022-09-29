@@ -5,3 +5,8 @@ type Role @key(fields: "id") {
   createdAt: String
   updatedAt: String
 }
+
+extend type Query {
+  roles: [Role]
+  role(id: ID!): Role
+}

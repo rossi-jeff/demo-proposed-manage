@@ -11,6 +11,11 @@ import {
 } from "./EmergencyContact/query-resolvers";
 import { Invite } from "./Invite/field-resolvers";
 import { invite, invites } from "./Invite/query-resolvers";
+import { MedicalCondition } from "./MedicalCondition/field-resolvers";
+import {
+  medicalCondition,
+  medicalConditions,
+} from "./MedicalCondition/query-resolvers";
 import { Person } from "./Person/field-resolvers";
 import { School } from "./School/field-resolvers";
 
@@ -22,10 +27,13 @@ export const resolvers: Resolvers = {
     emergencyContact,
     invites,
     invite,
+    medicalConditions,
+    medicalCondition,
   },
   AlergicCondition,
   EmergencyContact,
   Invite,
+  MedicalCondition,
   Person,
   School,
 };

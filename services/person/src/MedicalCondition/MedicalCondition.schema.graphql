@@ -7,4 +7,11 @@ type MedicalCondition {
   emergencyPlan: String
   createdAt: String
   updatedAt: String
+
+  Person: Person
+}
+
+extend type Query {
+  medicalConditions: [MedicalCondition]
+  medicalCondition(id: ID!): MedicalCondition
 }
