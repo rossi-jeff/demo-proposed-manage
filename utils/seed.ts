@@ -2,7 +2,11 @@ import { db as adminDb } from "../services/admin/src/db";
 import { db as schoolDb } from "../services/school/src/db";
 import { db as activityDb } from "../services/activity/src/db";
 import { db as personDb } from "../services/person/src/db";
-import { School, Role } from "../services/admin/generated/admin-db";
+import {
+  School,
+  Role,
+  SupportDocument,
+} from "../services/admin/generated/admin-db";
 import {
   Group,
   Event,
@@ -103,6 +107,7 @@ const count = {
   paymentCodes: 3,
   medicalConditions: 2,
   roles: 3,
+  docs: 3,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -154,6 +159,7 @@ const clear = async () => {
   await personDb.client.alergicCondition.deleteMany({});
   await personDb.client.emergencyContact.deleteMany({});
   // admin db
+  await adminDb.client.supportDocument.deleteMany({});
   await adminDb.client.role.deleteMany({});
   await adminDb.client.school.deleteMany({});
   logger.info("data cleared");
@@ -192,8 +198,22 @@ const seed = async () => {
   let paymentCode: PaymentCode;
   let medical: MedicalCondition;
   let role: Role;
+  let doc: SupportDocument;
 
   const now = new Date();
+
+  for (let d = 0; d < count.docs; d++) {
+    data = {
+      name: randCatchPhrase(),
+      documentText: randSentence(),
+      sectionHeader: randSentence(),
+      createdAt: now,
+      updatedAt: now,
+    };
+    doc = await adminDb.client.supportDocument.create({ data });
+    logger.info(`document ${doc.id}`);
+  } // end support docunents loop
+
   for (let r = 0; r < count.roles; r++) {
     data = {
       name: randColor(),
