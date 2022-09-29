@@ -13,4 +13,5 @@ config:
     Event: "../src/Event/types#EventType"
     Group: "../src/Group/types#GroupType"
     Registration: "../src/Registration/types#RegistrationType"
+    Roster: "../src/Roster/types#RosterType"
     Venture: "../src/Venture/types#VentureType"

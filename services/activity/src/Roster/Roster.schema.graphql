@@ -5,4 +5,11 @@ type Roster @key(fields: "id") {
   final: Boolean
   createdAt: String
   updatedAt: String
+
+  Group: Group
+}
+
+extend type Query {
+  rosters: [Roster]
+  roster(id: ID!): Roster
 }

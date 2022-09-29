@@ -2,11 +2,12 @@ import { db as adminDb } from "../services/admin/src/db";
 import { db as schoolDb } from "../services/school/src/db";
 import { db as activityDb } from "../services/activity/src/db";
 import { db as personDb } from "../services/person/src/db";
-import { School } from "../services/admin/generated/admin-db";
+import { School, Role } from "../services/admin/generated/admin-db";
 import {
   Group,
   Event,
   Registration,
+  Roster,
   Venture,
 } from "../services/activity/generated/activity-db";
 import {
@@ -96,8 +97,10 @@ const count = {
   ventures: 2,
   invites: 2,
   registrations: 3,
+  rosters: 2,
   fees: 3,
   medicalConditions: 2,
+  roles: 3,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -120,6 +123,7 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.roster.deleteMany({});
   await activityDb.client.registration.deleteMany({});
   await activityDb.client.venture.deleteMany({});
   await activityDb.client.event.deleteMany({});
@@ -147,6 +151,7 @@ const clear = async () => {
   await personDb.client.alergicCondition.deleteMany({});
   await personDb.client.emergencyContact.deleteMany({});
   // admin db
+  await adminDb.client.role.deleteMany({});
   await adminDb.client.school.deleteMany({});
   logger.info("data cleared");
 };
@@ -177,12 +182,25 @@ const seed = async () => {
   let venture: Venture;
   let invite: Invite;
   let registration: Registration;
+  let roster: Roster;
   let fee: Fee;
   let activityFee: ActivityFee;
   let schoolFee: SchoolFee;
   let medical: MedicalCondition;
+  let role: Role;
 
   const now = new Date();
+  for (let r = 0; r < count.roles; r++) {
+    data = {
+      name: randColor(),
+      isAdmin: randBoolean(),
+      createdAt: now,
+      updatedAt: now,
+    };
+    role = await adminDb.client.role.create({ data });
+    logger.info(`role ${role.id}: ${role.name}`);
+  } // end roles loop
+
   for (let s = 0; s < count.schools; s++) {
     data = {
       name: randCompanyName(),
@@ -547,6 +565,18 @@ const seed = async () => {
           registration = await activityDb.client.registration.create({ data });
           logger.info(`registration ${registration.id}`);
         } // end registrations loop
+
+        for (let r = 0; r < count.rosters; r++) {
+          data = {
+            groupId: group.id,
+            season: sample(seasons),
+            final: randBoolean(),
+            createdAt: now,
+            updatedAt: now,
+          };
+          roster = await activityDb.client.roster.create({ data });
+          logger.info(`roster ${roster.id}: ${roster.season}`);
+        } // end rosters loop
       } // end group loop
 
       for (let e = 0; e < count.events; e++) {
