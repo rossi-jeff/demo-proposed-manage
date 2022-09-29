@@ -32,6 +32,7 @@ import {
   EmergencyContact,
   AlergicCondition,
   Invite,
+  MedicalCondition,
 } from "../services/person/generated/person-db";
 import { logger } from "./logger";
 import { sample } from "./sample";
@@ -98,6 +99,7 @@ const count = {
   registrations: 3,
   rosters: 2,
   fees: 3,
+  medicalConditions: 2,
   roles: 3,
 };
 
@@ -144,6 +146,7 @@ const clear = async () => {
   await schoolDb.client.activity.deleteMany({});
   await schoolDb.client.person.deleteMany({});
   // person db
+  await personDb.client.medicalCondition.deleteMany({});
   await personDb.client.invite.deleteMany({});
   await personDb.client.alergicCondition.deleteMany({});
   await personDb.client.emergencyContact.deleteMany({});
@@ -183,6 +186,7 @@ const seed = async () => {
   let fee: Fee;
   let activityFee: ActivityFee;
   let schoolFee: SchoolFee;
+  let medical: MedicalCondition;
   let role: Role;
 
   const now = new Date();
@@ -465,6 +469,20 @@ const seed = async () => {
           `alergic condition ${alergy.id}: ${alergy.allergyCondition}`
         );
       } // end alergic conditions loop
+
+      for (let m = 0; m < count.medicalConditions; m++) {
+        data = {
+          personId: person.id,
+          name: randCatchPhrase(),
+          physician: randFullName(),
+          dateOfDiagnosis: randRecentDate(),
+          emergencyPlan: randSentence(),
+          createdAt: now,
+          updatedAt: now,
+        };
+        medical = await personDb.client.medicalCondition.create({ data });
+        logger.info(`medical condition ${medical.id}: ${medical.name}`);
+      } // end medical conditions loop
     } // end people loop
 
     for (let i = 0; i < count.invites; i++) {

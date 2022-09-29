@@ -16,4 +16,11 @@ export const Person: Resolvers["Person"] = {
       },
     });
   },
+  MedicalConditions: async (parent) => {
+    return await db.client.medicalCondition.findMany({
+      where: {
+        personId: parent.id,
+      },
+    });
+  },
 };
