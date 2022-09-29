@@ -2,6 +2,13 @@ import { Resolvers } from "../../generated/graphql";
 import { db } from "../db";
 
 export const Person: Resolvers["Person"] = {
+  Affiliations: async (parent) => {
+    return await db.client.affiliation.findMany({
+      where: {
+        personId: parent.id,
+      },
+    });
+  },
   AlergicConditions: async (parent) => {
     return await db.client.alergicCondition.findMany({
       where: {

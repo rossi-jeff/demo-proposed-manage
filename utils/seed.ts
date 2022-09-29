@@ -34,6 +34,7 @@ import {
   AlergicCondition,
   Invite,
   MedicalCondition,
+  Affiliation,
 } from "../services/person/generated/person-db";
 import { logger } from "./logger";
 import { sample } from "./sample";
@@ -103,6 +104,7 @@ const count = {
   paymentCodes: 3,
   medicalConditions: 2,
   roles: 3,
+  affiliations: 3,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -149,6 +151,7 @@ const clear = async () => {
   await schoolDb.client.activity.deleteMany({});
   await schoolDb.client.person.deleteMany({});
   // person db
+  await personDb.client.affiliation.deleteMany({});
   await personDb.client.medicalCondition.deleteMany({});
   await personDb.client.invite.deleteMany({});
   await personDb.client.alergicCondition.deleteMany({});
@@ -192,6 +195,7 @@ const seed = async () => {
   let paymentCode: PaymentCode;
   let medical: MedicalCondition;
   let role: Role;
+  let affiliation: Affiliation;
 
   const now = new Date();
   for (let r = 0; r < count.roles; r++) {
@@ -501,6 +505,18 @@ const seed = async () => {
         logger.info(`medical condition ${medical.id}: ${medical.name}`);
       } // end medical conditions loop
     } // end people loop
+
+    for (let a = 0; a < count.affiliations; a++) {
+      data = {
+        schoolId: school.id,
+        personId: sample(ids.people) ?? "",
+        affiliationType: randCatchPhrase(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      affiliation = await personDb.client.affiliation.create({ data });
+      logger.info(`affiliation ${affiliation.id}`);
+    } // end affiliations loop
 
     for (let i = 0; i < count.invites; i++) {
       data = {

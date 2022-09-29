@@ -5,4 +5,12 @@ type Affiliation {
   affiliationType: String
   createdAt: String
   updatedAt: String
+
+  Person: Person
+  School: School
+}
+
+extend type Query {
+  affiliations: [Affiliation]
+  affiliation(id: ID!): Affiliation
 }

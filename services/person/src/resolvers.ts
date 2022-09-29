@@ -1,4 +1,6 @@
 import { Resolvers } from "../generated/graphql";
+import { Affiliation } from "./Affiliation/field-resolvers";
+import { affiliation, affiliations } from "./Affiliation/query-resolvers";
 import { AlergicCondition } from "./AlergicCondition/field-resolvers";
 import {
   alergicCondition,
@@ -21,6 +23,8 @@ import { School } from "./School/field-resolvers";
 
 export const resolvers: Resolvers = {
   Query: {
+    affiliations,
+    affiliation,
     alergicConditions,
     alergicCondition,
     emergencyContacts,
@@ -30,6 +34,7 @@ export const resolvers: Resolvers = {
     medicalConditions,
     medicalCondition,
   },
+  Affiliation,
   AlergicCondition,
   EmergencyContact,
   Invite,
