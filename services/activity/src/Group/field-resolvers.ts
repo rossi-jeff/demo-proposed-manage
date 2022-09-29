@@ -64,4 +64,11 @@ export const Group: Resolvers["Group"] = {
       },
     });
   },
+  Rosters: async (parent) => {
+    return await db.client.roster.findMany({
+      where: {
+        groupId: parent.id,
+      },
+    });
+  },
 };

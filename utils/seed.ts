@@ -7,6 +7,7 @@ import {
   Group,
   Event,
   Registration,
+  Roster,
   Venture,
 } from "../services/activity/generated/activity-db";
 import {
@@ -95,6 +96,7 @@ const count = {
   ventures: 2,
   invites: 2,
   registrations: 3,
+  rosters: 2,
   fees: 3,
 };
 
@@ -118,6 +120,7 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.roster.deleteMany({});
   await activityDb.client.registration.deleteMany({});
   await activityDb.client.venture.deleteMany({});
   await activityDb.client.event.deleteMany({});
@@ -174,6 +177,7 @@ const seed = async () => {
   let venture: Venture;
   let invite: Invite;
   let registration: Registration;
+  let roster: Roster;
   let fee: Fee;
   let activityFee: ActivityFee;
   let schoolFee: SchoolFee;
@@ -529,6 +533,18 @@ const seed = async () => {
           registration = await activityDb.client.registration.create({ data });
           logger.info(`registration ${registration.id}`);
         } // end registrations loop
+
+        for (let r = 0; r < count.rosters; r++) {
+          data = {
+            groupId: group.id,
+            season: sample(seasons),
+            final: randBoolean(),
+            createdAt: now,
+            updatedAt: now,
+          };
+          roster = await activityDb.client.roster.create({ data });
+          logger.info(`roster ${roster.id}: ${roster.season}`);
+        } // end rosters loop
       } // end group loop
 
       for (let e = 0; e < count.events; e++) {
