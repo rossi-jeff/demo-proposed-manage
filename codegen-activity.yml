@@ -10,6 +10,7 @@ generates:
       - "typescript-resolvers"
 config:
   mappers:
+    Consent: "../src/Consent/types#ConsentType"
     Event: "../src/Event/types#EventType"
     Group: "../src/Group/types#GroupType"
     GroupRegistration: "../src/GroupRegistration/types#GroupRegistrationType"
