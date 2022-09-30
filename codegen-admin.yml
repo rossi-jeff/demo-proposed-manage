@@ -12,3 +12,4 @@ config:
   mappers:
     Role: "../src/Role/types#RoleType"
     School: "../src/School/types#SchoolType"
+    SupportDocument: "../src/SupportDocument/types#SupportDocumentType"

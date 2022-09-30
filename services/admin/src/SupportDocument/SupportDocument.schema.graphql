@@ -6,3 +6,8 @@ type SupportDocument {
   createdAt: String
   updatedAt: String
 }
+
+extend type Query {
+  supportDocuments: [SupportDocument]
+  supportDocument(id: ID!): SupportDocument
+}
