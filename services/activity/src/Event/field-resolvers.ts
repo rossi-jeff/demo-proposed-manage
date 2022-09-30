@@ -86,4 +86,11 @@ export const Event: Resolvers["Event"] = {
       id: ref.activityId,
     };
   },
+  Tickets: async (parent) => {
+    return await db.client.ticket.findMany({
+      where: {
+        eventId: parent.id,
+      },
+    });
+  },
 };

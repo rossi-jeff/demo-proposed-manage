@@ -15,4 +15,5 @@ config:
     GroupRegistration: "../src/GroupRegistration/types#GroupRegistrationType"
     Registration: "../src/Registration/types#RegistrationType"
     Roster: "../src/Roster/types#RosterType"
+    Ticket: "../src/Ticket/types#TicketType"
     Venture: "../src/Venture/types#VentureType"

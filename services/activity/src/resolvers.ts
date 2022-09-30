@@ -13,6 +13,8 @@ import { Registration } from "./Registration/field-resolvers";
 import { registration, registrations } from "./Registration/query-resolvers";
 import { Roster } from "./Roster/field-resolvers";
 import { roster, rosters } from "./Roster/query-resolvers";
+import { Ticket } from "./Ticket/field-resolvers";
+import { ticket, tickets } from "./Ticket/query-resolvers";
 import { Venture } from "./Venture/field-resolvers";
 import { venture, ventures } from "./Venture/query-resolvers";
 
@@ -28,6 +30,8 @@ export const resolvers: Resolvers = {
     registration,
     rosters,
     roster,
+    tickets,
+    ticket,
     ventures,
     venture,
   },
@@ -37,5 +41,6 @@ export const resolvers: Resolvers = {
   GroupRegistration,
   Registration,
   Roster,
+  Ticket,
   Venture,
 };
