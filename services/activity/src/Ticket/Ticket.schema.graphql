@@ -10,4 +10,11 @@ type Ticket @key(fields: "id") {
   commentsEnabled: Boolean
   createdAt: String
   updatedAt: String
+
+  Event: Event
+}
+
+extend type Query {
+  tickets: [Ticket]
+  ticket(id: ID!): Ticket
 }

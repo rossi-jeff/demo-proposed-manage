@@ -19,6 +19,7 @@ type Event @key(fields: "id") {
   updatedAt: String
 
   Activity: Activity
+  Tickets: [Ticket]
 }
 
 extend type Query {

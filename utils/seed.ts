@@ -13,6 +13,7 @@ import {
   GroupRegistration,
   Registration,
   Roster,
+  Ticket,
   Venture,
 } from "../services/activity/generated/activity-db";
 import {
@@ -113,6 +114,7 @@ const count = {
   roles: 3,
   rosters: 2,
   schools: 5,
+  tickets: 3,
   ventures: 2,
 };
 
@@ -136,6 +138,7 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.ticket.deleteMany({});
   await activityDb.client.groupRegistration.deleteMany({});
   await activityDb.client.roster.deleteMany({});
   await activityDb.client.registration.deleteMany({});
@@ -211,6 +214,7 @@ const seed = async () => {
   let schoolEmail: SchoolEmail;
   let schoolFee: SchoolFee;
   let schoolPhone: SchoolPhone;
+  let ticket: Ticket;
   let venture: Venture;
 
   const now = new Date();
@@ -682,6 +686,23 @@ const seed = async () => {
         };
         event = await activityDb.client.event.create({ data });
         logger.info(`event ${event.id}: ${event.name}`);
+
+        for (let t = 0; t < count.tickets; t++) {
+          data = {
+            eventId: event.id,
+            kind: randCatchPhrase(),
+            basePrice: randNumber({ min: 1, max: 1000 }),
+            maxNumberOfTickets: randNumber({ min: 1, max: 1000 }),
+            state: randNumber({ min: 1, max: 1000 }),
+            title: randWord(),
+            groupSize: randNumber({ min: 1, max: 1000 }),
+            commentsEnabled: randBoolean(),
+            createdAt: now,
+            updatedAt: now,
+          };
+          ticket = await activityDb.client.ticket.create({ data });
+          logger.info(`ticket ${ticket.id}: ${ticket.kind}`);
+        } // end tickets loop
       } // end events loop
 
       for (let v = 0; v < count.ventures; v++) {
