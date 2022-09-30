@@ -4,6 +4,11 @@ import { Event } from "./Event/field-resolvers";
 import { events, event } from "./Event/query-resolvers";
 import { Group } from "./Group/field-resolvers";
 import { group, groups } from "./Group/query-resolvers";
+import { GroupRegistration } from "./GroupRegistration/field-resolvers";
+import {
+  groupRegistration,
+  groupRegistrations,
+} from "./GroupRegistration/query-resolvers";
 import { Registration } from "./Registration/field-resolvers";
 import { registration, registrations } from "./Registration/query-resolvers";
 import { Roster } from "./Roster/field-resolvers";
@@ -17,6 +22,8 @@ export const resolvers: Resolvers = {
     event,
     groups,
     group,
+    groupRegistrations,
+    groupRegistration,
     registrations,
     registration,
     rosters,
@@ -27,6 +34,7 @@ export const resolvers: Resolvers = {
   Activity,
   Event,
   Group,
+  GroupRegistration,
   Registration,
   Roster,
   Venture,

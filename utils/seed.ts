@@ -9,6 +9,7 @@ import {
 } from "../services/admin/generated/admin-db";
 import {
   Group,
+  GroupRegistration,
   Event,
   Registration,
   Roster,
@@ -90,7 +91,7 @@ const phoneTypes = [
 const count = {
   schools: 5,
   activities: 3,
-  people: 4,
+  people: 5,
   phones: 2,
   emails: 2,
   emergencyContacts: 2,
@@ -101,13 +102,14 @@ const count = {
   alergies: 2,
   ventures: 2,
   invites: 2,
-  registrations: 3,
+  registrations: 5,
   rosters: 2,
   fees: 3,
   paymentCodes: 3,
   medicalConditions: 2,
   roles: 3,
   docs: 3,
+  groupRegistrations: 2,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -130,6 +132,7 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.groupRegistration.deleteMany({});
   await activityDb.client.roster.deleteMany({});
   await activityDb.client.registration.deleteMany({});
   await activityDb.client.venture.deleteMany({});
@@ -199,6 +202,7 @@ const seed = async () => {
   let medical: MedicalCondition;
   let role: Role;
   let doc: SupportDocument;
+  let groupRegistration: GroupRegistration;
 
   const now = new Date();
 
@@ -574,6 +578,7 @@ const seed = async () => {
         group = await activityDb.client.group.create({ data });
         logger.info(`group ${group.id}: ${group.name}`);
 
+        ids.registrations = [];
         for (let r = 0; r < count.registrations; r++) {
           data = {
             activityId: activity.id,
@@ -600,6 +605,7 @@ const seed = async () => {
             updatedAt: now,
           };
           registration = await activityDb.client.registration.create({ data });
+          ids.registrations.push(registration.id);
           logger.info(`registration ${registration.id}`);
         } // end registrations loop
 
@@ -613,6 +619,23 @@ const seed = async () => {
           };
           roster = await activityDb.client.roster.create({ data });
           logger.info(`roster ${roster.id}: ${roster.season}`);
+
+          for (let gr = 0; gr < count.groupRegistrations; gr++) {
+            data = {
+              groupId: group.id,
+              rosterId: roster.id,
+              registrationId: sample(ids.registrations),
+              finalizeDate: randRecentDate(),
+              jerseyNumber: randNumber({ min: 0, max: 100 }).toString(),
+              position: randWord(),
+              state: randNumber({ min: 1, max: 1000 }),
+              createdAt: now,
+              updatedAt: now,
+            };
+            groupRegistration =
+              await activityDb.client.groupRegistration.create({ data });
+            logger.info(`group registration ${groupRegistration.id}`);
+          } // end group registrations loop
         } // end rosters loop
       } // end group loop
 
