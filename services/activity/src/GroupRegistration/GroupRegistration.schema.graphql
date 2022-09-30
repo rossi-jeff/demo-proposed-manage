@@ -9,4 +9,13 @@ type GroupRegistration {
   state: Int
   createdAt: String
   updatedAt: String
+
+  Group: Group
+  Registration: Registration
+  Roster: Roster
+}
+
+extend type Query {
+  groupRegistrations: [GroupRegistration]
+  groupRegistration(id: ID!): GroupRegistration
 }

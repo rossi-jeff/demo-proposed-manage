@@ -114,6 +114,13 @@ export const Registration: Resolvers["Registration"] = {
       },
     });
   },
+  GroupRegistrations: async (parent) => {
+    return await db.client.groupRegistration.findMany({
+      where: {
+        registrationId: parent.id,
+      },
+    });
+  },
   Participant: async (ref) => {
     if (ref.participantId === null) return null;
     return {
