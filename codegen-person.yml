@@ -10,6 +10,7 @@ generates:
       - "typescript-resolvers"
 config:
   mappers:
+    Affiliation: "../src/Affiliation/types#AffiliationType"
     AlergicCondition: "../src/AlergicCondition/types#AlergicConditionType"
     EmergencyContact: "../src/EmergencyContact/types#EmergencyContactType"
     Invite: "../src/Invite/types#InviteType"
