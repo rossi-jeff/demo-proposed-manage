@@ -31,7 +31,7 @@ const startServer = async () => {
   server
     .listen({ port: 4003 })
     .then(({ url }) => {
-      logger.info(`School service started at ${url}`);
+      logger.info(`School service started at ${url} `);
     })
     .catch((e) => {
       logger.error(e.message);

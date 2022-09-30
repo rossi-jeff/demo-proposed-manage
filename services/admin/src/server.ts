@@ -31,7 +31,7 @@ const startServer = async () => {
   server
     .listen({ port: 4002 })
     .then(({ url }) => {
-      logger.info(`Admin service started at ${url}`);
+      logger.info(`Admin service started at ${url} `);
     })
     .catch((e) => {
       logger.error(e.message);

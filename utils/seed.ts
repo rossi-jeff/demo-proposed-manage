@@ -3,14 +3,14 @@ import { db as schoolDb } from "../services/school/src/db";
 import { db as activityDb } from "../services/activity/src/db";
 import { db as personDb } from "../services/person/src/db";
 import {
-  School,
   Role,
+  School,
   SupportDocument,
 } from "../services/admin/generated/admin-db";
 import {
+  Event,
   Group,
   GroupRegistration,
-  Event,
   Registration,
   Roster,
   Venture,
@@ -36,11 +36,11 @@ import {
   SchoolPhone,
 } from "../services/school/generated/school-db";
 import {
-  EmergencyContact,
+  Affiliation,
   AlergicCondition,
+  EmergencyContact,
   Invite,
   MedicalCondition,
-  Affiliation,
 } from "../services/person/generated/person-db";
 import { logger } from "./logger";
 import { sample } from "./sample";
@@ -91,29 +91,29 @@ const phoneTypes = [
 ];
 
 const count = {
-  schools: 5,
   activities: 3,
-  people: 5,
-  phones: 2,
+  affiliations: 3,
+  alergies: 2,
+  awards: 3,
+  colors: 3,
+  docs: 3,
   emails: 2,
   emergencyContacts: 2,
-  legalForms: 2,
-  groups: 3,
   events: 2,
-  colors: 3,
-  alergies: 2,
-  ventures: 2,
-  invites: 2,
-  registrations: 5,
-  rosters: 2,
   fees: 3,
-  paymentCodes: 3,
-  medicalConditions: 2,
-  roles: 3,
-  awards: 3,
-  affiliations: 3,
-  docs: 3,
+  groups: 3,
   groupRegistrations: 2,
+  invites: 2,
+  legalForms: 2,
+  medicalConditions: 2,
+  paymentCodes: 3,
+  people: 5,
+  phones: 2,
+  registrations: 5,
+  roles: 3,
+  rosters: 2,
+  schools: 5,
+  ventures: 2,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -179,38 +179,39 @@ const seed = async () => {
 
   let data;
   const ids: { [key: string]: string[] } = {};
-  let school: School;
+
   let activity: Activity;
-  let person: Person;
-  let phone: Phone;
-  let schoolPhone: SchoolPhone;
-  let personPhone: PersonPhone;
-  let email: Email;
-  let schoolEmail: SchoolEmail;
-  let personEmail: PersonEmail;
-  let address: Address;
-  let schoolAddress: SchoolAddress;
-  let personAddress: PersonAddress;
-  let emergencyContact: EmergencyContact;
-  let legalForm: LegalForm;
-  let group: Group;
-  let event: Event;
-  let color: Color;
-  let alergy: AlergicCondition;
-  let venture: Venture;
-  let invite: Invite;
-  let registration: Registration;
-  let roster: Roster;
-  let fee: Fee;
   let activityFee: ActivityFee;
-  let schoolFee: SchoolFee;
-  let paymentCode: PaymentCode;
-  let medical: MedicalCondition;
-  let role: Role;
-  let award: Award;
+  let address: Address;
   let affiliation: Affiliation;
+  let alergy: AlergicCondition;
+  let award: Award;
+  let color: Color;
   let doc: SupportDocument;
+  let email: Email;
+  let emergencyContact: EmergencyContact;
+  let event: Event;
+  let fee: Fee;
+  let group: Group;
   let groupRegistration: GroupRegistration;
+  let invite: Invite;
+  let legalForm: LegalForm;
+  let medical: MedicalCondition;
+  let paymentCode: PaymentCode;
+  let person: Person;
+  let personAddress: PersonAddress;
+  let personEmail: PersonEmail;
+  let personPhone: PersonPhone;
+  let phone: Phone;
+  let registration: Registration;
+  let role: Role;
+  let roster: Roster;
+  let school: School;
+  let schoolAddress: SchoolAddress;
+  let schoolEmail: SchoolEmail;
+  let schoolFee: SchoolFee;
+  let schoolPhone: SchoolPhone;
+  let venture: Venture;
 
   const now = new Date();
 
