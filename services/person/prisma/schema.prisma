@@ -85,6 +85,19 @@ model Invoice {
     updatedAt            DateTime
 }
 
+model InvoiceTransaction {
+    id              String    @id @default(cuid())
+    remoteId        String?
+    status          String?
+    invoiceId       String?   @unique
+    paymentType     String?
+    adminFlag       Boolean?  @default(true)
+    problemStatusAt DateTime?
+    details         String?   @db.Text
+    createdAt       DateTime
+    updatedAt       DateTime
+}
+
 model LegalVideoConsent {
     id           String   @id @default(cuid())
     legalVideoId String?

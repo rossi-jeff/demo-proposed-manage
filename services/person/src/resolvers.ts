@@ -13,6 +13,9 @@ import {
 } from "./EmergencyContact/query-resolvers";
 import { Invite } from "./Invite/field-resolvers";
 import { invite, invites } from "./Invite/query-resolvers";
+import { Invoice } from "./Invoice/field-resolvers";
+import { invoice, invoices } from "./Invoice/query-resolvers";
+import { InvoiceTransaction } from "./InvoiceTransaction/field-resolvers";
 import { MedicalCondition } from "./MedicalCondition/field-resolvers";
 import {
   medicalCondition,
@@ -31,6 +34,8 @@ export const resolvers: Resolvers = {
     emergencyContact,
     invites,
     invite,
+    invoices,
+    invoice,
     medicalConditions,
     medicalCondition,
   },
@@ -38,6 +43,8 @@ export const resolvers: Resolvers = {
   AlergicCondition,
   EmergencyContact,
   Invite,
+  Invoice,
+  InvoiceTransaction,
   MedicalCondition,
   Person,
   School,

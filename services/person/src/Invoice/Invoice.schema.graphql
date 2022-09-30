@@ -5,4 +5,12 @@ type Invoice {
   invoiceTransactionId: String
   createdAt: String
   updatedAt: String
+
+  InvoiceTransaction: InvoiceTransaction
+  Person: Person
+}
+
+extend type Query {
+  invoices: [Invoice]
+  invoice(id: ID!): Invoice
 }

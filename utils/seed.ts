@@ -40,6 +40,8 @@ import {
   AlergicCondition,
   EmergencyContact,
   Invite,
+  Invoice,
+  InvoiceTransaction,
   MedicalCondition,
 } from "../services/person/generated/person-db";
 import { logger } from "./logger";
@@ -104,6 +106,7 @@ const count = {
   groups: 3,
   groupRegistrations: 2,
   invites: 2,
+  invoices: 2,
   legalForms: 2,
   medicalConditions: 2,
   paymentCodes: 3,
@@ -162,6 +165,8 @@ const clear = async () => {
   await schoolDb.client.activity.deleteMany({});
   await schoolDb.client.person.deleteMany({});
   // person db
+  await personDb.client.invoice.deleteMany;
+  await personDb.client.invoiceTransaction.deleteMany;
   await personDb.client.affiliation.deleteMany({});
   await personDb.client.medicalCondition.deleteMany({});
   await personDb.client.invite.deleteMany({});
@@ -195,6 +200,8 @@ const seed = async () => {
   let group: Group;
   let groupRegistration: GroupRegistration;
   let invite: Invite;
+  let invoice: Invoice;
+  let invoiceTransaction: InvoiceTransaction;
   let legalForm: LegalForm;
   let medical: MedicalCondition;
   let paymentCode: PaymentCode;
@@ -533,6 +540,38 @@ const seed = async () => {
         medical = await personDb.client.medicalCondition.create({ data });
         logger.info(`medical condition ${medical.id}: ${medical.name}`);
       } // end medical conditions loop
+
+      for (let i = 0; i < count.invoices; i++) {
+        data = {
+          personId: person.id,
+          credit: randNumber({ min: 1, max: 1000 }),
+          createdAt: now,
+          updatedAt: now,
+        };
+        invoice = await personDb.client.invoice.create({ data });
+        logger.info(`invoice ${invoice.id}: ${invoice.credit}`);
+
+        data = {
+          remoteId: randUuid(),
+          status: randWord(),
+          invoiceId: invoice.id,
+          paymentType: randAbbreviation(),
+          adminFlag: randBoolean(),
+          problemStatusAt: now,
+          details: randSentence(),
+          createdAt: now,
+          updatedAt: now,
+        };
+        invoiceTransaction = await personDb.client.invoiceTransaction.create({
+          data,
+        });
+        logger.info(`invoice transaction ${invoiceTransaction.id}`);
+
+        await personDb.client.invoice.update({
+          where: { id: invoice.id },
+          data: { invoiceTransactionId: invoiceTransaction.id },
+        });
+      }
     } // end people loop
 
     for (let a = 0; a < count.affiliations; a++) {
