@@ -19,6 +19,7 @@ import {
   Activity,
   ActivityFee,
   Address,
+  Award,
   Color,
   Email,
   Fee,
@@ -109,6 +110,7 @@ const count = {
   paymentCodes: 3,
   medicalConditions: 2,
   roles: 3,
+  awards: 3,
   affiliations: 3,
   docs: 3,
   groupRegistrations: 2,
@@ -141,6 +143,7 @@ const clear = async () => {
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
+  await schoolDb.client.award.deleteMany({});
   await schoolDb.client.paymentCode.deleteMany({});
   await schoolDb.client.activityFee.deleteMany({});
   await schoolDb.client.schoolFee.deleteMany({});
@@ -204,6 +207,7 @@ const seed = async () => {
   let paymentCode: PaymentCode;
   let medical: MedicalCondition;
   let role: Role;
+  let award: Award;
   let affiliation: Affiliation;
   let doc: SupportDocument;
   let groupRegistration: GroupRegistration;
@@ -728,6 +732,19 @@ const seed = async () => {
         logger.info(`activity fee ${activityFee.id}`);
       } // end fees loop
     } // end activites loop
+
+    for (let a = 0; a < count.awards; a++) {
+      data = {
+        schoolId: school.id,
+        name: randCatchPhrase(),
+        position: randNumber({ min: 1, max: 1000 }),
+        active: randBoolean(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      award = await schoolDb.client.award.create({ data });
+      logger.info(`award ${award.id}: ${award.name}`);
+    } // end awards loop
   } // end school loop
 };
 

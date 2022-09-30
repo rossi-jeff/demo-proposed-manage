@@ -20,6 +20,13 @@ export const School: Resolvers["School"] = {
     });
     return schoolAddresses.map((s) => s.Address);
   },
+  Awards: async (parent) => {
+    return await db.client.award.findMany({
+      where: {
+        schoolId: parent.id,
+      },
+    });
+  },
   Colors: async (parent) => {
     return await db.client.color.findMany({
       where: {

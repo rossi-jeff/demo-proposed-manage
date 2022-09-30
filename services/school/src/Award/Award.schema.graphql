@@ -6,4 +6,11 @@ type Award @key(fields: "id") {
   active: Boolean
   createdAt: String
   updatedAt: String
+
+  School: School
+}
+
+extend type Query {
+  awards: [Award]
+  award(id: ID!): Award
 }
