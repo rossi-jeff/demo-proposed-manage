@@ -24,6 +24,7 @@ import {
   Email,
   Fee,
   LegalForm,
+  MedicalForm,
   PaymentCode,
   Person,
   PersonAddress,
@@ -106,6 +107,7 @@ const count = {
   invites: 2,
   legalForms: 2,
   medicalConditions: 2,
+  medicalForms: 3,
   paymentCodes: 3,
   people: 5,
   phones: 2,
@@ -143,6 +145,7 @@ const clear = async () => {
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
+  await schoolDb.client.medicalForm.deleteMany({});
   await schoolDb.client.award.deleteMany({});
   await schoolDb.client.paymentCode.deleteMany({});
   await schoolDb.client.activityFee.deleteMany({});
@@ -197,6 +200,7 @@ const seed = async () => {
   let invite: Invite;
   let legalForm: LegalForm;
   let medical: MedicalCondition;
+  let medicalForm: MedicalForm;
   let paymentCode: PaymentCode;
   let person: Person;
   let personAddress: PersonAddress;
@@ -263,6 +267,19 @@ const seed = async () => {
     };
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
+
+    for (let m = 0; m < count.medicalForms; m++) {
+      data = {
+        schoolId: school.id,
+        name: randCatchPhrase(),
+        file: randFilePath(),
+        freshmanOnly: randBoolean(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      medicalForm = await schoolDb.client.medicalForm.create({ data });
+      logger.info(`medical form ${medicalForm.id}: ${medicalForm.file}`);
+    } // end medical forms loop
 
     for (let p = 0; p < count.paymentCodes; p++) {
       data = {

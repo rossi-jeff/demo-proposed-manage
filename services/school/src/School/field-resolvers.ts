@@ -52,6 +52,13 @@ export const School: Resolvers["School"] = {
       },
     });
   },
+  MedicalForms: async (parent) => {
+    return await db.client.medicalForm.findMany({
+      where: {
+        schoolId: parent.id,
+      },
+    });
+  },
   People: async (parent) => {
     return await db.client.person.findMany({
       where: {
