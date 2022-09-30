@@ -37,7 +37,7 @@ const startUp = async (): Promise<void> => {
   server
     .listen()
     .then(({ url }) => {
-      logger.info(`gateway started at ${url}`);
+      logger.info(`gateway started at ${url} `);
     })
     .catch((e) => {
       logger.error(e.message);
