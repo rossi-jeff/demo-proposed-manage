@@ -19,6 +19,13 @@ export const getUpdatedAt = (parent: InvoiceType) => {
 };
 
 export const Invoice: Resolvers["Invoice"] = {
+  __resolveReference: async (ref) => {
+    return await db.client.invoice.findFirst({
+      where: {
+        id: ref.id,
+      },
+    });
+  },
   personId: getPersonId,
   credit: getCredit,
   invoiceTransactionId: getInvoiceTransactionId,

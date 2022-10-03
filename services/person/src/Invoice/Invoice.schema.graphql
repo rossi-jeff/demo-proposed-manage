@@ -1,4 +1,4 @@
-type Invoice {
+type Invoice @key(fields: "id") {
   id: ID!
   personId: String
   credit: Int

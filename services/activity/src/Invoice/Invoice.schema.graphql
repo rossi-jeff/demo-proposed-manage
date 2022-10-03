@@ -1,0 +1,5 @@
+type Invoice @key(fields: "id") {
+  id: ID!
+
+  LineItems: [LineItem]
+}
