@@ -1,5 +1,7 @@
 import type { Resolvers } from "../generated/graphql";
 import { Activity } from "./Activity/field-resolvers";
+import { Consent } from "./Consent/field-resolvers";
+import { consent, consents } from "./Consent/query-resolvers";
 import { Event } from "./Event/field-resolvers";
 import { events, event } from "./Event/query-resolvers";
 import { Group } from "./Group/field-resolvers";
@@ -9,6 +11,7 @@ import {
   groupRegistration,
   groupRegistrations,
 } from "./GroupRegistration/query-resolvers";
+import { LegalForm } from "./LegalForm/field-resolvers";
 import { Registration } from "./Registration/field-resolvers";
 import { registration, registrations } from "./Registration/query-resolvers";
 import { Roster } from "./Roster/field-resolvers";
@@ -20,6 +23,8 @@ import { venture, ventures } from "./Venture/query-resolvers";
 
 export const resolvers: Resolvers = {
   Query: {
+    consents,
+    consent,
     events,
     event,
     groups,
@@ -36,9 +41,11 @@ export const resolvers: Resolvers = {
     venture,
   },
   Activity,
+  Consent,
   Event,
   Group,
   GroupRegistration,
+  LegalForm,
   Registration,
   Roster,
   Ticket,

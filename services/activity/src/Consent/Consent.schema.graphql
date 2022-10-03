@@ -7,4 +7,12 @@ type Consent @key(fields: "id") {
   sha1: String
   createdAt: String
   updatedAt: String
+
+  LegalForm: LegalForm
+  Registration: Registration
+}
+
+extend type Query {
+  consents: [Consent]
+  consent(id: ID!): Consent
 }

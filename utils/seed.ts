@@ -8,6 +8,7 @@ import {
   SupportDocument,
 } from "../services/admin/generated/admin-db";
 import {
+  Consent,
   Event,
   Group,
   GroupRegistration,
@@ -100,6 +101,7 @@ const count = {
   alergies: 2,
   awards: 3,
   colors: 3,
+  consents: 2,
   docs: 3,
   emails: 2,
   emergencyContacts: 2,
@@ -143,6 +145,7 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.consent.deleteMany({});
   await activityDb.client.ticket.deleteMany({});
   await activityDb.client.groupRegistration.deleteMany({});
   await activityDb.client.roster.deleteMany({});
@@ -198,6 +201,7 @@ const seed = async () => {
   let alergy: AlergicCondition;
   let award: Award;
   let color: Color;
+  let consent: Consent;
   let doc: SupportDocument;
   let email: Email;
   let emergencyContact: EmergencyContact;
@@ -399,6 +403,7 @@ const seed = async () => {
       logger.info(`school phone ${schoolPhone.id}`);
     } // end phone loop
 
+    ids.legalForms = [];
     for (let l = 0; l < count.legalForms; l++) {
       data = {
         schoolId: school.id,
@@ -412,6 +417,7 @@ const seed = async () => {
         updatedAt: now,
       };
       legalForm = await schoolDb.client.legalForm.create({ data });
+      ids.legalForms.push(legalForm.id);
       logger.info(`legal form ${legalForm.id}: ${legalForm.name}`);
     } // end legal form loop
 
@@ -688,6 +694,20 @@ const seed = async () => {
           registration = await activityDb.client.registration.create({ data });
           ids.registrations.push(registration.id);
           logger.info(`registration ${registration.id}`);
+
+          for (let c = 0; c < count.consents; c++) {
+            data = {
+              legalFormId: sample(ids.legalForms) ?? "",
+              registrationId: registration.id,
+              accepted: randBoolean(),
+              checkboxText: randCatchPhrase(),
+              sha1: randUuid(),
+              createdAt: now,
+              updatedAt: now,
+            };
+            consent = await activityDb.client.consent.create({ data });
+            logger.info(`consent ${consent.id}: ${consent.checkboxText}`);
+          } // end consents loop
         } // end registrations loop
 
         for (let r = 0; r < count.rosters; r++) {

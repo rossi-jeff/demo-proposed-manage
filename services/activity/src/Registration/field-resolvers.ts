@@ -106,6 +106,13 @@ export const Registration: Resolvers["Registration"] = {
       id: ref.activityId,
     };
   },
+  Consents: async (parent) => {
+    return await db.client.consent.findMany({
+      where: {
+        registrationId: parent.id,
+      },
+    });
+  },
   Group: async (parent) => {
     if (parent.groupId === null) return null;
     return await db.client.group.findFirst({

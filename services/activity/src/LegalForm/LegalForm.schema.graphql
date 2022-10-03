@@ -1,0 +1,5 @@
+type LegalForm @key(fields: "id") {
+  id: ID!
+
+  Consents: [Consent]
+}

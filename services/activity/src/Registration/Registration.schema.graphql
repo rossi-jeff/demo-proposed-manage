@@ -27,6 +27,7 @@ type Registration @key(fields: "id") {
   Group: Group
   Participant: Person
   RegisteredBy: Person
+  Consents: [Consent]
   GroupRegistrations: [GroupRegistration]
 }
 
