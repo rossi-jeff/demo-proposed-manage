@@ -6,4 +6,11 @@ type MedicalForm @key(fields: "id") {
   freshmanOnly: Boolean
   createdAt: String
   updatedAt: String
+
+  School: School
+}
+
+extend type Query {
+  medicalForms: [MedicalForm]
+  medicalForm(id: ID!): MedicalForm
 }
