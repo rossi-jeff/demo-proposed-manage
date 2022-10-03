@@ -29,6 +29,7 @@ type Registration @key(fields: "id") {
   RegisteredBy: Person
   Consents: [Consent]
   GroupRegistrations: [GroupRegistration]
+  LineItems: [LineItem]
 }
 
 extend type Query {

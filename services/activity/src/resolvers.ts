@@ -11,7 +11,10 @@ import {
   groupRegistration,
   groupRegistrations,
 } from "./GroupRegistration/query-resolvers";
+import { Invoice } from "./Invoice/field-resolvers";
 import { LegalForm } from "./LegalForm/field-resolvers";
+import { LineItem } from "./LineItem/field-resolvers";
+import { lineItem, lineItems } from "./LineItem/query-resolvers";
 import { Registration } from "./Registration/field-resolvers";
 import { registration, registrations } from "./Registration/query-resolvers";
 import { Roster } from "./Roster/field-resolvers";
@@ -31,6 +34,8 @@ export const resolvers: Resolvers = {
     group,
     groupRegistrations,
     groupRegistration,
+    lineItems,
+    lineItem,
     registrations,
     registration,
     rosters,
@@ -45,7 +50,9 @@ export const resolvers: Resolvers = {
   Event,
   Group,
   GroupRegistration,
+  Invoice,
   LegalForm,
+  LineItem,
   Registration,
   Roster,
   Ticket,

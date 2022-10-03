@@ -12,6 +12,7 @@ import {
   Event,
   Group,
   GroupRegistration,
+  LineItem,
   Registration,
   Roster,
   Ticket,
@@ -145,6 +146,7 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.lineItem.deleteMany({});
   await activityDb.client.consent.deleteMany({});
   await activityDb.client.ticket.deleteMany({});
   await activityDb.client.groupRegistration.deleteMany({});
@@ -213,6 +215,7 @@ const seed = async () => {
   let invoice: Invoice;
   let invoiceTransaction: InvoiceTransaction;
   let legalForm: LegalForm;
+  let lineItem: LineItem;
   let medical: MedicalCondition;
   let medicalForm: MedicalForm;
   let paymentCode: PaymentCode;
@@ -740,6 +743,36 @@ const seed = async () => {
         } // end rosters loop
       } // end group loop
 
+      ids.ventures = [];
+      for (let v = 0; v < count.ventures; v++) {
+        data = {
+          activityId: activity.id,
+          name: randCatchPhrase(),
+          description: randSentence(),
+          type: randWord(),
+          gender: randGender(),
+          grade: randWord(),
+          basePrice: randNumber({ min: 1, max: 1000 }),
+          nonDistrictBasePrice: randNumber({ min: 1, max: 1000 }),
+          registrationStart: randFutureDate(),
+          registrationEnd: randFutureDate(),
+          director: randFullName(),
+          directorBio: randSentence(),
+          registerable: randBoolean(),
+          maxNumberOfParticipants: randNumber({ min: 1, max: 1000 }),
+          location: randStreetAddress(),
+          cancelled: randBoolean(),
+          state: randNumber({ min: 1, max: 1000 }),
+          season: sample(seasons),
+          sourceVentureId: randNumber({ min: 1, max: 1000 }),
+          createdAt: now,
+          updatedAt: now,
+        };
+        venture = await activityDb.client.venture.create({ data });
+        ids.ventures.push(venture.id);
+        logger.info(`venture ${venture.id}: ${venture.name}`);
+      } // end ventures loop
+
       for (let e = 0; e < count.events; e++) {
         data = {
           activityId: activity.id,
@@ -778,36 +811,38 @@ const seed = async () => {
           };
           ticket = await activityDb.client.ticket.create({ data });
           logger.info(`ticket ${ticket.id}: ${ticket.kind}`);
+
+          // invoice and line item
+          data = {
+            personId: sample(ids.people),
+            credit: ticket.basePrice,
+            createdAt: now,
+            updatedAt: now,
+          };
+          invoice = await personDb.client.invoice.create({ data });
+          logger.info(`invoice ${invoice.id}: ${invoice.credit}`);
+
+          data = {
+            registrationId: sample(ids.registrations),
+            ventureId: sample(ids.ventures),
+            activityName: activity.kind,
+            ventureName: randCatchPhrase(), // lookup too expensive
+            price: invoice.credit,
+            invoiceId: invoice.id,
+            refunded: randBoolean(),
+            paid: randBoolean(),
+            refundAmount: randNumber({ min: 1, max: invoice.credit ?? 1 }),
+            ticketKind: ticket.kind,
+            eventName: event.name,
+            ticketId: ticket.id,
+            state: randNumber({ min: 1, max: 1000 }),
+            createdAt: now,
+            updatedAt: now,
+          };
+          lineItem = await activityDb.client.lineItem.create({ data });
+          logger.info(`line item ${lineItem.id}: ${lineItem.price}`);
         } // end tickets loop
       } // end events loop
-
-      for (let v = 0; v < count.ventures; v++) {
-        data = {
-          activityId: activity.id,
-          name: randCatchPhrase(),
-          description: randSentence(),
-          type: randWord(),
-          gender: randGender(),
-          grade: randWord(),
-          basePrice: randNumber({ min: 1, max: 1000 }),
-          nonDistrictBasePrice: randNumber({ min: 1, max: 1000 }),
-          registrationStart: randFutureDate(),
-          registrationEnd: randFutureDate(),
-          director: randFullName(),
-          directorBio: randSentence(),
-          registerable: randBoolean(),
-          maxNumberOfParticipants: randNumber({ min: 1, max: 1000 }),
-          location: randStreetAddress(),
-          cancelled: randBoolean(),
-          state: randNumber({ min: 1, max: 1000 }),
-          season: sample(seasons),
-          sourceVentureId: randNumber({ min: 1, max: 1000 }),
-          createdAt: now,
-          updatedAt: now,
-        };
-        venture = await activityDb.client.venture.create({ data });
-        logger.info(`venture ${venture.id}: ${venture.name}`);
-      } // end ventures loop
 
       for (let f = 0; f < count.fees; f++) {
         data = {

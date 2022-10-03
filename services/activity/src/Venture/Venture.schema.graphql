@@ -23,6 +23,7 @@ type Venture @key(fields: "id") {
   updatedAt: String
 
   Activity: Activity
+  LineItems: [LineItem]
 }
 
 extend type Query {

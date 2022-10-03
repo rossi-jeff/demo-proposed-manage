@@ -102,4 +102,11 @@ export const Venture: Resolvers["Venture"] = {
       id: ref.activityId,
     };
   },
+  LineItems: async (parent) => {
+    return await db.client.lineItem.findMany({
+      where: {
+        ventureId: parent.id,
+      },
+    });
+  },
 };

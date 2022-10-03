@@ -15,4 +15,14 @@ type LineItem {
   state: Int
   createdAt: String
   updatedAt: String
+
+  Invoice: Invoice
+  Registration: Registration
+  Ticket: Ticket
+  Venture: Venture
+}
+
+extend type Query {
+  lineItems: [LineItem]
+  lineItem(id: ID!): LineItem
 }

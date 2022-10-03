@@ -128,6 +128,13 @@ export const Registration: Resolvers["Registration"] = {
       },
     });
   },
+  LineItems: async (parent) => {
+    return await db.client.lineItem.findMany({
+      where: {
+        registrationId: parent.id,
+      },
+    });
+  },
   Participant: async (ref) => {
     if (ref.participantId === null) return null;
     return {
