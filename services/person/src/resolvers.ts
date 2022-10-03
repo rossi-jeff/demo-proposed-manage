@@ -6,6 +6,11 @@ import {
   alergicCondition,
   alergicConditions,
 } from "./AlergicCondition/query-resolvers";
+import { CoachCertification } from "./CoachCertification/field-resolvers";
+import {
+  coachCertification,
+  coachCertifications,
+} from "./CoachCertification/query-resolvers";
 import { EmergencyContact } from "./EmergencyContact/field-resolvers";
 import {
   emergencyContact,
@@ -30,6 +35,8 @@ export const resolvers: Resolvers = {
     affiliation,
     alergicConditions,
     alergicCondition,
+    coachCertifications,
+    coachCertification,
     emergencyContacts,
     emergencyContact,
     invites,
@@ -41,6 +48,7 @@ export const resolvers: Resolvers = {
   },
   Affiliation,
   AlergicCondition,
+  CoachCertification,
   EmergencyContact,
   Invite,
   Invoice,

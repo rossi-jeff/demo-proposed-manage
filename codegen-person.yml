@@ -12,6 +12,7 @@ config:
   mappers:
     Affiliation: "../src/Affiliation/types#AffiliationType"
     AlergicCondition: "../src/AlergicCondition/types#AlergicConditionType"
+    CoachCertification: "../src/CoachCertification/types#CoachCertificationType"
     EmergencyContact: "../src/EmergencyContact/types#EmergencyContactType"
     Invite: "../src/Invite/types#InviteType"
     Invoice: "../src/Invoice/types#InvoiceType"
