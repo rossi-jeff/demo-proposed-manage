@@ -9,4 +9,6 @@ type InvoiceTransaction {
   details: String
   createdAt: String
   updatedAt: String
+
+  Invoice: Invoice
 }

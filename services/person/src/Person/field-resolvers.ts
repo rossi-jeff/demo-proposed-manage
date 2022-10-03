@@ -23,6 +23,13 @@ export const Person: Resolvers["Person"] = {
       },
     });
   },
+  Invoices: async (parent) => {
+    return await db.client.invoice.findMany({
+      where: {
+        personId: parent.id,
+      },
+    });
+  },
   MedicalConditions: async (parent) => {
     return await db.client.medicalCondition.findMany({
       where: {

@@ -184,19 +184,6 @@ model GroupRegistration {
     RecordAssignments     RecordAssignment[]
 }
 
-model InvoiceTransaction {
-    id              String    @id @default(cuid())
-    remoteId        String?
-    status          String?
-    invoiceId       String?   @unique
-    paymentType     String?
-    adminFlag       Boolean?  @default(true)
-    problemStatusAt DateTime?
-    details         String?   @db.Text
-    createdAt       DateTime
-    updatedAt       DateTime
-}
-
 model LineItem {
     id             String   @id @default(cuid())
     registrationId String?

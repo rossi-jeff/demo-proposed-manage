@@ -14,4 +14,6 @@ config:
     AlergicCondition: "../src/AlergicCondition/types#AlergicConditionType"
     EmergencyContact: "../src/EmergencyContact/types#EmergencyContactType"
     Invite: "../src/Invite/types#InviteType"
+    Invoice: "../src/Invoice/types#InvoiceType"
+    InvoiceTransaction: "../src/InvoiceTransaction/types#InvoiceTransactionType"
     MedicalCondition: "../src/MedicalCondition/types#MedicalConditionType"
