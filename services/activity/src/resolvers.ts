@@ -1,5 +1,11 @@
 import type { Resolvers } from "../generated/graphql";
 import { Activity } from "./Activity/field-resolvers";
+import { Award } from "./Award/field-resolvers";
+import { AwardAssignment } from "./AwardAssignment/field-resolvers";
+import {
+  awardAssignment,
+  awardAssignments,
+} from "./AwardAssignment/query-resolvers";
 import { Consent } from "./Consent/field-resolvers";
 import { consent, consents } from "./Consent/query-resolvers";
 import { Event } from "./Event/field-resolvers";
@@ -26,6 +32,8 @@ import { venture, ventures } from "./Venture/query-resolvers";
 
 export const resolvers: Resolvers = {
   Query: {
+    awardAssignments,
+    awardAssignment,
     consents,
     consent,
     events,
@@ -46,6 +54,8 @@ export const resolvers: Resolvers = {
     venture,
   },
   Activity,
+  Award,
+  AwardAssignment,
   Consent,
   Event,
   Group,

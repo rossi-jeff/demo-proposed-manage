@@ -1,4 +1,5 @@
 import { Resolvers } from "../../generated/graphql";
+import { db } from "../db";
 import { AwardType } from "./types";
 
 export const getActive = (parent: AwardType) => {
@@ -21,6 +22,13 @@ export const getUpdatedAt = (parent: AwardType) => {
 };
 
 export const Award: Resolvers["Award"] = {
+  __resolveReference: async (ref) => {
+    return await db.client.award.findFirst({
+      where: {
+        id: ref.id,
+      },
+    });
+  },
   schoolId: getSchoolId,
   name: getName,
   position: getPosition,

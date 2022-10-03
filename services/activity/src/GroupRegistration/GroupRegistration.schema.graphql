@@ -13,6 +13,7 @@ type GroupRegistration {
   Group: Group
   Registration: Registration
   Roster: Roster
+  AwardAssignments: [AwardAssignment]
 }
 
 extend type Query {

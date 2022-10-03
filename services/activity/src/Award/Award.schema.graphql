@@ -1,0 +1,5 @@
+type Award @key(fields: "id") {
+  id: ID!
+
+  AwardAssignments: [AwardAssignment]
+}
