@@ -9,6 +9,8 @@ import {
 } from "../services/admin/generated/admin-db";
 import {
   AwardAssignment,
+  CampShortOrder,
+  CampTshirtOrder,
   Consent,
   Event,
   Group,
@@ -105,6 +107,7 @@ const count = {
   alergies: 2,
   awards: 3,
   awardAssignments: 2,
+  campTShirts: 2,
   coachCertifications: 3,
   colors: 3,
   customDiscounts: 2,
@@ -152,6 +155,8 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.campShortOrder.deleteMany({});
+  await activityDb.client.campTshirtOrder.deleteMany({});
   await activityDb.client.awardAssignment.deleteMany({});
   await activityDb.client.lineItem.deleteMany({});
   await activityDb.client.consent.deleteMany({});
@@ -212,6 +217,8 @@ const seed = async () => {
   let alergy: AlergicCondition;
   let award: Award;
   let awardAssignment: AwardAssignment;
+  let campShorts: CampShortOrder;
+  let campTShirt: CampTshirtOrder;
   let coachCertification: CoachCertification;
   let color: Color;
   let consent: Consent;
@@ -847,6 +854,85 @@ const seed = async () => {
         venture = await activityDb.client.venture.create({ data });
         ids.ventures.push(venture.id);
         logger.info(`venture ${venture.id}: ${venture.name}`);
+
+        for (let ct = 0; ct < count.campTShirts; ct++) {
+          // coach
+          data = {
+            userName: randEmail(),
+            passWord: randPassword(),
+            schoolId: school.id,
+            firstName: randFirstName(),
+            lastName: randLastName(),
+            createdAt: now,
+            updatedAt: now,
+          };
+          const coach = await schoolDb.client.person.create({ data });
+
+          data = {
+            type: sample(phoneTypes) ?? PhoneTypeEnum.OFFICE,
+            number: randPhoneNumber(),
+            createdAt: now,
+            updatedAt: now,
+          };
+          phone = await schoolDb.client.phone.create({ data });
+          logger.info(`phone ${phone.id}: ${phone.number}`);
+
+          data = {
+            personId: coach.id,
+            phoneId: phone.id,
+            createdAt: now,
+            updatedAt: now,
+          };
+          personPhone = await schoolDb.client.personPhone.create({ data });
+          logger.info(`coach phone ${personPhone.id}`);
+          // tee
+          data = {
+            ventureId: venture.id,
+            coachId: coach.id,
+            schoolId: school.id,
+            season: sample(seasons),
+            organizationName: school.name,
+            ventureName: venture.name,
+            organizationColor1: randColor(),
+            organizationColor2: randColor(),
+            coachName: `${coach.firstName} ${coach.lastName}`,
+            coachEmail: coach.userName,
+            coachPhoneNumber: phone.number,
+            deliveryDate: randFutureDate(),
+            campDataSubmitted: randBoolean(),
+            orderDate: now,
+            template: randSentence(),
+            topLineText: randCatchPhrase(),
+            middleLineText: randCatchPhrase(),
+            bottomLineText: randCatchPhrase(),
+            tShirtColor: randColor(),
+            orderOptions: randNumber({ min: 1, max: 1000 }),
+            shirtSizes: sample(sizes),
+            participants: randCatchPhrase(),
+            tShirtQuantity: randNumber({ min: 1, max: 1000 }),
+            overfillPercentage: randNumber({ min: 1, max: 1000 }),
+            mascotFile: randFilePath(),
+            createdAt: now,
+            updatedAt: now,
+          };
+          campTShirt = await activityDb.client.campTshirtOrder.create({ data });
+          // shorts
+          data = {
+            campTShirtOrderId: campTShirt.id,
+            designLayout: randCatchPhrase(),
+            designChoice: randCatchPhrase(),
+            topLineText: randCatchPhrase(),
+            bottomLineText: randCatchPhrase(),
+            shortSizes: sample(sizes),
+            participants: randCatchPhrase(),
+            createdAt: now,
+            updatedAt: now,
+          };
+          campShorts = await activityDb.client.campShortOrder.create({ data });
+          logger.info(
+            `coach ${coach.id}  tshirt ${campTShirt.id}  shorts ${campShorts.id}`
+          );
+        } // end camp t shirts loop
       } // end ventures loop
 
       for (let e = 0; e < count.events; e++) {

@@ -1,3 +1,5 @@
 type School @key(fields: "id") {
   id: ID!
+
+  CampTshirtOrders: [CampTshirtOrder]
 }

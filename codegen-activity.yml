@@ -11,6 +11,8 @@ generates:
 config:
   mappers:
     AwardAssignment: "../src/AwardAssignment/types#AwardAssignmentType"
+    CampShortOrder: "../src/CampShortOrder/types#CampShortOrderType"
+    CampTshirtOrder: "../src/CampTshirtOrder/types#CampTshirtOrderType"
     Consent: "../src/Consent/types#ConsentType"
     Event: "../src/Event/types#EventType"
     Group: "../src/Group/types#GroupType"

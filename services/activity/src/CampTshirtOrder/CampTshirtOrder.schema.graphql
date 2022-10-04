@@ -27,4 +27,14 @@ type CampTshirtOrder {
   mascotFile: String
   createdAt: String
   updatedAt: String
+
+  CampShortOrders: [CampShortOrder]
+  Coach: Person
+  School: School
+  Venture: Venture
+}
+
+extend type Query {
+  campTshirtOrders: [CampTshirtOrder]
+  campTshirtOrder(id: ID!): CampTshirtOrder
 }
