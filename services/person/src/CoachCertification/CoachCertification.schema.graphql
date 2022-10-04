@@ -6,4 +6,11 @@ type CoachCertification {
   code: String
   createdAt: String
   updatedAt: String
+
+  Person: Person
+}
+
+extend type Query {
+  coachCertifications: [CoachCertification]
+  coachCertification(id: ID!): CoachCertification
 }

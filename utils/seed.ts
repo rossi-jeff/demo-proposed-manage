@@ -42,6 +42,7 @@ import {
 import {
   Affiliation,
   AlergicCondition,
+  CoachCertification,
   EmergencyContact,
   Invite,
   Invoice,
@@ -101,6 +102,7 @@ const count = {
   affiliations: 3,
   alergies: 2,
   awards: 3,
+  coachCertifications: 3,
   colors: 3,
   consents: 2,
   docs: 3,
@@ -176,6 +178,7 @@ const clear = async () => {
   await schoolDb.client.activity.deleteMany({});
   await schoolDb.client.person.deleteMany({});
   // person db
+  await personDb.client.coachCertification.deleteMany({});
   await personDb.client.invoice.deleteMany;
   await personDb.client.invoiceTransaction.deleteMany;
   await personDb.client.affiliation.deleteMany({});
@@ -202,6 +205,7 @@ const seed = async () => {
   let affiliation: Affiliation;
   let alergy: AlergicCondition;
   let award: Award;
+  let coachCertification: CoachCertification;
   let color: Color;
   let consent: Consent;
   let doc: SupportDocument;
@@ -603,6 +607,23 @@ const seed = async () => {
         });
       }
     } // end people loop
+
+    for (let c = 0; c < count.coachCertifications; c++) {
+      data = {
+        personId: sample(ids.people) ?? "",
+        value: randWord(),
+        state: randState(),
+        code: randAbbreviation(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      coachCertification = await personDb.client.coachCertification.create({
+        data,
+      });
+      logger.info(
+        `coach certification ${coachCertification.id}: ${coachCertification.code}`
+      );
+    } // end coach certifications loop
 
     for (let a = 0; a < count.affiliations; a++) {
       data = {
