@@ -10,6 +10,7 @@ generates:
       - "typescript-resolvers"
 config:
   mappers:
+    AwardAssignment: "../src/AwardAssignment/types#AwardAssignmentType"
     Consent: "../src/Consent/types#ConsentType"
     Event: "../src/Event/types#EventType"
     Group: "../src/Group/types#GroupType"

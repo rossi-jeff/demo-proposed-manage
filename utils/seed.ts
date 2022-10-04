@@ -8,6 +8,7 @@ import {
   SupportDocument,
 } from "../services/admin/generated/admin-db";
 import {
+  AwardAssignment,
   Consent,
   Event,
   Group,
@@ -103,6 +104,7 @@ const count = {
   affiliations: 3,
   alergies: 2,
   awards: 3,
+  awardAssignments: 2,
   coachCertifications: 3,
   colors: 3,
   customDiscounts: 2,
@@ -150,6 +152,7 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.awardAssignment.deleteMany({});
   await activityDb.client.lineItem.deleteMany({});
   await activityDb.client.consent.deleteMany({});
   await activityDb.client.ticket.deleteMany({});
@@ -208,6 +211,7 @@ const seed = async () => {
   let affiliation: Affiliation;
   let alergy: AlergicCondition;
   let award: Award;
+  let awardAssignment: AwardAssignment;
   let coachCertification: CoachCertification;
   let color: Color;
   let consent: Consent;
@@ -293,6 +297,21 @@ const seed = async () => {
     };
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
+
+    ids.awards = [];
+    for (let a = 0; a < count.awards; a++) {
+      data = {
+        schoolId: school.id,
+        name: randCatchPhrase(),
+        position: randNumber({ min: 1, max: 1000 }),
+        active: randBoolean(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      award = await schoolDb.client.award.create({ data });
+      ids.awards.push(award.id);
+      logger.info(`award ${award.id}: ${award.name}`);
+    } // end awards loop
 
     for (let m = 0; m < count.medicalForms; m++) {
       data = {
@@ -782,6 +801,20 @@ const seed = async () => {
             groupRegistration =
               await activityDb.client.groupRegistration.create({ data });
             logger.info(`group registration ${groupRegistration.id}`);
+
+            for (let aa = 0; aa < count.awardAssignments; aa++) {
+              data = {
+                recipientId: groupRegistration.id,
+                awardId: sample(ids.awards) ?? "",
+                state: randNumber({ min: 1, max: 1000 }),
+                createdAt: now,
+                updatedAt: now,
+              };
+              awardAssignment = await activityDb.client.awardAssignment.create({
+                data,
+              });
+              logger.info(`award assignment ${awardAssignment.id}`);
+            } // end award assignments loop
           } // end group registrations loop
         } // end rosters loop
       } // end group loop
@@ -908,19 +941,6 @@ const seed = async () => {
         logger.info(`activity fee ${activityFee.id}`);
       } // end fees loop
     } // end activites loop
-
-    for (let a = 0; a < count.awards; a++) {
-      data = {
-        schoolId: school.id,
-        name: randCatchPhrase(),
-        position: randNumber({ min: 1, max: 1000 }),
-        active: randBoolean(),
-        createdAt: now,
-        updatedAt: now,
-      };
-      award = await schoolDb.client.award.create({ data });
-      logger.info(`award ${award.id}: ${award.name}`);
-    } // end awards loop
   } // end school loop
 };
 
