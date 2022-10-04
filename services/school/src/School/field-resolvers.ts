@@ -34,6 +34,13 @@ export const School: Resolvers["School"] = {
       },
     });
   },
+  CustomDiscounts: async (parent) => {
+    return await db.client.customDiscount.findMany({
+      where: {
+        schoolId: parent.id,
+      },
+    });
+  },
   Emails: async (parent) => {
     const schoolEmails = await db.client.schoolEmail.findMany({
       where: {

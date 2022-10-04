@@ -25,6 +25,7 @@ import {
   Address,
   Award,
   Color,
+  CustomDiscount,
   Email,
   Fee,
   LegalForm,
@@ -43,6 +44,7 @@ import {
 import {
   Affiliation,
   AlergicCondition,
+  CoachCertification,
   EmergencyContact,
   Invite,
   Invoice,
@@ -103,7 +105,9 @@ const count = {
   alergies: 2,
   awards: 3,
   awardAssignments: 2,
+  coachCertifications: 3,
   colors: 3,
+  customDiscounts: 2,
   consents: 2,
   docs: 3,
   emails: 2,
@@ -159,6 +163,7 @@ const clear = async () => {
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
+  await schoolDb.client.customDiscount.deleteMany({});
   await schoolDb.client.medicalForm.deleteMany({});
   await schoolDb.client.award.deleteMany({});
   await schoolDb.client.paymentCode.deleteMany({});
@@ -179,6 +184,7 @@ const clear = async () => {
   await schoolDb.client.activity.deleteMany({});
   await schoolDb.client.person.deleteMany({});
   // person db
+  await personDb.client.coachCertification.deleteMany({});
   await personDb.client.invoice.deleteMany;
   await personDb.client.invoiceTransaction.deleteMany;
   await personDb.client.affiliation.deleteMany({});
@@ -206,8 +212,10 @@ const seed = async () => {
   let alergy: AlergicCondition;
   let award: Award;
   let awardAssignment: AwardAssignment;
+  let coachCertification: CoachCertification;
   let color: Color;
   let consent: Consent;
+  let customDiscount: CustomDiscount;
   let doc: SupportDocument;
   let email: Email;
   let emergencyContact: EmergencyContact;
@@ -623,6 +631,23 @@ const seed = async () => {
       }
     } // end people loop
 
+    for (let c = 0; c < count.coachCertifications; c++) {
+      data = {
+        personId: sample(ids.people) ?? "",
+        value: randWord(),
+        state: randState(),
+        code: randAbbreviation(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      coachCertification = await personDb.client.coachCertification.create({
+        data,
+      });
+      logger.info(
+        `coach certification ${coachCertification.id}: ${coachCertification.code}`
+      );
+    } // end coach certifications loop
+
     for (let a = 0; a < count.affiliations; a++) {
       data = {
         schoolId: school.id,
@@ -670,6 +695,24 @@ const seed = async () => {
       activity = await schoolDb.client.activity.create({ data });
       ids.activities.push(activity.id);
       logger.info(`activity ${activity.id}: ${activity.kind}`);
+
+      for (let c = 0; c < count.customDiscounts; c++) {
+        data = {
+          activityId: activity.id,
+          schoolId: school.id,
+          kind: randCatchPhrase(),
+          condition: randNumber({ min: 1, max: 1000 }),
+          active: randBoolean(),
+          discountedFee: randNumber({ min: 1, max: 1000 }),
+          secondaryCondition: randSentence(),
+          createdAt: now,
+          updatedAt: now,
+        };
+        customDiscount = await schoolDb.client.customDiscount.create({ data });
+        logger.info(
+          `custom discount ${customDiscount.id}: ${customDiscount.discountedFee}`
+        );
+      } // end custom discounts loop
 
       for (let g = 0; g < count.groups; g++) {
         data = {
