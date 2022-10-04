@@ -7,6 +7,11 @@ import { Award } from "./Award/field-resolvers";
 import { award, awards } from "./Award/query-resolvers";
 import { Color } from "./Color/field-resolvers";
 import { color, colors } from "./Color/query-resolvers";
+import { CustomDiscount } from "./CustomDiscount/field-resolvers";
+import {
+  customDiscount,
+  customDiscounts,
+} from "./CustomDiscount/query-resolvers";
 import { Email } from "./Email/field-resolvers";
 import { email, emails } from "./Email/query-resolvers";
 import { Fee } from "./Fee/field-resolvers";
@@ -33,6 +38,8 @@ export const resolvers: Resolvers = {
     award,
     colors,
     color,
+    customDiscounts,
+    customDiscount,
     emails,
     email,
     fees,
@@ -52,6 +59,7 @@ export const resolvers: Resolvers = {
   Address,
   Award,
   Color,
+  CustomDiscount,
   Email,
   Fee,
   LegalForm,

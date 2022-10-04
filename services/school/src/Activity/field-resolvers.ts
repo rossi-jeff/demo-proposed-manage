@@ -74,6 +74,13 @@ export const Activity: Resolvers["Activity"] = {
       id: ref.schoolId,
     };
   },
+  CustomDiscounts: async (parent) => {
+    return await db.client.customDiscount.findMany({
+      where: {
+        activityId: parent.id,
+      },
+    });
+  },
   Fees: async (parent) => {
     const activityFees = await db.client.activityFee.findMany({
       where: {

@@ -9,4 +9,12 @@ type CustomDiscount {
   secondaryCondition: String
   createdAt: String
   updatedAt: String
+
+  Activity: Activity
+  School: School
+}
+
+extend type Query {
+  customDiscounts: [CustomDiscount]
+  customDiscount(id: ID!): CustomDiscount
 }
