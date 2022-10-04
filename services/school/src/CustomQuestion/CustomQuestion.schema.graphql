@@ -13,4 +13,11 @@ type CustomQuestion @key(fields: "id") {
   activityType: String
   createdAt: String
   updatedAt: String
+
+  School: School
+}
+
+extend type Query {
+  customQuestions: [CustomQuestion]
+  customQuestion(id: ID!): CustomQuestion
 }

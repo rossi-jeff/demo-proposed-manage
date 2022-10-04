@@ -15,6 +15,7 @@ config:
     Award: "../scr/Award/types#AwardType"
     Color: "../src/Color/types#ColorType"
     CustomDiscount: "../src/CustomDiscount/types#CustomDiscountType"
+    CustomQuestion: "../src/CustomQuestion/types#CustomQuestionType"
     Email: "../src/Email/types#EmailType"
     Fee: "../src/Fee/types#FeeType"
     LegalForm: "../src/LegalForm/types#LegalFormType"

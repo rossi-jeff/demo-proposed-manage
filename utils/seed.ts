@@ -26,6 +26,7 @@ import {
   Award,
   Color,
   CustomDiscount,
+  CustomQuestion,
   Email,
   Fee,
   LegalForm,
@@ -107,8 +108,9 @@ const count = {
   awardAssignments: 2,
   coachCertifications: 3,
   colors: 3,
-  customDiscounts: 2,
   consents: 2,
+  customDiscounts: 2,
+  customQuestions: 3,
   docs: 3,
   emails: 2,
   emergencyContacts: 2,
@@ -163,6 +165,7 @@ const clear = async () => {
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
+  await schoolDb.client.customQuestion.deleteMany({});
   await schoolDb.client.customDiscount.deleteMany({});
   await schoolDb.client.medicalForm.deleteMany({});
   await schoolDb.client.award.deleteMany({});
@@ -216,6 +219,7 @@ const seed = async () => {
   let color: Color;
   let consent: Consent;
   let customDiscount: CustomDiscount;
+  let customQuestion: CustomQuestion;
   let doc: SupportDocument;
   let email: Email;
   let emergencyContact: EmergencyContact;
@@ -297,6 +301,26 @@ const seed = async () => {
     };
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
+
+    for (let c = 0; c < count.customQuestions; c++) {
+      data = {
+        schoolId: school.id,
+        state: randState(),
+        question: randCatchPhrase(),
+        questionType: randCatchPhrase(),
+        questionOptions: randCatchPhrase(),
+        active: randBoolean(),
+        required: randBoolean(),
+        dependentOn: randNumber({ min: 1, max: 1000 }),
+        dependentAnswer: randCatchPhrase(),
+        sortOrder: randNumber({ min: 1, max: 1000 }),
+        activityType: randSports(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      customQuestion = await schoolDb.client.customQuestion.create({ data });
+      logger.info(`custom question ${customQuestion.id}`);
+    } // end custom questions loop
 
     ids.awards = [];
     for (let a = 0; a < count.awards; a++) {
