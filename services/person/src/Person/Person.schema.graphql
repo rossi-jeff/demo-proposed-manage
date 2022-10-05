@@ -4,6 +4,7 @@ type Person @key(fields: "id") {
   Affiliations: [Affiliation]
   AlergicConditions: [AlergicCondition]
   CoachCertifications: [CoachCertification]
+  DirectingRoles: [DirectingRole]
   EmergencyContacts: [EmergencyContact]
   Invoices: [Invoice]
   MedicalConditions: [MedicalCondition]

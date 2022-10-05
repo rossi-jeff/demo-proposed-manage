@@ -13,6 +13,7 @@ config:
     Affiliation: "../src/Affiliation/types#AffiliationType"
     AlergicCondition: "../src/AlergicCondition/types#AlergicConditionType"
     CoachCertification: "../src/CoachCertification/types#CoachCertificationType"
+    DirectingRole: "../src/DirectingRole/types#DirectingRoleType"
     EmergencyContact: "../src/EmergencyContact/types#EmergencyContactType"
     Invite: "../src/Invite/types#InviteType"
     Invoice: "../src/Invoice/types#InvoiceType"

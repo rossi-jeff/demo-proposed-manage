@@ -47,6 +47,7 @@ import {
   Affiliation,
   AlergicCondition,
   CoachCertification,
+  DirectingRole,
   EmergencyContact,
   Invite,
   Invoice,
@@ -189,6 +190,7 @@ const clear = async () => {
   await schoolDb.client.activity.deleteMany({});
   await schoolDb.client.person.deleteMany({});
   // person db
+  await personDb.client.directingRole.deleteMany({});
   await personDb.client.coachCertification.deleteMany({});
   await personDb.client.invoice.deleteMany;
   await personDb.client.invoiceTransaction.deleteMany;
@@ -223,6 +225,7 @@ const seed = async () => {
   let color: Color;
   let consent: Consent;
   let customDiscount: CustomDiscount;
+  let directingRole: DirectingRole;
   let doc: SupportDocument;
   let email: Email;
   let emergencyContact: EmergencyContact;
@@ -957,6 +960,15 @@ const seed = async () => {
         };
         event = await activityDb.client.event.create({ data });
         logger.info(`event ${event.id}: ${event.name}`);
+
+        data = {
+          personId: sample(ids.people) ?? "",
+          eventId: event.id,
+          createdAt: now,
+          updatedAt: now,
+        };
+        directingRole = await personDb.client.directingRole.create({ data });
+        logger.info(`directing role ${directingRole.id}`);
 
         for (let t = 0; t < count.tickets; t++) {
           data = {

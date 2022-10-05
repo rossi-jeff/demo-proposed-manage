@@ -11,11 +11,14 @@ import {
   coachCertification,
   coachCertifications,
 } from "./CoachCertification/query-resolvers";
+import { DirectingRole } from "./DirectingRole/field-resolvers";
+import { directingRole, directingRoles } from "./DirectingRole/query-resolvers";
 import { EmergencyContact } from "./EmergencyContact/field-resolvers";
 import {
   emergencyContact,
   emergencyContacts,
 } from "./EmergencyContact/query-resolvers";
+import { Event } from "./Event/field-resolvers";
 import { Invite } from "./Invite/field-resolvers";
 import { invite, invites } from "./Invite/query-resolvers";
 import { Invoice } from "./Invoice/field-resolvers";
@@ -37,6 +40,8 @@ export const resolvers: Resolvers = {
     alergicCondition,
     coachCertifications,
     coachCertification,
+    directingRoles,
+    directingRole,
     emergencyContacts,
     emergencyContact,
     invites,
@@ -49,7 +54,9 @@ export const resolvers: Resolvers = {
   Affiliation,
   AlergicCondition,
   CoachCertification,
+  DirectingRole,
   EmergencyContact,
+  Event,
   Invite,
   Invoice,
   InvoiceTransaction,
