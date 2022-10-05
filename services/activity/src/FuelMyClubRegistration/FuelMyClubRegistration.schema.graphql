@@ -4,4 +4,11 @@ type FuelMyClubRegistration {
   data: String
   createdAt: String
   updatedAt: String
+
+  Registration: Registration
+}
+
+extend type Query {
+  fuelMyClubRegistrations: [FuelMyClubRegistration]
+  fuelMyClubRegistration(id: ID!): FuelMyClubRegistration
 }

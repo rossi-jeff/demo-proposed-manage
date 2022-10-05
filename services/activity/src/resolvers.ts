@@ -16,6 +16,21 @@ import { Consent } from "./Consent/field-resolvers";
 import { consent, consents } from "./Consent/query-resolvers";
 import { Event } from "./Event/field-resolvers";
 import { events, event } from "./Event/query-resolvers";
+import { FuelMyClubActivity } from "./FuelMyClubActivity/field-resolvers";
+import {
+  fuelMyClubActivities,
+  fuelMyClubActivity,
+} from "./FuelMyClubActivity/query-resolvers";
+import { FuelMyClubFundraiser } from "./FuelMyClubFundraiser/field-resolvers";
+import {
+  fuelMyClubFundraiser,
+  fuelMyClubFundraisers,
+} from "./FuelMyClubFundraiser/query-resolvers";
+import { FuelMyClubRegistration } from "./FuelMyClubRegistration/field-resolvers";
+import {
+  fuelMyClubRegistration,
+  fuelMyClubRegistrations,
+} from "./FuelMyClubRegistration/query-resolvers";
 import { Group } from "./Group/field-resolvers";
 import { group, groups } from "./Group/query-resolvers";
 import { GroupAward } from "./GroupAward/field-resolvers";
@@ -54,6 +69,12 @@ export const resolvers: Resolvers = {
     consent,
     events,
     event,
+    fuelMyClubActivities,
+    fuelMyClubActivity,
+    fuelMyClubFundraisers,
+    fuelMyClubFundraiser,
+    fuelMyClubRegistrations,
+    fuelMyClubRegistration,
     groups,
     group,
     groupAwards,
@@ -80,6 +101,9 @@ export const resolvers: Resolvers = {
   CampTshirtOrder,
   Consent,
   Event,
+  FuelMyClubActivity,
+  FuelMyClubFundraiser,
+  FuelMyClubRegistration,
   Group,
   GroupAward,
   GroupAwardAssignment,

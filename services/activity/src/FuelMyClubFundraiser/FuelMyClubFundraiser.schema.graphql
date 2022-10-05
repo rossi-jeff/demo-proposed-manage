@@ -8,4 +8,12 @@ type FuelMyClubFundraiser {
   leadInMessage: String
   createdAt: String
   updatedAt: String
+
+  ContactPerson: Person
+  FuelMyClubActivity: FuelMyClubActivity
+}
+
+extend type Query {
+  fuelMyClubFundraisers: [FuelMyClubFundraiser]
+  fuelMyClubFundraiser(id: ID!): FuelMyClubFundraiser
 }

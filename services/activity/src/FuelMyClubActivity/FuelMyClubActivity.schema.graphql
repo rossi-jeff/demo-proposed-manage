@@ -4,4 +4,12 @@ type FuelMyClubActivity {
   externalFmcOrganizationId: String
   createdAt: String
   updatedAt: String
+
+  Activity: Activity
+  FuelMyClubFundraisers: [FuelMyClubFundraiser]
+}
+
+extend type Query {
+  fuelMyClubActivities: [FuelMyClubActivity]
+  fuelMyClubActivity(id: ID!): FuelMyClubActivity
 }
