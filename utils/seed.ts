@@ -36,6 +36,7 @@ import {
   CustomQuestion,
   Email,
   Fee,
+  FuelMyClubOrganization,
   LegalForm,
   MedicalForm,
   PaymentCode,
@@ -183,6 +184,7 @@ const clear = async () => {
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
+  await schoolDb.client.fuelMyClubOrganization.deleteMany({});
   await schoolDb.client.customQuestion.deleteMany({});
   await schoolDb.client.customDiscount.deleteMany({});
   await schoolDb.client.medicalForm.deleteMany({});
@@ -249,6 +251,7 @@ const seed = async () => {
   let fee: Fee;
   let fuelActivity: FuelMyClubActivity;
   let fuelFundraiser: FuelMyClubFundraiser;
+  let fuelOrganization: FuelMyClubOrganization;
   let fuelRegistration: FuelMyClubRegistration;
   let group: Group;
   let groupAward: GroupAward;
@@ -328,6 +331,21 @@ const seed = async () => {
     };
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
+
+    data = {
+      schoolId: school.id,
+      data: randSentence(),
+      fmcOrganization: randCompanyName(),
+      fmcFundraiser: randCatchPhrase(),
+      fmcParticipant: randFullName(),
+      salesLink: randUuid(),
+      createdAt: now,
+      updatedAt: now,
+    };
+    fuelOrganization = await schoolDb.client.fuelMyClubOrganization.create({
+      data,
+    });
+    logger.info(`fuel organization ${fuelOrganization.id}`);
 
     for (let c = 0; c < count.customQuestions; c++) {
       data = {

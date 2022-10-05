@@ -9,6 +9,7 @@ type School @key(fields: "id") {
   CustomQuestions: [CustomQuestion]
   Emails: [Email]
   Fees: [Fee]
+  FuelMyClubOrganization: FuelMyClubOrganization
   LegalForms: [LegalForm]
   MedicalForms: [MedicalForm]
   PaymentCodes: [PaymentCode]

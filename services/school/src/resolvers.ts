@@ -21,6 +21,11 @@ import { Email } from "./Email/field-resolvers";
 import { email, emails } from "./Email/query-resolvers";
 import { Fee } from "./Fee/field-resolvers";
 import { fees, fee } from "./Fee/query-resolvers";
+import { FuelMyClubOrganization } from "./FuelMyClubOrganization/field-resolvers";
+import {
+  fuelMyClubOrganization,
+  fuelMyClubOrganizations,
+} from "./FuelMyClubOrganization/query-resolvers";
 import { LegalForm } from "./LegalForm/field-resolvers";
 import { legalForm, legalForms } from "./LegalForm/query-resolvers";
 import { MedicalForm } from "./MedicalForm/field-resolvers";
@@ -51,6 +56,8 @@ export const resolvers: Resolvers = {
     email,
     fees,
     fee,
+    fuelMyClubOrganizations,
+    fuelMyClubOrganization,
     legalForms,
     legalForm,
     medicalForms,
@@ -70,6 +77,7 @@ export const resolvers: Resolvers = {
   CustomQuestion,
   Email,
   Fee,
+  FuelMyClubOrganization,
   LegalForm,
   MedicalForm,
   PaymentCode,

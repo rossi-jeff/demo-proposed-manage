@@ -52,6 +52,13 @@ export const School: Resolvers["School"] = {
     });
     return schoolEmails.map((s) => s.Email);
   },
+  FuelMyClubOrganization: async (parent) => {
+    return await db.client.fuelMyClubOrganization.findFirst({
+      where: {
+        schoolId: parent.id,
+      },
+    });
+  },
   LegalForms: async (parent) => {
     return await db.client.legalForm.findMany({
       where: {

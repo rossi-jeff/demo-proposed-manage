@@ -18,6 +18,7 @@ config:
     CustomQuestion: "../src/CustomQuestion/types#CustomQuestionType"
     Email: "../src/Email/types#EmailType"
     Fee: "../src/Fee/types#FeeType"
+    FuelMyClubOrganization: "../src/FuelMyClubOrganization/types#FuelMyClubOrganizationType"
     LegalForm: "../src/LegalForm/types#LegalFormType"
     MedicalForm: "../src/MedicalForm/types#MedicalFormType"
     PaymentCode: "../src/PaymentCode/types#PaymentCodeType"
