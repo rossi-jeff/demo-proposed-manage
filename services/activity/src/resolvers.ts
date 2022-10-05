@@ -18,6 +18,13 @@ import { Event } from "./Event/field-resolvers";
 import { events, event } from "./Event/query-resolvers";
 import { Group } from "./Group/field-resolvers";
 import { group, groups } from "./Group/query-resolvers";
+import { GroupAward } from "./GroupAward/field-resolvers";
+import { groupAward, groupAwards } from "./GroupAward/query-resolvers";
+import { GroupAwardAssignment } from "./GroupAwardAssignment/field-resolvers";
+import {
+  groupAwardAssignment,
+  groupAwardAssignments,
+} from "./GroupAwardAssignment/query-resolvers";
 import { GroupRegistration } from "./GroupRegistration/field-resolvers";
 import {
   groupRegistration,
@@ -49,6 +56,10 @@ export const resolvers: Resolvers = {
     event,
     groups,
     group,
+    groupAwards,
+    groupAward,
+    groupAwardAssignments,
+    groupAwardAssignment,
     groupRegistrations,
     groupRegistration,
     lineItems,
@@ -70,6 +81,8 @@ export const resolvers: Resolvers = {
   Consent,
   Event,
   Group,
+  GroupAward,
+  GroupAwardAssignment,
   GroupRegistration,
   Invoice,
   LegalForm,
