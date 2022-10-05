@@ -14,6 +14,8 @@ import {
   Consent,
   Event,
   Group,
+  GroupAward,
+  GroupAwardAssignment,
   GroupRegistration,
   LineItem,
   Registration,
@@ -118,6 +120,7 @@ const count = {
   events: 2,
   fees: 3,
   groups: 3,
+  groupAwards: 3,
   groupRegistrations: 2,
   invites: 2,
   invoices: 2,
@@ -155,6 +158,8 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.groupAwardAssignment.deleteMany({});
+  await activityDb.client.groupAward.deleteMany({});
   await activityDb.client.campShortOrder.deleteMany({});
   await activityDb.client.campTshirtOrder.deleteMany({});
   await activityDb.client.awardAssignment.deleteMany({});
@@ -229,6 +234,8 @@ const seed = async () => {
   let event: Event;
   let fee: Fee;
   let group: Group;
+  let groupAward: GroupAward;
+  let groupAwardAssignment: GroupAwardAssignment;
   let groupRegistration: GroupRegistration;
   let invite: Invite;
   let invoice: Invoice;
@@ -737,6 +744,20 @@ const seed = async () => {
         group = await activityDb.client.group.create({ data });
         logger.info(`group ${group.id}: ${group.name}`);
 
+        ids.groupAwards = [];
+        for (let ga = 0; ga < count.groupAwards; ga++) {
+          data = {
+            groupId: group.id,
+            name: randCatchPhrase(),
+            state: randNumber({ min: 1, max: 1000 }),
+            createdAt: now,
+            updatedAt: now,
+          };
+          groupAward = await activityDb.client.groupAward.create({ data });
+          ids.groupAwards.push(groupAward.id);
+          logger.info(`group award ${groupAward.id}: ${groupAward.name}`);
+        } // end group awards loop
+
         ids.registrations = [];
         for (let r = 0; r < count.registrations; r++) {
           data = {
@@ -808,6 +829,17 @@ const seed = async () => {
             groupRegistration =
               await activityDb.client.groupRegistration.create({ data });
             logger.info(`group registration ${groupRegistration.id}`);
+
+            data = {
+              recipientId: groupRegistration.id,
+              awardId: sample(ids.groupAwards) ?? "",
+              state: randNumber({ min: 1, max: 1000 }),
+              createdAt: now,
+              updatedAt: now,
+            };
+            groupAwardAssignment =
+              await activityDb.client.groupAwardAssignment.create({ data });
+            logger.info(`group award assignment ${groupAwardAssignment.id}`);
 
             for (let aa = 0; aa < count.awardAssignments; aa++) {
               data = {

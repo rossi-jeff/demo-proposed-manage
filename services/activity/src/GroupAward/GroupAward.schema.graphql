@@ -5,4 +5,12 @@ type GroupAward @key(fields: "id") {
   state: Int
   createdAt: String
   updatedAt: String
+
+  Group: Group
+  GroupAwardAssignments: [GroupAwardAssignment]
+}
+
+extend type Query {
+  groupAwards: [GroupAward]
+  groupAward(id: ID!): GroupAward
 }

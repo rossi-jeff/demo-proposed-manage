@@ -5,4 +5,12 @@ type GroupAwardAssignment {
   state: Int
   createdAt: String
   updatedAt: String
+
+  GroupAward: GroupAward
+  GroupRegistration: GroupRegistration
+}
+
+extend type Query {
+  groupAwardAssignments: [GroupAwardAssignment]
+  groupAwardAssignment(id: ID!): GroupAwardAssignment
 }

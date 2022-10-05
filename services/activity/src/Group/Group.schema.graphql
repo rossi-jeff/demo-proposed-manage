@@ -12,6 +12,7 @@ type Group @key(fields: "id") {
   updatedAt: String
 
   Activity: Activity
+  GroupAwards: [GroupAward]
   GroupRegistrations: [GroupRegistration]
   Registrations: [Registration]
   Rosters: [Roster]

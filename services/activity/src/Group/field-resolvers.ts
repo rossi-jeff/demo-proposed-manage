@@ -71,6 +71,13 @@ export const Group: Resolvers["Group"] = {
       },
     });
   },
+  GroupAwards: async (parent) => {
+    return await db.client.groupAward.findMany({
+      where: {
+        groupId: parent.id,
+      },
+    });
+  },
   GroupRegistrations: async (parent) => {
     return await db.client.groupRegistration.findMany({
       where: {
