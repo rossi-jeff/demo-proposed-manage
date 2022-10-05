@@ -9,4 +9,6 @@ type CampShortOrder {
   participants: String
   createdAt: String
   updatedAt: String
+
+  CampTshirtOrder: CampTshirtOrder
 }

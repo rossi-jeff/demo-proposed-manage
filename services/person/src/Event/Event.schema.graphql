@@ -1,0 +1,5 @@
+type Event @key(fields: "id") {
+  id: ID!
+
+  DirectingRoles: [DirectingRole]
+}

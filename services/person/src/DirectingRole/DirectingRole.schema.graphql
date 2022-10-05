@@ -4,4 +4,12 @@ type DirectingRole {
   eventId: String
   createdAt: String
   updatedAt: String
+
+  Event: Event
+  Person: Person
+}
+
+extend type Query {
+  directingRoles: [DirectingRole]
+  directingRole(id: ID!): DirectingRole
 }
