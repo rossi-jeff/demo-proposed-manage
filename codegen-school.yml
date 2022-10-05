@@ -17,6 +17,7 @@ config:
     CustomDiscount: "../src/CustomDiscount/types#CustomDiscountType"
     CustomQuestion: "../src/CustomQuestion/types#CustomQuestionType"
     Email: "../src/Email/types#EmailType"
+    FeatureForSeason: "../src/FeatureForSeason/types#FeatureForSeasonType"
     Fee: "../src/Fee/types#FeeType"
     LegalForm: "../src/LegalForm/types#LegalFormType"
     MedicalForm: "../src/MedicalForm/types#MedicalFormType"

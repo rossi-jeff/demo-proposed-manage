@@ -19,6 +19,11 @@ import {
 } from "./CustomQuestion/query-resolvers";
 import { Email } from "./Email/field-resolvers";
 import { email, emails } from "./Email/query-resolvers";
+import { FeatureForSeason } from "./FeatureForSeason/field-resolvers";
+import {
+  featureForSeason,
+  featureForSeasons,
+} from "./FeatureForSeason/query-resolvers";
 import { Fee } from "./Fee/field-resolvers";
 import { fees, fee } from "./Fee/query-resolvers";
 import { LegalForm } from "./LegalForm/field-resolvers";
@@ -49,6 +54,8 @@ export const resolvers: Resolvers = {
     customQuestion,
     emails,
     email,
+    featureForSeasons,
+    featureForSeason,
     fees,
     fee,
     legalForms,
@@ -69,6 +76,7 @@ export const resolvers: Resolvers = {
   CustomDiscount,
   CustomQuestion,
   Email,
+  FeatureForSeason,
   Fee,
   LegalForm,
   MedicalForm,
