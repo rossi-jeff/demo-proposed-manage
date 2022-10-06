@@ -50,6 +50,7 @@ import {
   Affiliation,
   AlergicCondition,
   CoachCertification,
+  CustomAnswer,
   DirectingRole,
   EmergencyContact,
   Invite,
@@ -115,6 +116,7 @@ const count = {
   coachCertifications: 3,
   colors: 3,
   consents: 2,
+  customAnswers: 2,
   customDiscounts: 2,
   customQuestions: 3,
   docs: 3,
@@ -198,6 +200,7 @@ const clear = async () => {
   await schoolDb.client.activity.deleteMany({});
   await schoolDb.client.person.deleteMany({});
   // person db
+  await personDb.client.customAnswer.deleteMany({});
   await personDb.client.directingRole.deleteMany({});
   await personDb.client.coachCertification.deleteMany({});
   await personDb.client.invoice.deleteMany;
@@ -232,6 +235,7 @@ const seed = async () => {
   let coachCertification: CoachCertification;
   let color: Color;
   let consent: Consent;
+  let customAnswer: CustomAnswer;
   let customDiscount: CustomDiscount;
   let customQuestion: CustomQuestion;
   let directingRole: DirectingRole;
@@ -318,26 +322,6 @@ const seed = async () => {
     };
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
-
-    for (let c = 0; c < count.customQuestions; c++) {
-      data = {
-        schoolId: school.id,
-        state: randState(),
-        question: randCatchPhrase(),
-        questionType: randCatchPhrase(),
-        questionOptions: randCatchPhrase(),
-        active: randBoolean(),
-        required: randBoolean(),
-        dependentOn: randNumber({ min: 1, max: 1000 }),
-        dependentAnswer: randCatchPhrase(),
-        sortOrder: randNumber({ min: 1, max: 1000 }),
-        activityType: randSports(),
-        createdAt: now,
-        updatedAt: now,
-      };
-      customQuestion = await schoolDb.client.customQuestion.create({ data });
-      logger.info(`custom question ${customQuestion.id}`);
-    } // end custom questions loop
 
     ids.awards = [];
     for (let a = 0; a < count.awards; a++) {
@@ -671,6 +655,38 @@ const seed = async () => {
         });
       }
     } // end people loop
+
+    for (let c = 0; c < count.customQuestions; c++) {
+      data = {
+        schoolId: school.id,
+        state: randState(),
+        question: randCatchPhrase(),
+        questionType: randCatchPhrase(),
+        questionOptions: randCatchPhrase(),
+        active: randBoolean(),
+        required: randBoolean(),
+        dependentOn: randNumber({ min: 1, max: 1000 }),
+        dependentAnswer: randCatchPhrase(),
+        sortOrder: randNumber({ min: 1, max: 1000 }),
+        activityType: randSports(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      customQuestion = await schoolDb.client.customQuestion.create({ data });
+      logger.info(`custom question ${customQuestion.id}`);
+
+      for (let ca = 0; ca < count.customAnswers; ca++) {
+        data = {
+          personId: sample(ids.people) ?? "",
+          questionId: customQuestion.id,
+          answer: randCatchPhrase(),
+          createdAt: now,
+          updatedAt: now,
+        };
+        customAnswer = await personDb.client.customAnswer.create({ data });
+        logger.info(`custom answer ${customAnswer.id}`);
+      } // end custom answers loop
+    } // end custom questions loop
 
     for (let c = 0; c < count.coachCertifications; c++) {
       data = {
