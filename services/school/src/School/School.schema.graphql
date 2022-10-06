@@ -10,6 +10,7 @@ type School @key(fields: "id") {
   Emails: [Email]
   FeatureForSeasons: [FeatureForSeason]
   Fees: [Fee]
+  FuelMyClubOrganization: FuelMyClubOrganization
   LegalForms: [LegalForm]
   MedicalForms: [MedicalForm]
   PaymentCodes: [PaymentCode]

@@ -13,6 +13,9 @@ import {
   CampTshirtOrder,
   Consent,
   Event,
+  FuelMyClubActivity,
+  FuelMyClubFundraiser,
+  FuelMyClubRegistration,
   Group,
   GroupAward,
   GroupAwardAssignment,
@@ -34,6 +37,7 @@ import {
   Email,
   FeatureForSeason,
   Fee,
+  FuelMyClubOrganization,
   LegalForm,
   MedicalForm,
   PaymentCode,
@@ -126,6 +130,7 @@ const count = {
   events: 2,
   features: 3,
   fees: 3,
+  fundraisers: 3,
   groups: 3,
   groupAwards: 3,
   groupRegistrations: 2,
@@ -165,6 +170,9 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.fuelMyClubFundraiser.deleteMany({});
+  await activityDb.client.fuelMyClubActivity.deleteMany({});
+  await activityDb.client.fuelMyClubRegistration.deleteMany({});
   await activityDb.client.groupAwardAssignment.deleteMany({});
   await activityDb.client.groupAward.deleteMany({});
   await activityDb.client.campShortOrder.deleteMany({});
@@ -180,6 +188,8 @@ const clear = async () => {
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
+
+  await schoolDb.client.fuelMyClubOrganization.deleteMany({});
   await schoolDb.client.featureForSeason.deleteMany({});
   await schoolDb.client.customQuestion.deleteMany({});
   await schoolDb.client.customDiscount.deleteMany({});
@@ -248,6 +258,10 @@ const seed = async () => {
   let event: Event;
   let feature: FeatureForSeason;
   let fee: Fee;
+  let fuelActivity: FuelMyClubActivity;
+  let fuelFundraiser: FuelMyClubFundraiser;
+  let fuelOrganization: FuelMyClubOrganization;
+  let fuelRegistration: FuelMyClubRegistration;
   let group: Group;
   let groupAward: GroupAward;
   let groupAwardAssignment: GroupAwardAssignment;
@@ -326,6 +340,21 @@ const seed = async () => {
     };
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
+
+    data = {
+      schoolId: school.id,
+      data: randSentence(),
+      fmcOrganization: randCompanyName(),
+      fmcFundraiser: randCatchPhrase(),
+      fmcParticipant: randFullName(),
+      salesLink: randUuid(),
+      createdAt: now,
+      updatedAt: now,
+    };
+    fuelOrganization = await schoolDb.client.fuelMyClubOrganization.create({
+      data,
+    });
+    logger.info(`fuel organization ${fuelOrganization.id}`);
 
     for (let f = 0; f < count.features; f++) {
       data = {
@@ -789,6 +818,33 @@ const seed = async () => {
       ids.activities.push(activity.id);
       logger.info(`activity ${activity.id}: ${activity.kind}`);
 
+      data = {
+        activityId: activity.id,
+        externalFmcOrganizationId: randUuid(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      fuelActivity = await activityDb.client.fuelMyClubActivity.create({
+        data,
+      });
+      logger.info(`fuel activity ${fuelActivity.id}`);
+      for (let ff = 0; ff < count.fundraisers; ff++) {
+        data = {
+          fuelMyClubActivityId: fuelActivity.id,
+          season: sample(seasons),
+          externalFmcFundraiserId: randUuid(),
+          contactPersonId: sample(ids.people),
+          config: randNumber({ min: 1, max: 1000 }),
+          leadInMessage: randSentence(),
+          createdAt: now,
+          updatedAt: now,
+        };
+        fuelFundraiser = await activityDb.client.fuelMyClubFundraiser.create({
+          data,
+        });
+        logger.info(`fuel fundraiser ${fuelFundraiser.id}`);
+      } // end fundraisers loop
+
       for (let c = 0; c < count.customDiscounts; c++) {
         data = {
           activityId: activity.id,
@@ -866,6 +922,16 @@ const seed = async () => {
           registration = await activityDb.client.registration.create({ data });
           ids.registrations.push(registration.id);
           logger.info(`registration ${registration.id}`);
+
+          data = {
+            registrationId: registration.id,
+            data: randSentence(),
+            createdAt: now,
+            updatedAt: now,
+          };
+          fuelRegistration =
+            await activityDb.client.fuelMyClubRegistration.create({ data });
+          logger.info(`fuel registration ${fuelRegistration.id}`);
 
           for (let c = 0; c < count.consents; c++) {
             data = {

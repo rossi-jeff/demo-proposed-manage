@@ -26,6 +26,11 @@ import {
 } from "./FeatureForSeason/query-resolvers";
 import { Fee } from "./Fee/field-resolvers";
 import { fees, fee } from "./Fee/query-resolvers";
+import { FuelMyClubOrganization } from "./FuelMyClubOrganization/field-resolvers";
+import {
+  fuelMyClubOrganization,
+  fuelMyClubOrganizations,
+} from "./FuelMyClubOrganization/query-resolvers";
 import { LegalForm } from "./LegalForm/field-resolvers";
 import { legalForm, legalForms } from "./LegalForm/query-resolvers";
 import { MedicalForm } from "./MedicalForm/field-resolvers";
@@ -58,6 +63,8 @@ export const resolvers: Resolvers = {
     featureForSeason,
     fees,
     fee,
+    fuelMyClubOrganizations,
+    fuelMyClubOrganization,
     legalForms,
     legalForm,
     medicalForms,
@@ -78,6 +85,7 @@ export const resolvers: Resolvers = {
   Email,
   FeatureForSeason,
   Fee,
+  FuelMyClubOrganization,
   LegalForm,
   MedicalForm,
   PaymentCode,

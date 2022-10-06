@@ -8,4 +8,11 @@ type FuelMyClubOrganization {
   salesLink: String
   createdAt: String
   updatedAt: String
+
+  School: School
+}
+
+extend type Query {
+  fuelMyClubOrganizations: [FuelMyClubOrganization]
+  fuelMyClubOrganization(id: ID!): FuelMyClubOrganization
 }

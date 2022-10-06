@@ -9,6 +9,13 @@ export const Activity: Resolvers["Activity"] = {
       },
     });
   },
+  FuelMyClubActivity: async (parent) => {
+    return await db.client.fuelMyClubActivity.findFirst({
+      where: {
+        activityId: parent.id,
+      },
+    });
+  },
   Groups: async (parent) => {
     return await db.client.group.findMany({
       where: {

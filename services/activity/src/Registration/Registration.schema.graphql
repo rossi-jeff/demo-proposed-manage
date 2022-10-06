@@ -24,6 +24,7 @@ type Registration @key(fields: "id") {
   updatedAt: String
 
   Activity: Activity
+  FuelMyClubRegistration: FuelMyClubRegistration
   Group: Group
   Participant: Person
   RegisteredBy: Person
