@@ -32,6 +32,7 @@ import {
   CustomDiscount,
   CustomQuestion,
   Email,
+  FeatureForSeason,
   Fee,
   LegalForm,
   MedicalForm,
@@ -123,6 +124,7 @@ const count = {
   emails: 2,
   emergencyContacts: 2,
   events: 2,
+  features: 3,
   fees: 3,
   groups: 3,
   groupAwards: 3,
@@ -178,6 +180,7 @@ const clear = async () => {
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
+  await schoolDb.client.featureForSeason.deleteMany({});
   await schoolDb.client.customQuestion.deleteMany({});
   await schoolDb.client.customDiscount.deleteMany({});
   await schoolDb.client.medicalForm.deleteMany({});
@@ -243,6 +246,7 @@ const seed = async () => {
   let email: Email;
   let emergencyContact: EmergencyContact;
   let event: Event;
+  let feature: FeatureForSeason;
   let fee: Fee;
   let group: Group;
   let groupAward: GroupAward;
@@ -322,6 +326,38 @@ const seed = async () => {
     };
     school = await adminDb.client.school.create({ data });
     logger.info(`school ${school.id}: ${school.name}`);
+
+    for (let f = 0; f < count.features; f++) {
+      data = {
+        schoolId: school.id,
+        season: sample(seasons),
+        feature: randCatchPhrase(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      feature = await schoolDb.client.featureForSeason.create({ data });
+      logger.info(`feature ${feature.id}: ${feature.season}`);
+    } // end features loop
+
+    for (let c = 0; c < count.customQuestions; c++) {
+      data = {
+        schoolId: school.id,
+        state: randState(),
+        question: randCatchPhrase(),
+        questionType: randCatchPhrase(),
+        questionOptions: randCatchPhrase(),
+        active: randBoolean(),
+        required: randBoolean(),
+        dependentOn: randNumber({ min: 1, max: 1000 }),
+        dependentAnswer: randCatchPhrase(),
+        sortOrder: randNumber({ min: 1, max: 1000 }),
+        activityType: randSports(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      customQuestion = await schoolDb.client.customQuestion.create({ data });
+      logger.info(`custom question ${customQuestion.id}`);
+    } // end custom questions loop
 
     ids.awards = [];
     for (let a = 0; a < count.awards; a++) {
