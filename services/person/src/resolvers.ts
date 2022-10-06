@@ -11,6 +11,9 @@ import {
   coachCertification,
   coachCertifications,
 } from "./CoachCertification/query-resolvers";
+import { CustomAnswer } from "./CustomAnswer/field-resolvers";
+import { customAnswer, customAnswers } from "./CustomAnswer/query-resolvers";
+import { CustomQuestion } from "./CustomQuestion/field-resolvers";
 import { DirectingRole } from "./DirectingRole/field-resolvers";
 import { directingRole, directingRoles } from "./DirectingRole/query-resolvers";
 import { EmergencyContact } from "./EmergencyContact/field-resolvers";
@@ -40,6 +43,8 @@ export const resolvers: Resolvers = {
     alergicCondition,
     coachCertifications,
     coachCertification,
+    customAnswers,
+    customAnswer,
     directingRoles,
     directingRole,
     emergencyContacts,
@@ -54,6 +59,8 @@ export const resolvers: Resolvers = {
   Affiliation,
   AlergicCondition,
   CoachCertification,
+  CustomAnswer,
+  CustomQuestion,
   DirectingRole,
   EmergencyContact,
   Event,

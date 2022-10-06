@@ -35,6 +35,7 @@ import {
   CustomDiscount,
   CustomQuestion,
   Email,
+  FeatureForSeason,
   Fee,
   FuelMyClubOrganization,
   LegalForm,
@@ -54,6 +55,7 @@ import {
   Affiliation,
   AlergicCondition,
   CoachCertification,
+  CustomAnswer,
   DirectingRole,
   EmergencyContact,
   Invite,
@@ -119,12 +121,14 @@ const count = {
   coachCertifications: 3,
   colors: 3,
   consents: 2,
+  customAnswers: 2,
   customDiscounts: 2,
   customQuestions: 3,
   docs: 3,
   emails: 2,
   emergencyContacts: 2,
   events: 2,
+  features: 3,
   fees: 3,
   fundraisers: 3,
   groups: 3,
@@ -184,7 +188,9 @@ const clear = async () => {
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
+
   await schoolDb.client.fuelMyClubOrganization.deleteMany({});
+  await schoolDb.client.featureForSeason.deleteMany({});
   await schoolDb.client.customQuestion.deleteMany({});
   await schoolDb.client.customDiscount.deleteMany({});
   await schoolDb.client.medicalForm.deleteMany({});
@@ -207,6 +213,7 @@ const clear = async () => {
   await schoolDb.client.activity.deleteMany({});
   await schoolDb.client.person.deleteMany({});
   // person db
+  await personDb.client.customAnswer.deleteMany({});
   await personDb.client.directingRole.deleteMany({});
   await personDb.client.coachCertification.deleteMany({});
   await personDb.client.invoice.deleteMany;
@@ -241,6 +248,7 @@ const seed = async () => {
   let coachCertification: CoachCertification;
   let color: Color;
   let consent: Consent;
+  let customAnswer: CustomAnswer;
   let customDiscount: CustomDiscount;
   let customQuestion: CustomQuestion;
   let directingRole: DirectingRole;
@@ -248,6 +256,7 @@ const seed = async () => {
   let email: Email;
   let emergencyContact: EmergencyContact;
   let event: Event;
+  let feature: FeatureForSeason;
   let fee: Fee;
   let fuelActivity: FuelMyClubActivity;
   let fuelFundraiser: FuelMyClubFundraiser;
@@ -346,6 +355,18 @@ const seed = async () => {
       data,
     });
     logger.info(`fuel organization ${fuelOrganization.id}`);
+
+    for (let f = 0; f < count.features; f++) {
+      data = {
+        schoolId: school.id,
+        season: sample(seasons),
+        feature: randCatchPhrase(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      feature = await schoolDb.client.featureForSeason.create({ data });
+      logger.info(`feature ${feature.id}: ${feature.season}`);
+    } // end features loop
 
     for (let c = 0; c < count.customQuestions; c++) {
       data = {
@@ -699,6 +720,38 @@ const seed = async () => {
         });
       }
     } // end people loop
+
+    for (let c = 0; c < count.customQuestions; c++) {
+      data = {
+        schoolId: school.id,
+        state: randState(),
+        question: randCatchPhrase(),
+        questionType: randCatchPhrase(),
+        questionOptions: randCatchPhrase(),
+        active: randBoolean(),
+        required: randBoolean(),
+        dependentOn: randNumber({ min: 1, max: 1000 }),
+        dependentAnswer: randCatchPhrase(),
+        sortOrder: randNumber({ min: 1, max: 1000 }),
+        activityType: randSports(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      customQuestion = await schoolDb.client.customQuestion.create({ data });
+      logger.info(`custom question ${customQuestion.id}`);
+
+      for (let ca = 0; ca < count.customAnswers; ca++) {
+        data = {
+          personId: sample(ids.people) ?? "",
+          questionId: customQuestion.id,
+          answer: randCatchPhrase(),
+          createdAt: now,
+          updatedAt: now,
+        };
+        customAnswer = await personDb.client.customAnswer.create({ data });
+        logger.info(`custom answer ${customAnswer.id}`);
+      } // end custom answers loop
+    } // end custom questions loop
 
     for (let c = 0; c < count.coachCertifications; c++) {
       data = {

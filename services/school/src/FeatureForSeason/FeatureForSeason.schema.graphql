@@ -5,4 +5,11 @@ type FeatureForSeason {
   feature: String
   createdAt: String
   updatedAt: String
+
+  School: School
+}
+
+extend type Query {
+  featureForSeasons: [FeatureForSeason]
+  featureForSeason(id: ID!): FeatureForSeason
 }
