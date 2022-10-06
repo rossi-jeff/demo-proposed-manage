@@ -12,7 +12,7 @@ config:
   mappers:
     Activity: "../src/Activity/types#ActivityType"
     Address: "../src/Address/types#AddressType"
-    Award: "../scr/Award/types#AwardType"
+    Award: "../src/Award/types#AwardType"
     Color: "../src/Color/types#ColorType"
     CustomDiscount: "../src/CustomDiscount/types#CustomDiscountType"
     CustomQuestion: "../src/CustomQuestion/types#CustomQuestionType"
@@ -21,6 +21,7 @@ config:
     Fee: "../src/Fee/types#FeeType"
     FuelMyClubOrganization: "../src/FuelMyClubOrganization/types#FuelMyClubOrganizationType"
     LegalForm: "../src/LegalForm/types#LegalFormType"
+    LegalVideo: "../src/LegalVideo/types#LegalVideoType"
     MedicalForm: "../src/MedicalForm/types#MedicalFormType"
     PaymentCode: "../src/PaymentCode/types#PaymentCodeType"
     Person: "../src/Person/types#PersonType"

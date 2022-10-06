@@ -5,4 +5,12 @@ type LegalVideoConsent {
   season: String
   createdAt: String
   updatedAt: String
+
+  LegalVideo: LegalVideo
+  Person: Person
+}
+
+extend type Query {
+  legalVideoConsents: [LegalVideoConsent]
+  legalVideoConsent(id: ID!): LegalVideoConsent
 }

@@ -27,6 +27,12 @@ import { invite, invites } from "./Invite/query-resolvers";
 import { Invoice } from "./Invoice/field-resolvers";
 import { invoice, invoices } from "./Invoice/query-resolvers";
 import { InvoiceTransaction } from "./InvoiceTransaction/field-resolvers";
+import { LegalVideo } from "./LegalVideo/field-resolvers";
+import { LegalVideoConsent } from "./LegalVideoConsent/field-resolvers";
+import {
+  legalVideoConsent,
+  legalVideoConsents,
+} from "./LegalVideoConsent/query-resolvers";
 import { MedicalCondition } from "./MedicalCondition/field-resolvers";
 import {
   medicalCondition,
@@ -53,6 +59,8 @@ export const resolvers: Resolvers = {
     invite,
     invoices,
     invoice,
+    legalVideoConsents,
+    legalVideoConsent,
     medicalConditions,
     medicalCondition,
   },
@@ -67,6 +75,8 @@ export const resolvers: Resolvers = {
   Invite,
   Invoice,
   InvoiceTransaction,
+  LegalVideo,
+  LegalVideoConsent,
   MedicalCondition,
   Person,
   School,

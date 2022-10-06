@@ -8,5 +8,6 @@ type Person @key(fields: "id") {
   DirectingRoles: [DirectingRole]
   EmergencyContacts: [EmergencyContact]
   Invoices: [Invoice]
+  LegalVideoConsents: [LegalVideoConsent]
   MedicalConditions: [MedicalCondition]
 }

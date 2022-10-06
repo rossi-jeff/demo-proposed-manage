@@ -1,0 +1,5 @@
+type LegalVideo @key(fields: "id") {
+  id: ID!
+
+  LegalVideoConsents: [LegalVideoConsent]
+}
