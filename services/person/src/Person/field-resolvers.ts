@@ -16,6 +16,13 @@ export const Person: Resolvers["Person"] = {
       },
     });
   },
+  CustomAnswers: async (parent) => {
+    return await db.client.customAnswer.findMany({
+      where: {
+        personId: parent.id,
+      },
+    });
+  },
   DirectingRoles: async (parent) => {
     return await db.client.directingRole.findMany({
       where: {

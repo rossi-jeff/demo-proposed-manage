@@ -5,4 +5,12 @@ type CustomAnswer @key(fields: "id") {
   answer: String
   createdAt: String
   updatedAt: String
+
+  CustomQuestion: CustomQuestion
+  Person: Person
+}
+
+extend type Query {
+  customAnswers: [CustomAnswer]
+  customAnswer(id: ID!): CustomAnswer
 }

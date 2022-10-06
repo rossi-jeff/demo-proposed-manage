@@ -71,4 +71,11 @@ export const GroupRegistration: Resolvers["GroupRegistration"] = {
       },
     });
   },
+  GroupAwardAssignments: async (parent) => {
+    return await db.client.groupAwardAssignment.findMany({
+      where: {
+        recipientId: parent.id,
+      },
+    });
+  },
 };

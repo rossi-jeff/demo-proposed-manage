@@ -14,6 +14,8 @@ import {
   Consent,
   Event,
   Group,
+  GroupAward,
+  GroupAwardAssignment,
   GroupRegistration,
   LineItem,
   Registration,
@@ -49,6 +51,7 @@ import {
   Affiliation,
   AlergicCondition,
   CoachCertification,
+  CustomAnswer,
   DirectingRole,
   EmergencyContact,
   Invite,
@@ -114,6 +117,7 @@ const count = {
   coachCertifications: 3,
   colors: 3,
   consents: 2,
+  customAnswers: 2,
   customDiscounts: 2,
   customQuestions: 3,
   docs: 3,
@@ -123,6 +127,7 @@ const count = {
   features: 3,
   fees: 3,
   groups: 3,
+  groupAwards: 3,
   groupRegistrations: 2,
   invites: 2,
   invoices: 2,
@@ -160,6 +165,8 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.groupAwardAssignment.deleteMany({});
+  await activityDb.client.groupAward.deleteMany({});
   await activityDb.client.campShortOrder.deleteMany({});
   await activityDb.client.campTshirtOrder.deleteMany({});
   await activityDb.client.awardAssignment.deleteMany({});
@@ -196,6 +203,7 @@ const clear = async () => {
   await schoolDb.client.activity.deleteMany({});
   await schoolDb.client.person.deleteMany({});
   // person db
+  await personDb.client.customAnswer.deleteMany({});
   await personDb.client.directingRole.deleteMany({});
   await personDb.client.coachCertification.deleteMany({});
   await personDb.client.invoice.deleteMany;
@@ -230,6 +238,7 @@ const seed = async () => {
   let coachCertification: CoachCertification;
   let color: Color;
   let consent: Consent;
+  let customAnswer: CustomAnswer;
   let customDiscount: CustomDiscount;
   let customQuestion: CustomQuestion;
   let directingRole: DirectingRole;
@@ -240,6 +249,8 @@ const seed = async () => {
   let feature: FeatureForSeason;
   let fee: Fee;
   let group: Group;
+  let groupAward: GroupAward;
+  let groupAwardAssignment: GroupAwardAssignment;
   let groupRegistration: GroupRegistration;
   let invite: Invite;
   let invoice: Invoice;
@@ -681,6 +692,38 @@ const seed = async () => {
       }
     } // end people loop
 
+    for (let c = 0; c < count.customQuestions; c++) {
+      data = {
+        schoolId: school.id,
+        state: randState(),
+        question: randCatchPhrase(),
+        questionType: randCatchPhrase(),
+        questionOptions: randCatchPhrase(),
+        active: randBoolean(),
+        required: randBoolean(),
+        dependentOn: randNumber({ min: 1, max: 1000 }),
+        dependentAnswer: randCatchPhrase(),
+        sortOrder: randNumber({ min: 1, max: 1000 }),
+        activityType: randSports(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      customQuestion = await schoolDb.client.customQuestion.create({ data });
+      logger.info(`custom question ${customQuestion.id}`);
+
+      for (let ca = 0; ca < count.customAnswers; ca++) {
+        data = {
+          personId: sample(ids.people) ?? "",
+          questionId: customQuestion.id,
+          answer: randCatchPhrase(),
+          createdAt: now,
+          updatedAt: now,
+        };
+        customAnswer = await personDb.client.customAnswer.create({ data });
+        logger.info(`custom answer ${customAnswer.id}`);
+      } // end custom answers loop
+    } // end custom questions loop
+
     for (let c = 0; c < count.coachCertifications; c++) {
       data = {
         personId: sample(ids.people) ?? "",
@@ -780,6 +823,20 @@ const seed = async () => {
         group = await activityDb.client.group.create({ data });
         logger.info(`group ${group.id}: ${group.name}`);
 
+        ids.groupAwards = [];
+        for (let ga = 0; ga < count.groupAwards; ga++) {
+          data = {
+            groupId: group.id,
+            name: randCatchPhrase(),
+            state: randNumber({ min: 1, max: 1000 }),
+            createdAt: now,
+            updatedAt: now,
+          };
+          groupAward = await activityDb.client.groupAward.create({ data });
+          ids.groupAwards.push(groupAward.id);
+          logger.info(`group award ${groupAward.id}: ${groupAward.name}`);
+        } // end group awards loop
+
         ids.registrations = [];
         for (let r = 0; r < count.registrations; r++) {
           data = {
@@ -851,6 +908,17 @@ const seed = async () => {
             groupRegistration =
               await activityDb.client.groupRegistration.create({ data });
             logger.info(`group registration ${groupRegistration.id}`);
+
+            data = {
+              recipientId: groupRegistration.id,
+              awardId: sample(ids.groupAwards) ?? "",
+              state: randNumber({ min: 1, max: 1000 }),
+              createdAt: now,
+              updatedAt: now,
+            };
+            groupAwardAssignment =
+              await activityDb.client.groupAwardAssignment.create({ data });
+            logger.info(`group award assignment ${groupAwardAssignment.id}`);
 
             for (let aa = 0; aa < count.awardAssignments; aa++) {
               data = {

@@ -1,0 +1,5 @@
+type CustomQuestion @key(fields: "id") {
+  id: ID!
+
+  CustomAnswers: [CustomAnswer]
+}
