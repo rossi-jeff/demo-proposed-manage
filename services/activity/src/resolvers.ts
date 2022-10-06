@@ -50,6 +50,13 @@ import { LegalForm } from "./LegalForm/field-resolvers";
 import { LineItem } from "./LineItem/field-resolvers";
 import { lineItem, lineItems } from "./LineItem/query-resolvers";
 import { Person } from "./Person/field-resolvers";
+import { Record } from "./Record/field-resolvers";
+import { record, records } from "./Record/query-resolvers";
+import { RecordAssignment } from "./RecordAssignment/field-resolvers";
+import {
+  recordAssignment,
+  recordAssignments,
+} from "./RecordAssignment/query-resolvers";
 import { Registration } from "./Registration/field-resolvers";
 import { registration, registrations } from "./Registration/query-resolvers";
 import { Roster } from "./Roster/field-resolvers";
@@ -85,6 +92,10 @@ export const resolvers: Resolvers = {
     groupRegistration,
     lineItems,
     lineItem,
+    records,
+    record,
+    recordAssignments,
+    recordAssignment,
     registrations,
     registration,
     rosters,
@@ -112,6 +123,8 @@ export const resolvers: Resolvers = {
   LegalForm,
   LineItem,
   Person,
+  Record,
+  RecordAssignment,
   Registration,
   Roster,
   Ticket,

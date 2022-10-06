@@ -268,7 +268,7 @@ model RecordAssignment {
     recordSetDate DateTime? @db.Date
     result        Float?
     state         Int?      @default(0)
-    banner_year   String?
+    bannerYear   String?
     createdAt     DateTime
     updatedAt     DateTime
 

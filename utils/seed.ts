@@ -21,6 +21,8 @@ import {
   GroupAwardAssignment,
   GroupRegistration,
   LineItem,
+  Record,
+  RecordAssignment,
   Registration,
   Roster,
   Ticket,
@@ -142,6 +144,8 @@ const count = {
   paymentCodes: 3,
   people: 5,
   phones: 2,
+  records: 3,
+  recordAssignments: 2,
   registrations: 5,
   roles: 3,
   rosters: 2,
@@ -170,6 +174,8 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.recordAssignment.deleteMany({});
+  await activityDb.client.record.deleteMany({});
   await activityDb.client.fuelMyClubFundraiser.deleteMany({});
   await activityDb.client.fuelMyClubActivity.deleteMany({});
   await activityDb.client.fuelMyClubRegistration.deleteMany({});
@@ -279,6 +285,8 @@ const seed = async () => {
   let personEmail: PersonEmail;
   let personPhone: PersonPhone;
   let phone: Phone;
+  let record: Record;
+  let recordAssignment: RecordAssignment;
   let registration: Registration;
   let role: Role;
   let roster: Roster;
@@ -879,6 +887,23 @@ const seed = async () => {
         group = await activityDb.client.group.create({ data });
         logger.info(`group ${group.id}: ${group.name}`);
 
+        ids.records = [];
+        for (let r = 0; r < count.records; r++) {
+          data = {
+            groupId: group.id,
+            sportCode: randAbbreviation(),
+            title: randCatchPhrase(),
+            recordCode: randAbbreviation(),
+            unit: randWord(),
+            kind: randWord(),
+            createdAt: now,
+            updatedAt: now,
+          };
+          record = await activityDb.client.record.create({ data });
+          ids.records.push(record.id);
+          logger.info(`record ${record.id}`);
+        } // end records loop
+
         ids.groupAwards = [];
         for (let ga = 0; ga < count.groupAwards; ga++) {
           data = {
@@ -999,6 +1024,23 @@ const seed = async () => {
               });
               logger.info(`award assignment ${awardAssignment.id}`);
             } // end award assignments loop
+
+            for (let ra = 0; ra < count.recordAssignments; ra++) {
+              data = {
+                recipientId: groupRegistration.id,
+                rosterId: roster.id,
+                recordId: sample(ids.records),
+                recordSetDate: now,
+                result: randNumber({ min: 1, max: 1000 }),
+                state: randNumber({ min: 1, max: 1000 }),
+                bannerYear: now.getFullYear().toString(),
+                createdAt: now,
+                updatedAt: now,
+              };
+              recordAssignment =
+                await activityDb.client.recordAssignment.create({ data });
+              logger.info(`record assignment ${recordAssignment.id}`);
+            } // end record assignments loop
           } // end group registrations loop
         } // end rosters loop
       } // end group loop
