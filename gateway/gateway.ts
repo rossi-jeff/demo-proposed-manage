@@ -5,6 +5,7 @@ import {
   ApolloServerPluginLandingPageLocalDefault,
 } from "apollo-server-core";
 import { logger } from "../utils/logger";
+import waitPort from "wait-port";
 
 const services = [
   { name: "activity", url: "http://localhost:4001" },
@@ -34,14 +35,22 @@ const startUp = async (): Promise<void> => {
     ],
   });
 
-  server
-    .listen()
-    .then(({ url }) => {
-      logger.info(`gateway started at ${url} `);
-    })
-    .catch((e) => {
-      logger.error(e.message);
-    });
+  try {
+    await waitPort({ host: "localhost", port: 4001 });
+    await waitPort({ host: "localhost", port: 4002 });
+    await waitPort({ host: "localhost", port: 4003 });
+    await waitPort({ host: "localhost", port: 4004 });
+    server
+      .listen()
+      .then(({ url }) => {
+        logger.info(`gateway started at ${url} `);
+      })
+      .catch((e) => {
+        logger.error(e.message);
+      });
+  } catch (error) {
+    logger.error(error);
+  }
 };
 
 startUp()

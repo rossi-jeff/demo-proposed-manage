@@ -24,7 +24,7 @@
     "start:service:school": "nodemon services/school/src/server.ts",
     "start:service:person": "nodemon services/person/src/server.ts",
     "start:services": "concurrently npm:start:service:*",
-    "start:gateway": "wait-port -t 10000 :4001 :4002 :4003 :4004 && nodemon gateway/gateway.ts",
+    "start:gateway": "nodemon gateway/gateway.ts",
     "format": "prettier --write \"./gateway/*.{ts,tsx}\" \"./services/*/src/**/*.{ts,tsx,json,graphql}\" \"./utils/*.{ts,tsx}\"",
     "lint": "eslint . --fix --ext ts",
     "seed": "ts-node ./utils/seed.ts",
