@@ -1,7 +1,0 @@
-type MessagePerson {
-  id: ID!
-  messageId: String
-  personId: String
-  createdAt: String
-  updatedAt: String
-}
