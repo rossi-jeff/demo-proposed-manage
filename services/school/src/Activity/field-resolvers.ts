@@ -92,4 +92,11 @@ export const Activity: Resolvers["Activity"] = {
     });
     return activityFees.map((a) => a.Fee);
   },
+  ParticipantInformationConfigurations: async (parent) => {
+    return await db.client.participantInformationConfiguration.findMany({
+      where: {
+        activityId: parent.id,
+      },
+    });
+  },
 };

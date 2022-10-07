@@ -14,6 +14,7 @@ type School @key(fields: "id") {
   LegalForms: [LegalForm]
   LegalVideos: [LegalVideo]
   MedicalForms: [MedicalForm]
+  ParticipantInformationConfigurations: [ParticipantInformationConfiguration]
   PaymentCodes: [PaymentCode]
   People: [Person]
   Phones: [Phone]
