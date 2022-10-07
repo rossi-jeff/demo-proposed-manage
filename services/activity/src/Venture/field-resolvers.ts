@@ -109,4 +109,11 @@ export const Venture: Resolvers["Venture"] = {
       },
     });
   },
+  Occurances: async (parent) => {
+    return await db.client.occurance.findMany({
+      where: {
+        ventureId: parent.id,
+      },
+    });
+  },
 };

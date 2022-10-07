@@ -21,6 +21,7 @@ import {
   GroupAwardAssignment,
   GroupRegistration,
   LineItem,
+  Occurance,
   Record,
   RecordAssignment,
   Registration,
@@ -145,6 +146,7 @@ const count = {
   legalVideoConsents: 2,
   medicalConditions: 2,
   medicalForms: 3,
+  occurances: 2,
   paymentCodes: 3,
   people: 5,
   phones: 2,
@@ -178,6 +180,7 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.occurance.deleteMany({});
   await activityDb.client.recordAssignment.deleteMany({});
   await activityDb.client.record.deleteMany({});
   await activityDb.client.fuelMyClubFundraiser.deleteMany({});
@@ -284,6 +287,7 @@ const seed = async () => {
   let legalVideo: LegalVideo;
   let legalVideoConsent: LegalVideoConsent;
   let lineItem: LineItem;
+  let occurance: Occurance;
   let medical: MedicalCondition;
   let medicalForm: MedicalForm;
   let paymentCode: PaymentCode;
@@ -1108,6 +1112,18 @@ const seed = async () => {
         venture = await activityDb.client.venture.create({ data });
         ids.ventures.push(venture.id);
         logger.info(`venture ${venture.id}: ${venture.name}`);
+
+        for (let o = 0; o < count.occurances; o++) {
+          data = {
+            from: randRecentDate(),
+            to: randFutureDate(),
+            ventureId: venture.id,
+            createdAt: now,
+            updatedAt: now,
+          };
+          occurance = await activityDb.client.occurance.create({ data });
+          logger.info(`occurance ${occurance.id}`);
+        } // end occurances loop
 
         for (let ct = 0; ct < count.campTShirts; ct++) {
           // coach
