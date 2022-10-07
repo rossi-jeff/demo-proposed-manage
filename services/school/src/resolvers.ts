@@ -33,6 +33,8 @@ import {
 } from "./FuelMyClubOrganization/query-resolvers";
 import { LegalForm } from "./LegalForm/field-resolvers";
 import { legalForm, legalForms } from "./LegalForm/query-resolvers";
+import { LegalVideo } from "./LegalVideo/field-resolvers";
+import { legalVideo, legalVideos } from "./LegalVideo/query-resolvers";
 import { MedicalForm } from "./MedicalForm/field-resolvers";
 import { medicalForm, medicalForms } from "./MedicalForm/query-resolvers";
 import { PaymentCode } from "./PaymentCode/field-resolvers";
@@ -67,6 +69,8 @@ export const resolvers: Resolvers = {
     fuelMyClubOrganization,
     legalForms,
     legalForm,
+    legalVideos,
+    legalVideo,
     medicalForms,
     medicalForm,
     paymentCodes,
@@ -87,6 +91,7 @@ export const resolvers: Resolvers = {
   Fee,
   FuelMyClubOrganization,
   LegalForm,
+  LegalVideo,
   MedicalForm,
   PaymentCode,
   Person,

@@ -19,4 +19,5 @@ config:
     Invite: "../src/Invite/types#InviteType"
     Invoice: "../src/Invoice/types#InvoiceType"
     InvoiceTransaction: "../src/InvoiceTransaction/types#InvoiceTransactionType"
+    LegalVideoConsent: "../src/LegalVideoConsent/types#LegalVideoConsentType"
     MedicalCondition: "../src/MedicalCondition/types#MedicalConditionType"

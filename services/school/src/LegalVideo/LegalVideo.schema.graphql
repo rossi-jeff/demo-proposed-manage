@@ -7,4 +7,11 @@ type LegalVideo @key(fields: "id") {
   requireStudentSignOff: Boolean
   createdAt: String
   updatedAt: String
+
+  School: School
+}
+
+extend type Query {
+  legalVideos: [LegalVideo]
+  legalVideo(id: ID!): LegalVideo
 }

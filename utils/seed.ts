@@ -41,6 +41,7 @@ import {
   Fee,
   FuelMyClubOrganization,
   LegalForm,
+  LegalVideo,
   MedicalForm,
   PaymentCode,
   Person,
@@ -63,6 +64,7 @@ import {
   Invite,
   Invoice,
   InvoiceTransaction,
+  LegalVideoConsent,
   MedicalCondition,
 } from "../services/person/generated/person-db";
 import { logger } from "./logger";
@@ -139,6 +141,8 @@ const count = {
   invites: 2,
   invoices: 2,
   legalForms: 2,
+  legalVideos: 3,
+  legalVideoConsents: 2,
   medicalConditions: 2,
   medicalForms: 3,
   paymentCodes: 3,
@@ -194,7 +198,7 @@ const clear = async () => {
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
-
+  await schoolDb.client.legalVideo.deleteMany({});
   await schoolDb.client.fuelMyClubOrganization.deleteMany({});
   await schoolDb.client.featureForSeason.deleteMany({});
   await schoolDb.client.customQuestion.deleteMany({});
@@ -219,6 +223,7 @@ const clear = async () => {
   await schoolDb.client.activity.deleteMany({});
   await schoolDb.client.person.deleteMany({});
   // person db
+  await personDb.client.legalVideoConsent.deleteMany({});
   await personDb.client.customAnswer.deleteMany({});
   await personDb.client.directingRole.deleteMany({});
   await personDb.client.coachCertification.deleteMany({});
@@ -276,6 +281,8 @@ const seed = async () => {
   let invoice: Invoice;
   let invoiceTransaction: InvoiceTransaction;
   let legalForm: LegalForm;
+  let legalVideo: LegalVideo;
+  let legalVideoConsent: LegalVideoConsent;
   let lineItem: LineItem;
   let medical: MedicalCondition;
   let medicalForm: MedicalForm;
@@ -728,6 +735,34 @@ const seed = async () => {
         });
       }
     } // end people loop
+
+    for (let lv = 0; lv < count.legalVideos; lv++) {
+      data = {
+        schoolId: school.id,
+        name: randCatchPhrase(),
+        checkboxText: randSentence(),
+        remoteId: randUuid(),
+        requireStudentSignOff: randBoolean(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      legalVideo = await schoolDb.client.legalVideo.create({ data });
+      logger.info(`legal video ${legalVideo.id}`);
+
+      for (let lvc = 0; lvc < count.legalVideoConsents; lvc++) {
+        data = {
+          legalVideoId: legalVideo.id,
+          personId: sample(ids.people),
+          season: sample(seasons),
+          createdAt: now,
+          updatedAt: now,
+        };
+        legalVideoConsent = await personDb.client.legalVideoConsent.create({
+          data,
+        });
+        logger.info(`legal video consent ${legalVideoConsent.id}`);
+      } // end legal video consent loop
+    } // end legal videos loop
 
     for (let c = 0; c < count.customQuestions; c++) {
       data = {
