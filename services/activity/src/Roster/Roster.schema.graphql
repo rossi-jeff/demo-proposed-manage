@@ -8,6 +8,7 @@ type Roster @key(fields: "id") {
 
   Group: Group
   GroupRegistrations: [GroupRegistration]
+  RecordAssignments: [RecordAssignment]
 }
 
 extend type Query {

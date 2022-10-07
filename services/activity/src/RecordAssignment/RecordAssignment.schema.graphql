@@ -6,7 +6,16 @@ type RecordAssignment {
   recordSetDate: String
   result: Float
   state: Int
-  banner_year: String
+  bannerYear: String
   createdAt: String
   updatedAt: String
+
+  GroupRegistration: GroupRegistration
+  Record: Record
+  Roster: Roster
+}
+
+extend type Query {
+  recordAssignments: [RecordAssignment]
+  recordAssignment(id: ID!): RecordAssignment
 }

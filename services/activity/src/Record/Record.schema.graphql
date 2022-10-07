@@ -8,4 +8,12 @@ type Record {
   kind: String
   createdAt: String
   updatedAt: String
+
+  Group: Group
+  RecordAssignments: [RecordAssignment]
+}
+
+extend type Query {
+  records: [Record]
+  record(id: ID!): Record
 }

@@ -23,6 +23,8 @@ config:
     GroupAwardAssignment: "../src/GroupAwardAssignment/types#GroupAwardAssignmentType"
     GroupRegistration: "../src/GroupRegistration/types#GroupRegistrationType"
     LineItem: "../src/LineItem/types#LineItemType"
+    Record: "../src/Record/types#RecordType"
+    RecordAssignment: "../src/RecordAssignment/types#RecordAssignmentType"
     Registration: "../src/Registration/types#RegistrationType"
     Roster: "../src/Roster/types#RosterType"
     Ticket: "../src/Ticket/types#TicketType"

@@ -15,6 +15,7 @@ type GroupRegistration {
   Roster: Roster
   AwardAssignments: [AwardAssignment]
   GroupAwardAssignments: [GroupAwardAssignment]
+  RecordAssignments: [RecordAssignment]
 }
 
 extend type Query {
