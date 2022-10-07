@@ -43,6 +43,8 @@ import { Person } from "./Person/field-resolvers";
 import { people, person } from "./Person/query-resolvers";
 import { Phone } from "./Phone/field-resolvers";
 import { phone, phones } from "./Phone/query-resolvers";
+import { Relationship } from "./Relationship/field-resolvers";
+import { relationship, relationships } from "./Relationship/query-resolvers";
 import { School } from "./School/field-resolvers";
 
 export const resolvers: Resolvers = {
@@ -79,6 +81,8 @@ export const resolvers: Resolvers = {
     person,
     phones,
     phone,
+    relationships,
+    relationship,
   },
   Activity,
   Address,
@@ -96,5 +100,6 @@ export const resolvers: Resolvers = {
   PaymentCode,
   Person,
   Phone,
+  Relationship,
   School,
 };
