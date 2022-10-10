@@ -8,4 +8,14 @@ type ParticipantInformationConfiguration {
   activityKind: String
   createdAt: String
   updatedAt: String
+
+  Activity: Activity
+  School: School
+}
+
+extend type Query {
+  participantInformationConfigurations: [ParticipantInformationConfiguration]
+  participantInformationConfiguration(
+    id: ID!
+  ): ParticipantInformationConfiguration
 }

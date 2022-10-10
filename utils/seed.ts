@@ -45,6 +45,7 @@ import {
   LegalVideo,
   MedicalForm,
   PaymentCode,
+  ParticipantInformationConfiguration,
   Person,
   PersonAddress,
   PersonEmail,
@@ -203,6 +204,7 @@ const clear = async () => {
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
+  await schoolDb.client.participantInformationConfiguration.deleteMany({});
   await schoolDb.client.legalVideo.deleteMany({});
   await schoolDb.client.fuelMyClubOrganization.deleteMany({});
   await schoolDb.client.featureForSeason.deleteMany({});
@@ -300,6 +302,7 @@ const seed = async () => {
   let personEmail: PersonEmail;
   let personPhone: PersonPhone;
   let phone: Phone;
+  let piConfig: ParticipantInformationConfiguration;
   let record: Record;
   let recordAssignment: RecordAssignment;
   let registration: Registration;
@@ -895,6 +898,22 @@ const seed = async () => {
         });
         logger.info(`fuel fundraiser ${fuelFundraiser.id}`);
       } // end fundraisers loop
+
+      data = {
+        schoolId: school.id,
+        activityId: activity.id,
+        key: randWord(),
+        visible: randBoolean(),
+        required: randBoolean(),
+        activityKind: randSports(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      piConfig =
+        await schoolDb.client.participantInformationConfiguration.create({
+          data,
+        });
+      logger.info(`pi config ${piConfig.id}`);
 
       for (let c = 0; c < count.customDiscounts; c++) {
         data = {
