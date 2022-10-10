@@ -30,6 +30,7 @@ import {
   SubLineItem,
   Ticket,
   Venture,
+  VentureRegistration,
 } from "../services/activity/generated/activity-db";
 import {
   Activity,
@@ -167,6 +168,7 @@ const count = {
   subLineItems: 2,
   tickets: 3,
   ventures: 2,
+  ventureRegistrations: 2,
 };
 
 const emailTypes = [EmailTypeEnum.BUSINESS, EmailTypeEnum.PERSONAL];
@@ -189,6 +191,7 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.ventureRegistration.deleteMany({});
   await activityDb.client.subLineItem.deleteMany({});
   await activityDb.client.occurance.deleteMany({});
   await activityDb.client.message.deleteMany({});
@@ -327,6 +330,7 @@ const seed = async () => {
   let subLineItem: SubLineItem;
   let ticket: Ticket;
   let venture: Venture;
+  let venureRegistration: VentureRegistration;
 
   const now = new Date();
 
@@ -454,6 +458,7 @@ const seed = async () => {
       logger.info(`medical form ${medicalForm.id}: ${medicalForm.file}`);
     } // end medical forms loop
 
+    ids.paymentCodes = [];
     for (let p = 0; p < count.paymentCodes; p++) {
       data = {
         schoolId: school.id,
@@ -464,6 +469,7 @@ const seed = async () => {
         updatedAt: now,
       };
       paymentCode = await schoolDb.client.paymentCode.create({ data });
+      ids.paymentCodes.push(paymentCode.id);
       logger.info(`payment code ${paymentCode.id}: ${paymentCode.code}`);
     } // end payment codes loop
 
@@ -1252,6 +1258,21 @@ const seed = async () => {
             `coach ${coach.id}  tshirt ${campTShirt.id}  shorts ${campShorts.id}`
           );
         } // end camp t shirts loop
+
+        for (let vr = 0; vr < count.ventureRegistrations; vr++) {
+          data = {
+            registrationId: sample(ids.registrations),
+            ventureId: venture.id,
+            state: randNumber({ min: 1, max: 1000 }),
+            comment: randSentence(),
+            paymentCodeId: sample(ids.paymentCodes),
+            createdAt: now,
+            updatedAt: now,
+          };
+          venureRegistration =
+            await activityDb.client.ventureRegistration.create({ data });
+          logger.info(`venture registration ${venureRegistration.id}`);
+        } // end venture registrations loop
       } // end ventures loop
 
       for (let e = 0; e < count.events; e++) {

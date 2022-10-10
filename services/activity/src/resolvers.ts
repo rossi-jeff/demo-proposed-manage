@@ -53,6 +53,7 @@ import { Message } from "./Message/field-resolvers";
 import { message, messages } from "./Message/query-resolvers";
 import { Occurance } from "./Occurance/field-resolvers";
 import { occurance, occurances } from "./Occurance/query-resolvers";
+import { PaymentCode } from "./PaymentCode/field-resolvers";
 import { Person } from "./Person/field-resolvers";
 import { Record } from "./Record/field-resolvers";
 import { record, records } from "./Record/query-resolvers";
@@ -72,6 +73,11 @@ import { Ticket } from "./Ticket/field-resolvers";
 import { ticket, tickets } from "./Ticket/query-resolvers";
 import { Venture } from "./Venture/field-resolvers";
 import { venture, ventures } from "./Venture/query-resolvers";
+import { VentureRegistration } from "./VentureRegistration/field-resolvers";
+import {
+  ventureRegistration,
+  ventureRegistrations,
+} from "./VentureRegistration/query-resolvers";
 
 export const resolvers: Resolvers = {
   Query: {
@@ -117,6 +123,8 @@ export const resolvers: Resolvers = {
     ticket,
     ventures,
     venture,
+    ventureRegistrations,
+    ventureRegistration,
   },
   Activity,
   Award,
@@ -137,6 +145,7 @@ export const resolvers: Resolvers = {
   LineItem,
   Message,
   Occurance,
+  PaymentCode,
   Person,
   Record,
   RecordAssignment,
@@ -146,4 +155,5 @@ export const resolvers: Resolvers = {
   SubLineItem,
   Ticket,
   Venture,
+  VentureRegistration,
 };

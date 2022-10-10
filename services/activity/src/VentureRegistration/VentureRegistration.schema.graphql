@@ -7,4 +7,13 @@ type VentureRegistration {
   paymentCodeId: String
   createdAt: String
   updatedAt: String
+
+  PaymentCode: PaymentCode
+  Registration: Registration
+  Venture: Venture
+}
+
+extend type Query {
+  ventureRegistrations: [VentureRegistration]
+  ventureRegistration(id: ID!): VentureRegistration
 }
