@@ -242,7 +242,7 @@ model Occurance {
     id        String    @id @default(cuid())
     from      DateTime?
     to        DateTime?
-    ventureId Int?
+    ventureId String?
     createdAt DateTime
     updatedAt DateTime
 }

@@ -23,6 +23,7 @@ config:
     LegalForm: "../src/LegalForm/types#LegalFormType"
     LegalVideo: "../src/LegalVideo/types#LegalVideoType"
     MedicalForm: "../src/MedicalForm/types#MedicalFormType"
+    ParticipantInformationConfiguration: "../src/ParticipantInformationConfiguration/types#ParticipantInformationConfigurationType"
     PaymentCode: "../src/PaymentCode/types#PaymentCodeType"
     Person: "../src/Person/types#PersonType"
     Phone: "../src/Phone/types#PhoneType"

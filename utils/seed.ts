@@ -21,6 +21,8 @@ import {
   GroupAwardAssignment,
   GroupRegistration,
   LineItem,
+  Message,
+  Occurance,
   Record,
   RecordAssignment,
   Registration,
@@ -44,6 +46,7 @@ import {
   LegalVideo,
   MedicalForm,
   PaymentCode,
+  ParticipantInformationConfiguration,
   Person,
   PersonAddress,
   PersonEmail,
@@ -67,6 +70,7 @@ import {
   InvoiceTransaction,
   LegalVideoConsent,
   MedicalCondition,
+  MessagePerson,
 } from "../services/person/generated/person-db";
 import { logger } from "./logger";
 import { sample } from "./sample";
@@ -146,6 +150,9 @@ const count = {
   legalVideoConsents: 2,
   medicalConditions: 2,
   medicalForms: 3,
+  messages: 3,
+  messageRecipients: 2,
+  occurances: 2,
   paymentCodes: 3,
   people: 5,
   phones: 2,
@@ -180,6 +187,8 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.occurance.deleteMany({});
+  await activityDb.client.message.deleteMany({});
   await activityDb.client.recordAssignment.deleteMany({});
   await activityDb.client.record.deleteMany({});
   await activityDb.client.fuelMyClubFundraiser.deleteMany({});
@@ -201,6 +210,7 @@ const clear = async () => {
   await activityDb.client.group.deleteMany({});
   // school db
   await schoolDb.client.relationship.deleteMany({});
+  await schoolDb.client.participantInformationConfiguration.deleteMany({});
   await schoolDb.client.legalVideo.deleteMany({});
   await schoolDb.client.fuelMyClubOrganization.deleteMany({});
   await schoolDb.client.featureForSeason.deleteMany({});
@@ -226,6 +236,7 @@ const clear = async () => {
   await schoolDb.client.activity.deleteMany({});
   await schoolDb.client.person.deleteMany({});
   // person db
+  await personDb.client.messagePerson.deleteMany({});
   await personDb.client.legalVideoConsent.deleteMany({});
   await personDb.client.customAnswer.deleteMany({});
   await personDb.client.directingRole.deleteMany({});
@@ -287,14 +298,18 @@ const seed = async () => {
   let legalVideo: LegalVideo;
   let legalVideoConsent: LegalVideoConsent;
   let lineItem: LineItem;
+  let occurance: Occurance;
   let medical: MedicalCondition;
   let medicalForm: MedicalForm;
+  let message: Message;
+  let messagePerson: MessagePerson;
   let paymentCode: PaymentCode;
   let person: Person;
   let personAddress: PersonAddress;
   let personEmail: PersonEmail;
   let personPhone: PersonPhone;
   let phone: Phone;
+  let piConfig: ParticipantInformationConfiguration;
   let record: Record;
   let recordAssignment: RecordAssignment;
   let registration: Registration;
@@ -904,6 +919,22 @@ const seed = async () => {
         logger.info(`fuel fundraiser ${fuelFundraiser.id}`);
       } // end fundraisers loop
 
+      data = {
+        schoolId: school.id,
+        activityId: activity.id,
+        key: randWord(),
+        visible: randBoolean(),
+        required: randBoolean(),
+        activityKind: randSports(),
+        createdAt: now,
+        updatedAt: now,
+      };
+      piConfig =
+        await schoolDb.client.participantInformationConfiguration.create({
+          data,
+        });
+      logger.info(`pi config ${piConfig.id}`);
+
       for (let c = 0; c < count.customDiscounts; c++) {
         data = {
           activityId: activity.id,
@@ -922,6 +953,7 @@ const seed = async () => {
         );
       } // end custom discounts loop
 
+      ids.groups = [];
       for (let g = 0; g < count.groups; g++) {
         data = {
           activityId: activity.id,
@@ -936,6 +968,7 @@ const seed = async () => {
           updatedAt: now,
         };
         group = await activityDb.client.group.create({ data });
+        ids.groups.push(group.id);
         logger.info(`group ${group.id}: ${group.name}`);
 
         ids.records = [];
@@ -1125,6 +1158,18 @@ const seed = async () => {
         ids.ventures.push(venture.id);
         logger.info(`venture ${venture.id}: ${venture.name}`);
 
+        for (let o = 0; o < count.occurances; o++) {
+          data = {
+            from: randRecentDate(),
+            to: randFutureDate(),
+            ventureId: venture.id,
+            createdAt: now,
+            updatedAt: now,
+          };
+          occurance = await activityDb.client.occurance.create({ data });
+          logger.info(`occurance ${occurance.id}`);
+        } // end occurances loop
+
         for (let ct = 0; ct < count.campTShirts; ct++) {
           // coach
           data = {
@@ -1283,6 +1328,41 @@ const seed = async () => {
           lineItem = await activityDb.client.lineItem.create({ data });
           logger.info(`line item ${lineItem.id}: ${lineItem.price}`);
         } // end tickets loop
+
+        for (let m = 0; m < count.messages; m++) {
+          data = {
+            schoolId: school.id,
+            activityId: activity.id,
+            ventureId: sample(ids.ventures),
+            status: randWord(),
+            message: randSentence(),
+            groupId: sample(ids.groups),
+            senderId: sample(ids.people),
+            eventId: event.id,
+            messageType: randNumber({ min: 1, max: 1000 }),
+            superadminMessage: randBoolean(),
+            documentFileName: randFilePath(),
+            documentContentType: randAbbreviation(),
+            documentFileSize: randNumber({ min: 1, max: 1000 }),
+            createdAt: now,
+            updatedAt: now,
+          };
+          message = await activityDb.client.message.create({ data });
+          logger.info(`message ${message.id}`);
+
+          for (let mr = 0; mr < count.messageRecipients; mr++) {
+            data = {
+              messageId: message.id,
+              personId: sample(ids.people) ?? "",
+              createdAt: now,
+              updatedAt: now,
+            };
+            messagePerson = await personDb.client.messagePerson.create({
+              data,
+            });
+            logger.info(`message person ${messagePerson.id}`);
+          } // end message person loop
+        } // end messages loop
       } // end events loop
 
       for (let f = 0; f < count.fees; f++) {

@@ -2,7 +2,14 @@ type Occurance {
   id: ID!
   from: String
   to: String
-  ventureId: Int
+  ventureId: String
   createdAt: String
   updatedAt: String
+
+  Venture: Venture
+}
+
+extend type Query {
+  occurances: [Occurance]
+  occurance(id: ID!): Occurance
 }

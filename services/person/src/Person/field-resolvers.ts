@@ -51,4 +51,14 @@ export const Person: Resolvers["Person"] = {
       },
     });
   },
+  ReceivedMessages: async (parent) => {
+    const messagePeople = await db.client.messagePerson.findMany({
+      where: {
+        personId: parent.id,
+      },
+    });
+    return messagePeople.map((m) => {
+      return { __typename: "Message", id: m.messageId };
+    });
+  },
 };

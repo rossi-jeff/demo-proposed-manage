@@ -49,6 +49,10 @@ import { Invoice } from "./Invoice/field-resolvers";
 import { LegalForm } from "./LegalForm/field-resolvers";
 import { LineItem } from "./LineItem/field-resolvers";
 import { lineItem, lineItems } from "./LineItem/query-resolvers";
+import { Message } from "./Message/field-resolvers";
+import { message, messages } from "./Message/query-resolvers";
+import { Occurance } from "./Occurance/field-resolvers";
+import { occurance, occurances } from "./Occurance/query-resolvers";
 import { Person } from "./Person/field-resolvers";
 import { Record } from "./Record/field-resolvers";
 import { record, records } from "./Record/query-resolvers";
@@ -61,6 +65,7 @@ import { Registration } from "./Registration/field-resolvers";
 import { registration, registrations } from "./Registration/query-resolvers";
 import { Roster } from "./Roster/field-resolvers";
 import { roster, rosters } from "./Roster/query-resolvers";
+import { School } from "./School/field-resolvers";
 import { Ticket } from "./Ticket/field-resolvers";
 import { ticket, tickets } from "./Ticket/query-resolvers";
 import { Venture } from "./Venture/field-resolvers";
@@ -92,6 +97,10 @@ export const resolvers: Resolvers = {
     groupRegistration,
     lineItems,
     lineItem,
+    messages,
+    message,
+    occurances,
+    occurance,
     records,
     record,
     recordAssignments,
@@ -122,11 +131,14 @@ export const resolvers: Resolvers = {
   Invoice,
   LegalForm,
   LineItem,
+  Message,
+  Occurance,
   Person,
   Record,
   RecordAssignment,
   Registration,
   Roster,
+  School,
   Ticket,
   Venture,
 };

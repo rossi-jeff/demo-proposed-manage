@@ -37,6 +37,11 @@ import { LegalVideo } from "./LegalVideo/field-resolvers";
 import { legalVideo, legalVideos } from "./LegalVideo/query-resolvers";
 import { MedicalForm } from "./MedicalForm/field-resolvers";
 import { medicalForm, medicalForms } from "./MedicalForm/query-resolvers";
+import { ParticipantInformationConfiguration } from "./ParticipantInformationConfiguration/field-resolvers";
+import {
+  participantInformationConfiguration,
+  participantInformationConfigurations,
+} from "./ParticipantInformationConfiguration/query-resolvers";
 import { PaymentCode } from "./PaymentCode/field-resolvers";
 import { paymentCode, paymentCodes } from "./PaymentCode/query-resolvers";
 import { Person } from "./Person/field-resolvers";
@@ -75,6 +80,8 @@ export const resolvers: Resolvers = {
     legalVideo,
     medicalForms,
     medicalForm,
+    participantInformationConfigurations,
+    participantInformationConfiguration,
     paymentCodes,
     paymentCode,
     people,
@@ -97,6 +104,7 @@ export const resolvers: Resolvers = {
   LegalForm,
   LegalVideo,
   MedicalForm,
+  ParticipantInformationConfiguration,
   PaymentCode,
   Person,
   Phone,

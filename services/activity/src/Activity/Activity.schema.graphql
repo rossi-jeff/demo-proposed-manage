@@ -4,6 +4,7 @@ type Activity @key(fields: "id") {
   Events: [Event]
   FuelMyClubActivity: FuelMyClubActivity
   Groups: [Group]
+  Messages: [Message]
   Registrations: [Registration]
   Ventures: [Venture]
 }

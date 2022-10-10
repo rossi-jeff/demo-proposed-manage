@@ -1,18 +1,18 @@
 import { Resolvers } from "../../generated/graphql";
 import { db } from "../db";
 
-export const Person: Resolvers["Person"] = {
+export const School: Resolvers["School"] = {
   CampTshirtOrders: async (parent) => {
     return await db.client.campTshirtOrder.findMany({
       where: {
-        coachId: parent.id,
+        schoolId: parent.id,
       },
     });
   },
-  SentMessages: async (parent) => {
+  Messages: async (parent) => {
     return await db.client.message.findMany({
       where: {
-        senderId: parent.id,
+        schoolId: parent.id,
       },
     });
   },
