@@ -23,6 +23,13 @@ export const Activity: Resolvers["Activity"] = {
       },
     });
   },
+  Messages: async (parent) => {
+    return await db.client.message.findMany({
+      where: {
+        activityId: parent.id,
+      },
+    });
+  },
   Registrations: async (parent) => {
     return await db.client.registration.findMany({
       where: {

@@ -10,4 +10,5 @@ type Person @key(fields: "id") {
   Invoices: [Invoice]
   LegalVideoConsents: [LegalVideoConsent]
   MedicalConditions: [MedicalCondition]
+  ReceivedMessages: [Message]
 }

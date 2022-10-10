@@ -38,6 +38,7 @@ import {
   medicalCondition,
   medicalConditions,
 } from "./MedicalCondition/query-resolvers";
+import { Message } from "./Message/field-resolvers";
 import { Person } from "./Person/field-resolvers";
 import { School } from "./School/field-resolvers";
 
@@ -78,6 +79,7 @@ export const resolvers: Resolvers = {
   LegalVideo,
   LegalVideoConsent,
   MedicalCondition,
+  Message,
   Person,
   School,
 };

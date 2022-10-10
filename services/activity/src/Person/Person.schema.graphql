@@ -2,4 +2,5 @@ type Person @key(fields: "id") {
   id: ID!
 
   CampTshirtOrders: [CampTshirtOrder]
+  SentMessages: [Message]
 }
