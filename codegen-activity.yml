@@ -29,5 +29,6 @@ config:
     RecordAssignment: "../src/RecordAssignment/types#RecordAssignmentType"
     Registration: "../src/Registration/types#RegistrationType"
     Roster: "../src/Roster/types#RosterType"
+    SubLineItem: "../src/SubLineItem/types#SubLineItemType"
     Ticket: "../src/Ticket/types#TicketType"
     Venture: "../src/Venture/types#VentureType"

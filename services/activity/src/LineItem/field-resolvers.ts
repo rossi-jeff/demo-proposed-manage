@@ -79,6 +79,13 @@ export const LineItem: Resolvers["LineItem"] = {
       },
     });
   },
+  SubLineItems: async (parent) => {
+    return await db.client.subLineItem.findMany({
+      where: {
+        lineItemId: parent.id,
+      },
+    });
+  },
   Ticket: async (parent) => {
     if (parent.ticketId === null) return null;
     return await db.client.ticket.findFirst({

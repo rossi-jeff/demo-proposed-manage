@@ -7,4 +7,11 @@ type SubLineItem {
   remoteId: Int
   createdAt: String
   updatedAt: String
+
+  LineItem: LineItem
+}
+
+extend type Query {
+  subLineItems: [SubLineItem]
+  subLineItem(id: ID!): SubLineItem
 }
