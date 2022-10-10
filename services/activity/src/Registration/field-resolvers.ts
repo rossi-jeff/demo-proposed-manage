@@ -156,4 +156,11 @@ export const Registration: Resolvers["Registration"] = {
       id: ref.registeredById,
     };
   },
+  TicketRegistrations: async (parent) => {
+    return await db.client.ticketRegistration.findMany({
+      where: {
+        registrationId: parent.id,
+      },
+    });
+  },
 };
