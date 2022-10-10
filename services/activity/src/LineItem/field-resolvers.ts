@@ -94,6 +94,13 @@ export const LineItem: Resolvers["LineItem"] = {
       },
     });
   },
+  TicketRegistrations: async (parent) => {
+    return await db.client.ticketRegistration.findMany({
+      where: {
+        lineItemId: parent.id,
+      },
+    });
+  },
   Venture: async (parent) => {
     if (parent.ventureId === null) return null;
     return await db.client.venture.findFirst({

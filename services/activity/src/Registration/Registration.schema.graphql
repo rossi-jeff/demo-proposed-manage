@@ -31,6 +31,7 @@ type Registration @key(fields: "id") {
   Consents: [Consent]
   GroupRegistrations: [GroupRegistration]
   LineItems: [LineItem]
+  TicketRegistrations: [TicketRegistration]
 }
 
 extend type Query {
