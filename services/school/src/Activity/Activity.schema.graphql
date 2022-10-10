@@ -18,6 +18,7 @@ type Activity @key(fields: "id") {
   School: School
   CustomDiscounts: [CustomDiscount]
   Fees: [Fee]
+  ParticipantInformationConfigurations: [ParticipantInformationConfiguration]
 }
 
 extend type Query {

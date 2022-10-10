@@ -1,4 +1,4 @@
-type Message {
+type Message @key(fields: "id") {
   id: ID!
   schoolId: String
   activityId: String
@@ -15,4 +15,16 @@ type Message {
   documentFileSize: Int
   createdAt: String
   updatedAt: String
+
+  Activity: Activity
+  Event: Event
+  Group: Group
+  School: School
+  Sender: Person
+  Venture: Venture
+}
+
+extend type Query {
+  messages: [Message]
+  message(id: ID!): Message
 }

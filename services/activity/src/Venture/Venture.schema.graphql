@@ -26,6 +26,7 @@ type Venture @key(fields: "id") {
   CampTshirtOrders: [CampTshirtOrder]
   LineItems: [LineItem]
   Occurances: [Occurance]
+  Messages: [Message]
 }
 
 extend type Query {

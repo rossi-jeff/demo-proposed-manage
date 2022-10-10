@@ -80,6 +80,13 @@ export const School: Resolvers["School"] = {
       },
     });
   },
+  ParticipantInformationConfigurations: async (parent) => {
+    return await db.client.participantInformationConfiguration.findMany({
+      where: {
+        schoolId: parent.id,
+      },
+    });
+  },
   People: async (parent) => {
     return await db.client.person.findMany({
       where: {

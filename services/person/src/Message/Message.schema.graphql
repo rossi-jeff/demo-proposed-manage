@@ -1,0 +1,5 @@
+type Message @key(fields: "id") {
+  id: ID!
+
+  Recipients: [Person]
+}
