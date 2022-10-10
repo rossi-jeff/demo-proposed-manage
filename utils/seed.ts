@@ -27,6 +27,7 @@ import {
   RecordAssignment,
   Registration,
   Roster,
+  SubLineItem,
   Ticket,
   Venture,
 } from "../services/activity/generated/activity-db";
@@ -161,6 +162,7 @@ const count = {
   roles: 3,
   rosters: 2,
   schools: 5,
+  subLineItems: 2,
   tickets: 3,
   ventures: 2,
 };
@@ -185,6 +187,7 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.subLineItem.deleteMany({});
   await activityDb.client.occurance.deleteMany({});
   await activityDb.client.message.deleteMany({});
   await activityDb.client.recordAssignment.deleteMany({});
@@ -317,6 +320,7 @@ const seed = async () => {
   let schoolEmail: SchoolEmail;
   let schoolFee: SchoolFee;
   let schoolPhone: SchoolPhone;
+  let subLineItem: SubLineItem;
   let ticket: Ticket;
   let venture: Venture;
 
@@ -1311,6 +1315,20 @@ const seed = async () => {
           };
           lineItem = await activityDb.client.lineItem.create({ data });
           logger.info(`line item ${lineItem.id}: ${lineItem.price}`);
+
+          for (let sl = 0; sl < count.subLineItems; sl++) {
+            data = {
+              lineItemId: lineItem.id,
+              type: randWord(),
+              amount: randNumber({ min: 1, max: 1000 }),
+              settledAt: now,
+              remoteId: randNumber({ min: 1, max: 1000 }),
+              createdAt: now,
+              updatedAt: now,
+            };
+            subLineItem = await activityDb.client.subLineItem.create({ data });
+            logger.info(`sub line item ${subLineItem.id}`);
+          } // end sub line item loop
         } // end tickets loop
 
         for (let m = 0; m < count.messages; m++) {

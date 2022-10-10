@@ -18,6 +18,7 @@ type LineItem {
 
   Invoice: Invoice
   Registration: Registration
+  SubLineItems: [SubLineItem]
   Ticket: Ticket
   Venture: Venture
 }
