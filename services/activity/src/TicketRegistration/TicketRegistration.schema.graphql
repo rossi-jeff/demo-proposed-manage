@@ -12,4 +12,14 @@ type TicketRegistration {
   comment: String
   createdAt: String
   updatedAt: String
+
+  LineItem: LineItem
+  Registration: Registration
+  Student: Person
+  Ticket: Ticket
+}
+
+extend type Query {
+  ticketRegistrations: [TicketRegistration]
+  ticketRegistration(id: ID!): TicketRegistration
 }

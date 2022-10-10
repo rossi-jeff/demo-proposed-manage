@@ -13,6 +13,7 @@ type Ticket @key(fields: "id") {
 
   Event: Event
   LineItems: [LineItem]
+  TicketRegistrations: [TicketRegistration]
 }
 
 extend type Query {

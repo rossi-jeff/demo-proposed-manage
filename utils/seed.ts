@@ -29,6 +29,7 @@ import {
   Roster,
   SubLineItem,
   Ticket,
+  TicketRegistration,
   Venture,
 } from "../services/activity/generated/activity-db";
 import {
@@ -166,6 +167,7 @@ const count = {
   schools: 5,
   subLineItems: 2,
   tickets: 3,
+  ticketRegistrations: 2,
   ventures: 2,
 };
 
@@ -189,6 +191,7 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const clear = async () => {
   // delete childeren first due to constraints
   // activity db
+  await activityDb.client.ticketRegistration.deleteMany({});
   await activityDb.client.subLineItem.deleteMany({});
   await activityDb.client.occurance.deleteMany({});
   await activityDb.client.message.deleteMany({});
@@ -326,6 +329,7 @@ const seed = async () => {
   let schoolPhone: SchoolPhone;
   let subLineItem: SubLineItem;
   let ticket: Ticket;
+  let ticketRegistration: TicketRegistration;
   let venture: Venture;
 
   const now = new Date();
@@ -1345,6 +1349,37 @@ const seed = async () => {
             subLineItem = await activityDb.client.subLineItem.create({ data });
             logger.info(`sub line item ${subLineItem.id}`);
           } // end sub line item loop
+
+          for (let tr = 0; tr < count.ticketRegistrations; tr++) {
+            data = {
+              userName: randEmail(),
+              passWord: randPassword(),
+              schoolId: school.id,
+              firstName: randFirstName(),
+              lastName: randLastName(),
+              createdAt: now,
+              updatedAt: now,
+            };
+            const student = await schoolDb.client.person.create({ data });
+
+            data = {
+              registrationId: sample(ids.registrations),
+              ticketId: ticket.id,
+              state: randNumber({ min: 1, max: 1000 }),
+              ticketholderFirstName: student.firstName,
+              ticketEmail: student.userName,
+              studentId: student.id,
+              lineItemId: lineItem.id,
+              confirmationNumber: randUuid(),
+              ticketholderLastName: student.lastName,
+              comment: randSentence(),
+              createdAt: now,
+              updatedAt: now,
+            };
+            ticketRegistration =
+              await activityDb.client.ticketRegistration.create({ data });
+            logger.info(`ticket registration ${ticketRegistration.id}`);
+          } // end ticket registrations loop
         } // end tickets loop
 
         for (let m = 0; m < count.messages; m++) {
