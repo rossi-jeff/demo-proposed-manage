@@ -51,6 +51,8 @@ import { phone, phones } from "./Phone/query-resolvers";
 import { Relationship } from "./Relationship/field-resolvers";
 import { relationship, relationships } from "./Relationship/query-resolvers";
 import { School } from "./School/field-resolvers";
+import { Settlement } from "./Settlement/field-resolvers";
+import { settlement, settlements } from "./Settlement/query-resolvers";
 
 export const resolvers: Resolvers = {
   Query: {
@@ -90,6 +92,8 @@ export const resolvers: Resolvers = {
     phone,
     relationships,
     relationship,
+    settlements,
+    settlement,
   },
   Activity,
   Address,
@@ -110,4 +114,5 @@ export const resolvers: Resolvers = {
   Phone,
   Relationship,
   School,
+  Settlement,
 };
