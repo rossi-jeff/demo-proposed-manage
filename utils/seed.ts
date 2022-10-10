@@ -52,6 +52,7 @@ import {
   PersonEmail,
   PersonPhone,
   Phone,
+  Relationship,
   SchoolAddress,
   SchoolEmail,
   SchoolFee,
@@ -158,6 +159,7 @@ const count = {
   records: 3,
   recordAssignments: 2,
   registrations: 5,
+  relationships: 3,
   roles: 3,
   rosters: 2,
   schools: 5,
@@ -207,6 +209,7 @@ const clear = async () => {
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
+  await schoolDb.client.relationship.deleteMany({});
   await schoolDb.client.participantInformationConfiguration.deleteMany({});
   await schoolDb.client.legalVideo.deleteMany({});
   await schoolDb.client.fuelMyClubOrganization.deleteMany({});
@@ -310,6 +313,7 @@ const seed = async () => {
   let record: Record;
   let recordAssignment: RecordAssignment;
   let registration: Registration;
+  let relationship: Relationship;
   let role: Role;
   let roster: Roster;
   let school: School;
@@ -750,6 +754,18 @@ const seed = async () => {
         });
       }
     } // end people loop
+
+    for (let r = 0; r < count.relationships; r++) {
+      data = {
+        subjectId: sample(ids.people),
+        receiverId: sample(ids.people),
+        relationshipType: sample(relationships),
+        createdAt: now,
+        updatedAt: now,
+      };
+      relationship = await schoolDb.client.relationship.create({ data });
+      logger.info(`relationship ${relationship.id}`);
+    } // end relationships loop
 
     for (let lv = 0; lv < count.legalVideos; lv++) {
       data = {

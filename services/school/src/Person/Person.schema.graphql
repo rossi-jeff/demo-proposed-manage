@@ -35,6 +35,8 @@ type Person @key(fields: "id") {
   Addresses: [Address]
   Emails: [Email]
   Phones: [Phone]
+  SubjectRelationships: [Relationship]
+  ReceiverRelationships: [Relationship]
 }
 
 extend type Query {

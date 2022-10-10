@@ -5,4 +5,12 @@ type Relationship {
   relationshipType: String
   createdAt: String
   updatedAt: String
+
+  Subject: Person
+  Receiver: Person
+}
+
+extend type Query {
+  relationships: [Relationship]
+  relationship(id: ID!): Relationship
 }
