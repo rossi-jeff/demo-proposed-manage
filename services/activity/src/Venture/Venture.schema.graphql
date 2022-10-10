@@ -25,6 +25,7 @@ type Venture @key(fields: "id") {
   Activity: Activity
   CampTshirtOrders: [CampTshirtOrder]
   LineItems: [LineItem]
+  Occurances: [Occurance]
   Messages: [Message]
 }
 

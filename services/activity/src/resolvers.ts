@@ -51,6 +51,8 @@ import { LineItem } from "./LineItem/field-resolvers";
 import { lineItem, lineItems } from "./LineItem/query-resolvers";
 import { Message } from "./Message/field-resolvers";
 import { message, messages } from "./Message/query-resolvers";
+import { Occurance } from "./Occurance/field-resolvers";
+import { occurance, occurances } from "./Occurance/query-resolvers";
 import { Person } from "./Person/field-resolvers";
 import { Record } from "./Record/field-resolvers";
 import { record, records } from "./Record/query-resolvers";
@@ -97,6 +99,8 @@ export const resolvers: Resolvers = {
     lineItem,
     messages,
     message,
+    occurances,
+    occurance,
     records,
     record,
     recordAssignments,
@@ -128,6 +132,7 @@ export const resolvers: Resolvers = {
   LegalForm,
   LineItem,
   Message,
+  Occurance,
   Person,
   Record,
   RecordAssignment,
