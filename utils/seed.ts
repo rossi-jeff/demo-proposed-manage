@@ -59,6 +59,7 @@ import {
   SchoolEmail,
   SchoolFee,
   SchoolPhone,
+  Settlement,
 } from "../services/school/generated/school-db";
 import {
   Affiliation,
@@ -165,6 +166,7 @@ const count = {
   roles: 3,
   rosters: 2,
   schools: 5,
+  settlements: 2,
   subLineItems: 2,
   tickets: 3,
   ticketRegistrations: 2,
@@ -215,6 +217,7 @@ const clear = async () => {
   await activityDb.client.event.deleteMany({});
   await activityDb.client.group.deleteMany({});
   // school db
+  await schoolDb.client.settlement.deleteMany({});
   await schoolDb.client.relationship.deleteMany({});
   await schoolDb.client.participantInformationConfiguration.deleteMany({});
   await schoolDb.client.legalVideo.deleteMany({});
@@ -327,6 +330,7 @@ const seed = async () => {
   let schoolEmail: SchoolEmail;
   let schoolFee: SchoolFee;
   let schoolPhone: SchoolPhone;
+  let settlement: Settlement;
   let subLineItem: SubLineItem;
   let ticket: Ticket;
   let ticketRegistration: TicketRegistration;
@@ -1438,6 +1442,33 @@ const seed = async () => {
         activityFee = await schoolDb.client.activityFee.create({ data });
         logger.info(`activity fee ${activityFee.id}`);
       } // end fees loop
+
+      for (let st = 0; st < count.settlements; st++) {
+        data = {
+          activityId: activity.id,
+          schoolId: school.id,
+          startDate: randRecentDate(),
+          endDate: randFutureDate(),
+          amountCollected: randNumber({ min: 1, max: 1000 }),
+          fees: randNumber({ min: 1, max: 1000 }),
+          amountSettled: randNumber({ min: 1, max: 1000 }),
+          percentage: randNumber({ min: 1, max: 1000 }),
+          amountPaid: randNumber({ min: 1, max: 1000 }),
+          amountRemaining: randNumber({ min: 1, max: 1000 }),
+          final: randBoolean(),
+          flatFee: randNumber({ min: 1, max: 1000 }),
+          percentageFee: randNumber({ min: 1, max: 1000 }),
+          manualFee: randNumber({ min: 1, max: 1000 }),
+          participantCount: randNumber({ min: 1, max: 1000 }),
+          kind: randNumber({ min: 1, max: 1000 }),
+          approval: randNumber({ min: 1, max: 1000 }),
+          activityKind: activity.kind,
+          createdAt: now,
+          updatedAt: now,
+        };
+        settlement = await schoolDb.client.settlement.create({ data });
+        logger.info(`settlement ${settlement.id}`);
+      } // end setllements loop
     } // end activites loop
   } // end school loop
 };

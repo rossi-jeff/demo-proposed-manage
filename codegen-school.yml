@@ -28,6 +28,7 @@ config:
     Person: "../src/Person/types#PersonType"
     Phone: "../src/Phone/types#PhoneType"
     Relationship: "../src/Relationship/types#RelationshipType"
+    Settlement: "../src/Settlement/types#SettlementType"
   enumValues:
     AddresTypeEnum: "../src/Address/types#AddresTypeEnum"
     EmailTypeEnum: "../src/Email/types#EmailTypeEnum"

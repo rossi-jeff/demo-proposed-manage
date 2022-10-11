@@ -20,4 +20,12 @@ type Settlement {
   activityKind: String
   createdAt: String
   updatedAt: String
+
+  Activity: Activity
+  School: School
+}
+
+extend type Query {
+  settlements: [Settlement]
+  settlement(id: ID!): Settlement
 }
