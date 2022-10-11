@@ -22,7 +22,54 @@ type School @key(fields: "id") {
   updatedAt: String
 }
 
+input SchoolInput {
+  name: String
+  subDomain: String
+  latitude: String
+  longitude: String
+  mascot: String
+  feederTowns: String
+  takingPayments: Boolean
+  paymentOptions: Int
+  spendingCapMax: Int
+  paymentCode: String
+  smsMessaging: Boolean
+  notifications: Int
+  notes: String
+  features: Int
+  kind: String
+  tracked: Boolean
+  subMerchantId: String
+  a2kLinkSchoolId: Int
+}
+
+input SchoolCreateInput {
+  name: String!
+  subDomain: String!
+  latitude: String
+  longitude: String
+  mascot: String
+  feederTowns: String
+  takingPayments: Boolean
+  paymentOptions: Int
+  spendingCapMax: Int
+  paymentCode: String
+  smsMessaging: Boolean
+  notifications: Int
+  notes: String
+  features: Int
+  kind: String
+  tracked: Boolean
+  subMerchantId: String
+  a2kLinkSchoolId: Int
+}
+
 extend type Query {
   schools: [School]
   school(id: ID!): School
+}
+
+extend type Mutation {
+  schoolCreate(input: SchoolCreateInput): School
+  schoolUpdate(id: ID!, updates: SchoolInput): School
 }

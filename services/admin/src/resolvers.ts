@@ -2,6 +2,7 @@ import type { Resolvers } from "../generated/graphql";
 import { Role } from "./Role/field-resolvers";
 import { role, roles } from "./Role/query-resolvers";
 import { School } from "./School/field-resolvers";
+import { schoolCreate, schoolUpdate } from "./School/mutation-resolvers";
 import { school, schools } from "./School/query-resolvers";
 import { SupportDocument } from "./SupportDocument/field-resolvers";
 import {
@@ -17,6 +18,10 @@ export const resolvers: Resolvers = {
     school,
     supportDocuments,
     supportDocument,
+  },
+  Mutation: {
+    schoolCreate,
+    schoolUpdate,
   },
   Role,
   School,
