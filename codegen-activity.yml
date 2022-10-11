@@ -33,3 +33,4 @@ config:
     Ticket: "../src/Ticket/types#TicketType"
     TicketRegistration: "../src/TicketRegistration/types#TicketRegistrationType"
     Venture: "../src/Venture/types#VentureType"
+    VentureRegistration: "../src/VentureRegistration/types#VentureRegistrationType"

@@ -1,0 +1,5 @@
+type PaymentCode @key(fields: "id") {
+  id: ID!
+
+  VentureRegistrations: [VentureRegistration]
+}

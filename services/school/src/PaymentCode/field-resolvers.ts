@@ -1,4 +1,5 @@
 import { Resolvers } from "../../generated/graphql";
+import { db } from "../db";
 import { PaymentCodeType } from "./types";
 
 export const getActive = (parent: PaymentCodeType) => {
@@ -21,6 +22,13 @@ export const getUpdatedAt = (parent: PaymentCodeType) => {
 };
 
 export const PaymentCode: Resolvers["PaymentCode"] = {
+  __resolveReference: async (ref) => {
+    return await db.client.paymentCode.findFirst({
+      where: {
+        id: ref.id,
+      },
+    });
+  },
   schoolId: getSchoolId,
   name: getName,
   code: getCode,
